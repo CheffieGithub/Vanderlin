@@ -14,6 +14,15 @@
 	var/msg = input(src, null, "looc \"text\"") as text|null
 	do_looc(msg)
 
+/client/verb/mob_image(atom/A as mob in view(5))
+	set name = "MOB IMAGE"
+	set desc = "OORAH."
+	set category = "OOC"
+
+	if(!A)
+		return
+	src << ftp(getFlatIcon(A), "[time2text(world.realtime,"YYYY-MM-DD")].png")
+
 /client/verb/looc(msg as text)
 	set name = "LOOC"
 	set desc = "Local OOC, seen only by those in view."
