@@ -1,4 +1,9 @@
 //MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
+"aaj" = (
+/obj/structure/fluff/walldeco/chains,
+/mob/living/carbon/human/species/goblin/cave,
+/turf/open/floor/dirt,
+/area/rogue/indoors/town/cell)
 "aao" = (
 /obj/structure/table/wood{
 	icon_state = "largetable";
@@ -3531,6 +3536,11 @@
 	},
 /turf/open/floor/churchrough,
 /area/rogue/under/town/caverogue)
+"csP" = (
+/obj/structure/bed/shit,
+/mob/living/carbon/human/species/goblin/cave,
+/turf/open/floor/dirt/road,
+/area/rogue/indoors/town/cell)
 "ctn" = (
 /turf/closed/wall/mineral/wooddark,
 /area/rogue/indoors/town/dwarfin)
@@ -4123,6 +4133,7 @@
 /area/rogue/indoors/town/tavern)
 "cNw" = (
 /obj/item/reagent_containers/food/snacks/smallrat,
+/mob/living/carbon/human/species/goblin/cave,
 /turf/open/floor/cobble,
 /area/rogue/indoors/villagegarrison)
 "cNG" = (
@@ -4920,6 +4931,7 @@
 /area/rogue/indoors/town/garrison)
 "dvj" = (
 /obj/structure/fluff/railing/border,
+/mob/living/carbon/human/species/goblin/cave,
 /turf/open/floor/cobble,
 /area/rogue/indoors/villagegarrison)
 "dvp" = (
@@ -5043,6 +5055,7 @@
 	locked = 1;
 	lockid = "forrestgarrison"
 	},
+/mob/living/carbon/human/species/goblin/cave,
 /turf/open/floor/metal,
 /area/rogue/indoors/town/cell)
 "dCg" = (
@@ -6636,6 +6649,11 @@
 	},
 /turf/open/floor/hexstone,
 /area/rogue/indoors/town/garrison)
+"eAW" = (
+/obj/structure/bed/shit,
+/mob/living/carbon/human/species/goblin/cave,
+/turf/open/floor/dirt,
+/area/rogue/indoors/town/cell)
 "eBo" = (
 /obj/machinery/light/fueled/chand,
 /turf/open/transparent/openspace,
@@ -8674,6 +8692,7 @@
 /obj/item/rope,
 /obj/item/rope,
 /obj/machinery/light/fueled/torchholder/r,
+/mob/living/carbon/human/species/goblin/cave,
 /turf/open/floor/cobble,
 /area/rogue/indoors/villagegarrison)
 "fYR" = (
@@ -16365,6 +16384,7 @@
 /obj/item/natural/cloth,
 /obj/item/natural/cloth,
 /obj/item/needle/thorn,
+/mob/living/carbon/human/species/goblin/cave,
 /turf/open/floor/cobble,
 /area/rogue/indoors/villagegarrison)
 "lzD" = (
@@ -17062,6 +17082,10 @@
 	},
 /turf/open/floor/dirt/road,
 /area/rogue/under/town/caverogue)
+"mfC" = (
+/mob/living/carbon/human/species/goblin/cave,
+/turf/open/floor/cobble,
+/area/rogue/indoors/villagegarrison)
 "mfD" = (
 /obj/machinery/light/fueled/wallfire/candle,
 /obj/structure/table/wood/counter/end{
@@ -19655,6 +19679,10 @@
 	icon_state = "tavern"
 	},
 /area/rogue/indoors/town/tavern)
+"nXF" = (
+/mob/living/carbon/human/species/goblin/cave,
+/turf/closed/wall/mineral/stone,
+/area/rogue/indoors/town/cell)
 "nXH" = (
 /obj/structure/bed/shit,
 /obj/effect/landmark/start/grabber{
@@ -20219,6 +20247,10 @@
 	icon_state = "weird1"
 	},
 /area/rogue/indoors/town/shop)
+"oxh" = (
+/mob/living/carbon/human/species/goblin/cave,
+/turf/open/floor/dirt/road,
+/area/rogue/indoors/town/cell)
 "oxn" = (
 /obj/structure/flora/grass/water/reeds,
 /obj/structure/flora/grass/water,
@@ -25849,6 +25881,10 @@
 /obj/machinery/light/fueled/firebowl/standing/blue,
 /turf/open/floor/tile/bfloorz,
 /area/rogue/indoors/town/bath)
+"sDw" = (
+/mob/living/carbon/human/species/goblin/cave,
+/turf/closed/mineral,
+/area/rogue/under/cave)
 "sDU" = (
 /obj/structure/fake_machine/scomm/r,
 /turf/open/floor/ruinedwood/spiral,
@@ -26383,6 +26419,7 @@
 	dir = 4;
 	lockid = "forrestgarrison"
 	},
+/mob/living/carbon/human/species/goblin/cave,
 /turf/open/floor/metal{
 	icon_state = "plating2"
 	},
@@ -27182,6 +27219,10 @@
 /obj/structure/table/wood/plain_alt,
 /turf/open/floor/blocks,
 /area/rogue/under/town/basement)
+"tuz" = (
+/mob/living/carbon/human/species/goblin/cave,
+/turf/closed/wall/mineral/stone,
+/area/rogue/indoors/villagegarrison)
 "tuH" = (
 /obj/machinery/light/fueled/wallfire/candle/l,
 /turf/open/floor/ruinedwood/turned/darker,
@@ -27595,6 +27636,10 @@
 	},
 /turf/open/floor/cobble,
 /area/rogue/under/town/basement)
+"tIT" = (
+/mob/living/carbon/human/species/goblin/cave,
+/turf/open/floor/dirt,
+/area/rogue/indoors/town/cell)
 "tJg" = (
 /obj/structure/toilet,
 /turf/open/floor/blocks,
@@ -29295,6 +29340,11 @@
 	},
 /turf/open/floor/dirt,
 /area/rogue/indoors/town/shop)
+"uMP" = (
+/obj/structure/bars,
+/mob/living/carbon/human/species/goblin/cave,
+/turf/open/floor/blocks,
+/area/rogue/indoors/town/cell)
 "uMX" = (
 /obj/item/broom,
 /obj/structure/closet/crate/crafted_closet/inn,
@@ -29466,6 +29516,7 @@
 /obj/item/rope/chain,
 /obj/item/rope/chain,
 /obj/item/rope/chain,
+/mob/living/carbon/human/species/goblin/cave,
 /turf/open/floor/cobble,
 /area/rogue/indoors/villagegarrison)
 "uTB" = (
@@ -29567,6 +29618,11 @@
 /obj/machinery/light/fueled/torchholder/c,
 /turf/closed/wall/mineral/stonebrick,
 /area/rogue/indoors/town/steward)
+"uYO" = (
+/obj/item/reagent_containers/food/snacks/smallrat,
+/mob/living/carbon/human/species/goblin/cave,
+/turf/open/floor/dirt/road,
+/area/rogue/indoors/town/cell)
 "uZi" = (
 /obj/structure/table/wood/plain_alt,
 /obj/item/natural/feather,
@@ -32374,6 +32430,7 @@
 /obj/structure/stairs{
 	dir = 8
 	},
+/mob/living/carbon/human/species/goblin/cave,
 /turf/open/floor/cobble,
 /area/rogue/indoors/villagegarrison)
 "wYW" = (
@@ -33349,6 +33406,7 @@
 /obj/item/flashlight/flare/torch/metal,
 /obj/item/flashlight/flare/torch/metal,
 /obj/item/flashlight/flare/torch/metal,
+/mob/living/carbon/human/species/goblin/cave,
 /turf/open/floor/cobble,
 /area/rogue/indoors/villagegarrison)
 "xKM" = (
@@ -52928,7 +52986,7 @@ vtv
 vtv
 vtv
 vtv
-vtv
+sDw
 vtv
 vtv
 vtv
@@ -53130,8 +53188,8 @@ vtv
 vtv
 vtv
 vtv
-vtv
-vtv
+sDw
+sDw
 vtv
 vtv
 vtv
@@ -53329,11 +53387,11 @@ vtv
 vtv
 vtv
 vtv
+sDw
 vtv
+sDw
 vtv
-vtv
-vtv
-vtv
+sDw
 vtv
 vtv
 vtv
@@ -53531,11 +53589,11 @@ vtv
 vtv
 vtv
 vtv
+sDw
 vtv
 vtv
 vtv
-vtv
-vtv
+sDw
 vtv
 vtv
 vtv
@@ -53731,13 +53789,13 @@ vtv
 vtv
 vtv
 vtv
+sDw
 vtv
 vtv
-vtv
-vtv
-vtv
-vtv
-vtv
+sDw
+sDw
+sDw
+sDw
 vtv
 vtv
 vtv
@@ -53935,11 +53993,11 @@ vtv
 vtv
 vtv
 vtv
+sDw
 vtv
-vtv
-vtv
-vtv
-vtv
+sDw
+sDw
+sDw
 vtv
 vtv
 vtv
@@ -54134,14 +54192,14 @@ vtv
 vtv
 vtv
 vtv
+nXF
 bkg
+nXF
+nXF
 bkg
+nXF
 bkg
-bkg
-bkg
-bkg
-bkg
-vtv
+sDw
 vtv
 vtv
 vtv
@@ -54336,14 +54394,14 @@ vtv
 vtv
 vtv
 vtv
-bkg
+nXF
 bgI
-ovP
-fOC
-hyo
-iqd
-bkg
-vtv
+oxh
+csP
+aaj
+tIT
+nXF
+sDw
 vtv
 vtv
 vtv
@@ -54539,10 +54597,10 @@ vtv
 vtv
 vtv
 bkg
-oUc
+eAW
+oxh
 ovP
-ovP
-ovP
+oxh
 fOC
 bkg
 vtv
@@ -54739,17 +54797,17 @@ nYn
 xfD
 bkg
 bkg
+nXF
 bkg
-bkg
-bkg
+nXF
 hyo
-ovP
-ovP
-iqd
-bkg
+oxh
+oxh
+tIT
+nXF
+sDw
 vtv
-vtv
-vtv
+sDw
 vtv
 vtv
 vtv
@@ -54943,15 +55001,15 @@ bkg
 hyo
 fOC
 iqd
-bkg
-lBA
+nXF
+uMP
 sUf
-lBA
-bkg
-bkg
-vtv
-vtv
-vtv
+uMP
+nXF
+nXF
+sDw
+sDw
+sDw
 vtv
 vtv
 vtv
@@ -55143,16 +55201,16 @@ nYn
 nYn
 bkg
 vvL
-ovP
-iqd
+oxh
+tIT
 lBA
 cEI
 eWY
 dvj
-fjG
-fjG
+tuz
+tuz
 vtv
-vtv
+sDw
 vtv
 vtv
 vtv
@@ -55345,14 +55403,14 @@ nYn
 nYn
 bkg
 oUc
-ovP
-ovP
+oxh
+oxh
 dBM
-eWY
-eWY
+mfC
+mfC
 dvj
-fjG
-fjG
+tuz
+tuz
 vtv
 vtv
 vtv
@@ -55547,15 +55605,15 @@ nYn
 nYn
 bkg
 iqd
-hyo
-vvL
-lBA
+aaj
+uYO
+uMP
 eWY
 cNw
 dvj
 wYV
 fjG
-vtv
+sDw
 vtv
 vtv
 vtv
@@ -55749,13 +55807,13 @@ lwU
 nYn
 bkg
 bkg
-bkg
-bkg
-bkg
-eWY
-eWY
-eWY
-eWY
+nXF
+nXF
+nXF
+mfC
+mfC
+mfC
+mfC
 fjG
 vtv
 vtv
@@ -55952,13 +56010,13 @@ nYn
 vtv
 vtv
 vtv
-bkg
-bkg
+nXF
+nXF
 xKL
 lzy
 fYa
 uTl
-fjG
+tuz
 vtv
 vtv
 vtv
@@ -56155,12 +56213,12 @@ vtv
 vtv
 vtv
 bkg
-bkg
+nXF
 fjG
-fjG
-fjG
-fjG
-fjG
+tuz
+tuz
+tuz
+tuz
 vtv
 vtv
 vtv
@@ -56357,11 +56415,11 @@ vtv
 vtv
 vtv
 vtv
-vtv
-vtv
-vtv
-vtv
-vtv
+sDw
+sDw
+sDw
+sDw
+sDw
 vtv
 vtv
 vtv
@@ -56560,10 +56618,10 @@ vtv
 vtv
 vtv
 vtv
+sDw
 vtv
-vtv
-vtv
-vtv
+sDw
+sDw
 vtv
 vtv
 vtv
@@ -56762,9 +56820,9 @@ vtv
 vtv
 vtv
 vtv
-vtv
-vtv
-vtv
+sDw
+sDw
+sDw
 vtv
 vtv
 vtv
@@ -56964,8 +57022,8 @@ vtv
 vtv
 vtv
 vtv
-vtv
-vtv
+sDw
+sDw
 vtv
 vtv
 vtv
