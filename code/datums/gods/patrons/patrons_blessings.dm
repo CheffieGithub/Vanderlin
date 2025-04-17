@@ -8,34 +8,34 @@
 	if(!check_rights())
 		return FALSE
 
-	var/category = input("Select Blessing Category") as null|anything in list("Divine", "Food", "Special", "Mending")
+	var/category = browser_input_list(usr, "Select a Blessing type", "GIFT FROM ABOVE", list("Divine", "Food", "Special", "Mending"))
 	if(!category)
 		return FALSE
 
 	var/blessing_path
 	switch(category)
 		if("Divine")
-			blessing_path = input("Choose Divine Blessing") as null|anything in list( \
+			blessing_path = browser_input_list(usr, "Select a Divine Blessing", "GIFT FROM ABOVE", list( \
 				/datum/status_effect/buff/noc, \
 				/datum/status_effect/buff/ravox, \
 				/datum/status_effect/buff/beastsense, \
 				/datum/status_effect/buff/trollshape, \
 				/datum/status_effect/buff/divine_beauty, \
 				/datum/status_effect/buff/call_to_arms, \
-				/datum/status_effect/buff/craft_buff)
+				/datum/status_effect/buff/craft_buff))
 		if("Food")
-			blessing_path = input("Choose Food Blessing") as null|anything in list( \
+			blessing_path = browser_input_list(usr, "Select a Food Blessing", "GIFT FROM ABOVE", list( \
 				/datum/status_effect/buff/foodbuff, \
-				/datum/status_effect/buff/clean_plus)
+				/datum/status_effect/buff/clean_plus))
 		if("Special")
-			blessing_path = input("Choose Special Blessing") as null|anything in list( \
+			blessing_path = browser_input_list(usr, "Select a Special Blessing", "GIFT FROM ABOVE", list( \
 				/datum/status_effect/buff/duration_modification/featherfall, \
 				/datum/status_effect/buff/duration_modification/darkvision, \
 				/datum/status_effect/buff/duration_modification/haste, \
 				/datum/status_effect/buff/calm, \
-				/datum/status_effect/buff/barbrage)
+				/datum/status_effect/buff/barbrage))
 		if("Mending")
-			var/mending_amount = input("Choose Lifeblood Amount") as null|anything in list(5, 10, 15, 20, 25, 30)
+			var/mending_amount = browser_input_list(usr, "Select Rich Lifeblood Amount", "DIVINE HEALING", list(5, 10, 15, 20, 25, 30))
 			if(!mending_amount)
 				return FALSE
 
@@ -46,16 +46,16 @@
 			M.reagents.add_reagent(/datum/reagent/medicine/stronghealth, mending_amount)
 			var/patron_name = (M.patron && istype(M.patron)) ? M.patron.name : "a divine presence"
 			to_chat(M, span_nicegreen("You feel your body renewing. [patron_name] has renewed your body with temporary divinity."))
-			to_chat(usr, span_notice("You mended [M] with [mending_amount] units of Lifeblood."))
-			log_admin("[key_name(usr)] mended [key_name(M)] with [mending_amount] units of Lifeblood.")
+			to_chat(usr, span_notice("You mended [M] with [mending_amount] units of Rich Lifeblood."))
+			log_admin("[key_name(usr)] mended [key_name(M)] with [mending_amount] units of Rich Lifeblood.")
 			return TRUE
 
 	if(!blessing_path)
 		return FALSE
 
-	var/duration_choice = input("Select Duration for the Blessing:") as null|anything in list( \
+	var/duration_choice = browser_input_list(usr, "Select Duration for the Blessing", "SANDS OF TIME", list( \
 		"1 Minute", "5 Minutes", "10 Minutes", "20 Minutes", \
-		"30 Minutes", "60 Minutes", "Until Sleep", "Infinite")
+		"30 Minutes", "60 Minutes", "Until Sleep", "Infinite"))
 	if(!duration_choice)
 		return FALSE
 
@@ -105,7 +105,6 @@
 
 	return FALSE
 
-
 /// Starts a timer to auto-remove the blessing after duration expires
 /mob/living/proc/start_blessing_duration_timer(blessing_path, duration)
 	spawn(duration)
@@ -130,16 +129,15 @@
 
 	var/datum/status_effect/B = get_status_effect(blessing_path)
 	if(!B || !B.alert_type)
-		to_chat(src, span_warning("No active buff or invalid blessing path found to modify."))
+		to_chat(usr, span_warning("No active buff or invalid blessing path found to modify."))
 		return FALSE
 
 	for(var/atom/movable/screen/alert/A in client.screen)
 		if(istype(A, B.alert_type))
 			A.desc = new_desc
-			//to_chat(src, span_notice("Blessing visual updated: [new_desc]"))
 			return TRUE
 
-	to_chat(src, span_warning("Could not find active alert instance for the blessing."))
+	to_chat(usr, span_warning("Could not find active alert instance for the blessing."))
 	return FALSE
 
 /// Returns the active status effect datum for the given type if it exists on the mob
@@ -156,10 +154,6 @@
 /// Returns the immersive flavor text based on both the target's patron and the specific blessing applied
 /// Fully extended for Abyssor, Astrata, Baotha, Dendor, Eora, Graggar, Malum, Matthios, Necra, Noc, Pestra, Ravox, Xylix, Zizo
 /mob/living/proc/get_patron_blessing_text(blessing_path)
-	var/patron_type = patron?.type
-	if(!patron_type)
-		return "A divine force surges through you, wrapping your soul in unseen power."
-
 	/// Specific god -> specific blessing mapping
 	var/static/list/blessing_flavor = list(
 		/// Abyssor – The Sunken God
@@ -387,9 +381,15 @@
 			/datum/status_effect/buff/barbrage = "Zizo roars: \"Rend zem. Show zis strength!\""
 		)
 	)
+	var/patron_type = patron?.type
+	if(!patron_type)
+		return "A divine force surges through you, wrapping your soul in unseen power."
+
+	if(patron_type == /datum/patron/inhumen/graggar_zizo)
+		patron_type = pick(/datum/patron/inhumen/graggar, /datum/patron/inhumen/zizo)
 
 	/// Return specific blessing line if available
-	if(blessing_flavor[patron_type] && blessing_flavor[patron_type][blessing_path])
+	if(blessing_flavor[patron_type]?[blessing_path])
 		return blessing_flavor[patron_type][blessing_path]
 
 	/// Generic fallback
