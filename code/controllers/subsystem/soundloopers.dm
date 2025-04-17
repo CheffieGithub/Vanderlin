@@ -23,7 +23,7 @@ SUBSYSTEM_DEF(soundloopers)
 	else
 		check_clients = FALSE
 
-	while (current.len)
+	while(current.len)
 		var/datum/looping_sound/thing = current[current.len]
 		current.len--
 		if (!thing || !istype(thing) || QDELETED(thing))
@@ -37,7 +37,7 @@ SUBSYSTEM_DEF(soundloopers)
 				continue
 
 		if(check_clients && thing.persistent_loop)
-			for(var/client/C in GLOB.clients)
+			for(var/client/C as anything in GLOB.clients)
 				if(C.mob) //Not in the lobby
 					C.update_sounds()
 
@@ -46,7 +46,9 @@ SUBSYSTEM_DEF(soundloopers)
 
 /client/proc/update_sounds()
 	//First we need to periodically scan if we moved into range of an already-playing sound
-	for(var/datum/looping_sound/PS in GLOB.persistent_sound_loops)
+	for(var/datum/looping_sound/PS as anything in GLOB.persistent_sound_loops)
+		if(QDELETED(PS))
+			continue
 		if(PS in played_loops) //Make sure it's not already on the list
 			continue
 
@@ -68,7 +70,9 @@ SUBSYSTEM_DEF(soundloopers)
 		mob.playsound_local(parent_turf, PS.cursound, PS.volume, PS.vary, PS.frequency, PS.falloff, PS.channel, FALSE, our_sound, repeat = PS)
 
 	//Now we check how far away etc we are
-	for(var/datum/looping_sound/loop in played_loops)
+	for(var/datum/looping_sound/loop as anything in played_loops)
+		if(QDELETED(loop))
+			continue
 		if(mob && loop.parent == mob) //the sound's coming from inside the house!
 			continue
 
@@ -76,8 +80,6 @@ SUBSYSTEM_DEF(soundloopers)
 		var/turf/source_turf = get_turf(loop.parent)
 		var/distance_between = get_dist(mob,loop.parent)
 
-		if(isturf(loop.parent))
-			source_turf = loop.parent
 		if(!source_turf) //somehow
 			continue
 

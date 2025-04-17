@@ -160,30 +160,31 @@ GLOBAL_LIST_EMPTY(created_sound_groups)
 		if(ismob(thing))
 			var/mob/mob = thing
 			mob.playsound_local(mob, S, volume, vary, frequency, falloff, repeat = src, channel = channel)
-	else
-		var/list/R = playsound(thing, S, volume, vary, extra_range, falloff, frequency, channel, ignore_walls = ignore_walls, repeat = src)
-		if(!R || !R.len)
-			R = list()
-		for(var/mob/M in thingshearing)
-			if(!M.client)
-				thingshearing -= M
+		return
+	var/list/R = playsound(thing, S, volume, vary, extra_range, falloff, frequency, channel, ignore_walls = ignore_walls, repeat = src)
+	if(!R || !length(R))
+		R = list()
+	for(var/mob/M as anything in thingshearing)
+		if(!M.client)
+			thingshearing -= M
+			continue
+		if(!(M in R) || M.IsSleeping())// they are out of range
+			var/list/L = M.client.played_loops[src]
+			if(!L || !length(L))
 				continue
-			if(!(M in R) || M.IsSleeping())// they are out of range
-				var/list/L = M.client.played_loops[src]
-				if(L)
-					var/sound/SD = L["SOUND"]
-					if(SD)
-						if(persistent_loop)
-							L["MUTESTATUS"] = TRUE
-							L["VOL"] = 0
-							M.mute_sound(SD)
-							//M.play_ambience()
-						else
-							M.client.played_loops -= src
-							thingshearing -= M
-							M.stop_sound_channel(SD.channel)
-			else
-				on_hear_sound(M)
+			var/sound/SD = L["SOUND"]
+			if(!SD)
+				continue
+			if(persistent_loop)
+				L["MUTESTATUS"] = TRUE
+				L["VOL"] = 0
+				M.mute_sound(SD)
+				continue
+			M.client.played_loops -= src
+			thingshearing -= M
+			M.stop_sound_channel(SD.channel)
+			continue
+		on_hear_sound(M)
 
 /datum/looping_sound/proc/on_hear_sound(mob/M)
 	return
@@ -207,35 +208,25 @@ GLOBAL_LIST_EMPTY(created_sound_groups)
 	START_PROCESSING(SSsoundloopers, src)
 
 /datum/looping_sound/proc/on_stop()
-//	play(end_sound)
 	STOP_PROCESSING(SSsoundloopers, src)
 	if(persistent_loop)
 		GLOB.persistent_sound_loops -= src
-	if(!direct)
-		for(var/mob/M in thingshearing)
-			if(M.client)
-				var/list/L = M.client.played_loops[src]
-				if(L)
-					var/sound/SD = L["SOUND"]
-					if(SD)
-						M.stop_sound_channel(SD.channel)
-					M.client.played_loops -= src
-					thingshearing -= M
-	else
+	if(direct)
 		var/mob/P = parent
 		if(P && P.client)
 			P.stop_sound_channel(channel) //This is mostly used for weather
-/*
-/mob/proc/stop_all_loops()
-	if(client)
-		for(var/datum/looping_sound/X in client.played_loops)
-			var/list/L = client.played_loops[X]
-			var/sound/SD = L["SOUND"]
-			if(SD)
-				stop_sound_channel(SD.channel)
-			client.played_loops -= X
-			X.thingshearing -= src
-*/
+		return
+	for(var/mob/M as anything in thingshearing)
+		if(!M.client)
+			continue
+		var/list/L = M.client.played_loops[src]
+		if(!L)
+			continue
+		var/sound/SD = L["SOUND"]
+		if(SD)
+			M.stop_sound_channel(SD.channel)
+		M.client.played_loops -= src
+		thingshearing -= M
 
 /datum/looping_sound/proc/set_parent(new_parent)
 	if(parent)
