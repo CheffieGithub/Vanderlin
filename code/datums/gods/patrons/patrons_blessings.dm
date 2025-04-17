@@ -129,7 +129,6 @@
 
 	var/datum/status_effect/B = get_status_effect(blessing_path)
 	if(!B || !B.alert_type)
-		to_chat(usr, span_warning("No active buff or invalid blessing path found to modify."))
 		return FALSE
 
 	for(var/atom/movable/screen/alert/A in client.screen)
@@ -137,7 +136,6 @@
 			A.desc = new_desc
 			return TRUE
 
-	to_chat(usr, span_warning("Could not find active alert instance for the blessing."))
 	return FALSE
 
 /// Returns the active status effect datum for the given type if it exists on the mob
