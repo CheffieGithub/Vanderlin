@@ -1,6 +1,6 @@
 /// Admin proc to apply or remove blessings from a character
 /// Supports timed expiration, auto-removal on sleep, and dynamic flavor text injection
-/datum/admins/proc/admin_bless(mob/living/carbon/human/M in GLOB.mob_list)
+/datum/admins/proc/admin_bless(mob/living/carbon/human/M in GLOB.player_list)
 	set name = "Bless"
 	set desc = "Bless or lift a blessing from a character"
 	set category = "GameMaster"
@@ -78,7 +78,7 @@
 
 		M.playsound_local(get_turf(M), 'sound/magic/bless.ogg', 100, FALSE)
 
-		var/flavor_text = get_patron_blessing_text(M, blessing_path)
+		var/flavor_text = M.get_patron_blessing_text(blessing_path)
 		if(flavor_text)
 			to_chat(M, span_nicegreen("[flavor_text]"))
 
@@ -155,8 +155,8 @@
 /// Falls back to generic patron text or a default generic divine message
 /// Returns the immersive flavor text based on both the target's patron and the specific blessing applied
 /// Fully extended for Abyssor, Astrata, Baotha, Dendor, Eora, Graggar, Malum, Matthios, Necra, Noc, Pestra, Ravox, Xylix, Zizo
-proc/get_patron_blessing_text(mob/living/carbon/human/M, var/blessing_path)
-	var/patron_type = M.patron?.type
+/mob/living/proc/get_patron_blessing_text(blessing_path)
+	var/patron_type = patron?.type
 	if(!patron_type)
 		return "A divine force surges through you, wrapping your soul in unseen power."
 
