@@ -595,14 +595,9 @@ GLOBAL_LIST_EMPTY(ritualslist)
 /proc/falseappearance(mob/user, turf/C)
 	for(var/mob/living/carbon/human/H in C.contents)
 		var/datum/preferences/A = new()//Randomize appearance for the guy
-		var/first_names = GLOB.first_names
-		if(H.gender == FEMALE)
-			first_names = GLOB.first_names_female
-		else
-			first_names = GLOB.first_names_male
 		A.apply_prefs_to(H)
-		A.real_name = "[pick(first_names)]"
 		H.dna.update_dna_identity()
+		H.set_patron(/datum/patron/inhumen/zizo)
 		break
 
 /datum/ritual/heartache
