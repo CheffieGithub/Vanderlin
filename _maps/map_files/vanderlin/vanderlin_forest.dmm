@@ -64,10 +64,6 @@
 	icon_state = "horzw"
 	},
 /area/rogue/indoors)
-"bu" = (
-/obj/effect/landmark/start/lich,
-/turf/open/floor/cobblerock,
-/area/rogue/outdoors/woods)
 "bz" = (
 /obj/structure/bed/shit,
 /obj/effect/decal/cleanable/dirt/cobweb{
@@ -42161,7 +42157,7 @@ Zf
 Sy
 cA
 QC
-bu
+cA
 QC
 Gh
 wV
