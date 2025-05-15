@@ -102,14 +102,14 @@
 /obj/structure/spider/stickyweb/CanPass(atom/movable/mover, turf/target)
 	if(isliving(mover))
 		if(prob(50) && !HAS_TRAIT(mover, TRAIT_WEBWALK))
-			to_chat(mover, "<span class='danger'>I get stuck in \the [src] for a moment.</span>")
+			to_chat(mover, span_danger("I get stuck in \the [src] for a moment."))
 			return FALSE
 	else if(istype(mover, /obj/projectile))
 		return prob(30)
 	return TRUE
 
 /obj/structure/spider/stickyweb/fire_act(added, maxstacks)
-	visible_message("<span class='warning'>[src] catches fire!</span>")
+	visible_message(span_warning("[src] catches fire!"))
 	var/turf/T = get_turf(src)
 	qdel(src)
 	new /obj/effect/hotspot(T)
@@ -141,8 +141,8 @@
 	var/breakout_time = 1 MINUTES
 	user.changeNext_move(CLICK_CD_BREAKOUT)
 	user.last_special = world.time + CLICK_CD_BREAKOUT
-	to_chat(user, "<span class='notice'>I struggle against the tight bonds... (This will take about [DisplayTimeText(breakout_time)].)</span>")
-	visible_message("<span class='notice'>I see something struggling and writhing in \the [src]!</span>")
+	to_chat(user, span_notice("I struggle against the tight bonds... (This will take about [DisplayTimeText(breakout_time)].)"))
+	visible_message(span_notice("I see something struggling and writhing in \the [src]!"))
 	if(do_after(user, breakout_time, src))
 		if(!user || user.stat != CONSCIOUS || user.loc != src)
 			return
@@ -150,7 +150,7 @@
 
 /obj/structure/spider/cocoon/Destroy()
 	var/turf/T = get_turf(src)
-	src.visible_message("<span class='warning'>\The [src] splits open.</span>")
+	src.visible_message(span_warning("\The [src] splits open."))
 	for(var/atom/movable/A in contents)
 		A.forceMove(T)
 	return ..()
@@ -206,7 +206,7 @@
 	. = ..()
 	var/mob/living/carbon/human/H = user
 	if(depleted)
-		to_chat(user, "<span class='notice'>The salt circle has been damaged...</span>")
+		to_chat(user, span_notice("The salt circle has been damaged..."))
 		return
 	if(H.virginity)
 		playsound(get_turf(user), 'sound/magic/timestop.ogg', 100, TRUE, -1)
@@ -223,10 +223,10 @@
 		depleted = TRUE
 		alpha = 90
 	else
-		to_chat(user, "<span class='notice'>The magick forces are beyond your control.</span>")
+		to_chat(user, span_notice("The magick forces are beyond your control."))
 /obj/structure/circle_protection/attackby(obj/item/I, mob/user, params)
 	if(istype(I, /obj/item/reagent_containers/powder/salt))
-		to_chat(user, "<span class='notice'>Restoring the salt lines...</span>")
+		to_chat(user, span_notice("Restoring the salt lines..."))
 		if(do_after(user, 10 SECONDS, src))
 			depleted = FALSE
 			alpha = 180
@@ -258,54 +258,48 @@
 	icon_state = "nocdevice"
 	plane = -1
 	layer = 4.2
-	var/mob/current_owner
 	var/last_scry
+
 /obj/structure/nocdevice/attack_hand(mob/user)
 	. = ..()
 	var/mob/living/carbon/human/H = user
-	if(H.virginity)
-		if(world.time < last_scry + 30 SECONDS)
-			to_chat(user, "<span class='warning'>I peer into the sky but cannot focus the lens on the face of Noc. Maybe I should wait.</span>")
-			return
-		var/input = stripped_input(user, "Who are you looking for?", "Scrying Orb")
-		if(!input)
-			return
-		if(!user.key)
-			return
-		if(world.time < last_scry + 30 SECONDS)
-			to_chat(user, "<span class='warning'>I peer into the sky but cannot focus the lens on the face of Noc. Maybe I should wait.</span>")
-			return
-		if(!user.mind || !user.mind.do_i_know(name=input))
-			to_chat(user, "<span class='warning'>I don't know anyone by that name.</span>")
-			return
-		for(var/mob/living/carbon/human/HL in GLOB.human_list)
-			if(HL.real_name == input)
-				var/turf/T = get_turf(HL)
-				if(!T)
-					continue
-				var/mob/dead/observer/screye/S = user.scry_ghost()
-				if(!S)
-					return
-				S.ManualFollow(HL)
-				last_scry = world.time
-				user.visible_message("<span class='danger'>[user] stares into [src], [p_their()] squinting and concentrating...</span>")
-				addtimer(CALLBACK(S, TYPE_PROC_REF(/mob/dead/observer, reenter_corpse)), 8 SECONDS)
-				if(!HL.stat)
-					if(HL.STAPER >= 15)
-						if(HL.mind)
-							if(HL.mind.do_i_know(name=user.real_name))
-								to_chat(HL, "<span class='warning'>I can clearly see the face of [user.real_name] staring at me!.</span>")
-								return
-						to_chat(HL, "<span class='warning'>I can clearly see the face of an unknown [user.gender == FEMALE ? "woman" : "man"] staring at me!</span>")
-						return
-					if(HL.STAPER >= 11)
-						to_chat(HL, "<span class='warning'>I feel a pair of unknown eyes on me.</span>")
-				return
-		to_chat(user, "<span class='warning'>I peer into the viewpiece, but Noc does not reveal where [input] is.</span>")
+	if(!H.mind)
 		return
-	else
-		to_chat(user, "<span class='notice'>Noc looks angry with me...</span>")
-
+	if(!H.virginity)
+		to_chat(user, span_notice("Noc looks angry with me..."))
+	if(world.time < last_scry + 30 SECONDS)
+		to_chat(user, span_warning("I peer into the sky but cannot focus the lens on the face of Noc. Maybe I should wait."))
+		return
+	var/input = stripped_input(user, "Who are you looking for?", "Scrying Orb")
+	if(!input)
+		return
+	if(!user.mind?.known_as_name(input))
+		to_chat(user, span_warning("I don't know anyone by that name."))
+		return
+	for(var/datum/mind/mind as anything in SSticker.minds)
+		var/mob/living/carbon/human/to_scry = mind.current
+		if(!to_scry)
+			return
+		if(LOWERSTRINGCOMP(to_scry.real_name, input))
+			to_chat(user, span_warning("I peer into the viewpiece, but Noc does not reveal where [input] is."))
+			return
+		var/mob/dead/observer/screye/S = user.scry_ghost()
+		if(!S)
+			return
+		S.ManualFollow(to_scry)
+		last_scry = world.time
+		user.visible_message(span_danger("[user] stares into [src], [p_their()] squinting and concentrating..."))
+		addtimer(CALLBACK(S, TYPE_PROC_REF(/mob/dead/observer, reenter_corpse)), 8 SECONDS)
+		if(to_scry.stat || to_scry.is_blind())
+			return
+		if(to_scry.STAPER >= 15)
+			var/name = to_scry.mind.known_as(user.mind)
+			if(name)
+				to_chat(to_scry, span_warning("I can clearly see the face of [name] staring at me!."))
+				return
+			to_chat(to_scry, span_warning("I can clearly see the face of an unknown [user.gender == FEMALE ? "woman" : "man"] staring at me!"))
+		else if(to_scry.STAPER >= 11)
+			to_chat(to_scry, span_warning("I feel a pair of unknown eyes on me."))
 
 /*	..................   Floor decoration   ................... */
 /obj/structure/giantfur
