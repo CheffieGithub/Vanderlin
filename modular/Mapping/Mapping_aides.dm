@@ -263,7 +263,7 @@
 /obj/structure/nocdevice/attack_hand(mob/user)
 	. = ..()
 	var/mob/living/carbon/human/H = user
-	if(!H.mind)
+	if(!istype(H))
 		return
 	if(!H.virginity)
 		to_chat(user, span_notice("Noc looks angry with me..."))
@@ -278,26 +278,33 @@
 		return
 	for(var/datum/mind/mind as anything in SSticker.minds)
 		var/mob/living/carbon/human/to_scry = mind.current
-		if(!to_scry)
-			return
+		if(QDELETED(to_scry))
+			continue
 		if(!LOWERSTRINGCOMP(to_scry.real_name, input))
+			continue
+		if(HAS_TRAIT(to_scry, TRAIT_ANTISCRYING))
+			to_chat(user, span_warning("I peer into the lens, but an impenetrable fog shrouds [input]."))
+			to_chat(to_scry, span_warning("My magical shrouding reacted to something."))
 			return
+		message_admins("SCRYING: [user.real_name] ([user.ckey]) has used the noc device orb to leer at [to_scry.real_name] ([to_scry.ckey])")
+		log_game("SCRYING: [user.real_name] ([user.ckey]) has used the noc device to leer at [to_scry.real_name] ([to_scry.ckey])")
 		var/mob/dead/observer/screye/S = user.scry_ghost()
 		if(!S)
 			return
 		S.ManualFollow(to_scry)
 		last_scry = world.time
-		user.visible_message(span_danger("[user] stares into [src], [p_their()] squinting and concentrating..."))
+		user.visible_message(span_danger("[user] stares into [src], squinting and concentrating..."))
 		addtimer(CALLBACK(S, TYPE_PROC_REF(/mob/dead/observer, reenter_corpse)), 8 SECONDS)
 		if(to_scry.stat || to_scry.is_blind())
 			return
 		if(to_scry.STAPER >= 15)
-			var/name = to_scry.mind.known_as(user.mind)
+			var/name = to_scry.mind?.known_as(user.mind)
 			if(name)
 				to_chat(to_scry, span_warning("I can clearly see the face of [name] staring at me!."))
 				return
 			to_chat(to_scry, span_warning("I can clearly see the face of an unknown [user.gender == FEMALE ? "woman" : "man"] staring at me!"))
-		else if(to_scry.STAPER >= 11)
+			return
+		if(to_scry.STAPER >= 11)
 			to_chat(to_scry, span_warning("I feel a pair of unknown eyes on me."))
 		return
 	to_chat(user, span_warning("I peer into the viewpiece, but Noc does not reveal where [input] is."))

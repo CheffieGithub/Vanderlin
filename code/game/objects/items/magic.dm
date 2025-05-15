@@ -17,7 +17,6 @@
 	grid_height = 32
 	grid_width = 32
 
-	var/mob/current_owner
 	var/last_scry
 	var/cooldown = 30 SECONDS
 
@@ -36,45 +35,41 @@
 	var/input = stripped_input(user, "Who are you looking for?", "Scrying Orb")
 	if(!input)
 		return
-	if(!user.key)
+	if(!user.mind?.known_as_name(input))
+		to_chat(user, span_warning("I don't know anyone by that name."))
 		return
-	if(world.time < last_scry + cooldown)
-		to_chat(user, "<span class='warning'>I look into the ball but only see inky smoke. Maybe I should wait.</span>")
-		return
-	if(!user.mind || !user.mind.do_i_know(name=input))
-		to_chat(user, "<span class='warning'>I don't know anyone by that name.</span>")
-		return
-	for(var/mob/living/carbon/human/HL in GLOB.human_list)
-		if(HL.real_name == input)
-			var/turf/T = get_turf(HL)
-			if(!T)
-				continue
-			if(HAS_TRAIT(HL, TRAIT_ANTISCRYING))
-				to_chat(user, span_warning("I peer into the ball, but an impenetrable fog shrouds [input]."))
-				to_chat(HL, span_warning("My magical shrouding reacted to something."))
-				return
-			message_admins("SCRYING: [user.real_name] ([user.ckey]) has used the scrying orb to leer at [HL.real_name] ([HL.ckey])")
-			log_game("SCRYING: [user.real_name] ([user.ckey]) has used the scrying orb to leer at [HL.real_name] ([HL.ckey])")
-			var/mob/dead/observer/screye/S = user.scry_ghost()
-			if(!S)
-				return
-			S.ManualFollow(HL)
-			last_scry = world.time
-			user.visible_message("<span class='danger'>[user] stares into [src], [p_their()] eyes rolling back into [p_their()] head.</span>")
-			addtimer(CALLBACK(S, TYPE_PROC_REF(/mob/dead/observer, reenter_corpse)), 8 SECONDS)
-			if(!HL.stat)
-				if(HL.STAPER >= 15)
-					if(HL.mind)
-						if(HL.mind.do_i_know(name=user.real_name))
-							to_chat(HL, "<span class='warning'>I can clearly see the face of [user.real_name] staring at me!.</span>")
-							return
-					to_chat(HL, "<span class='warning'>I can clearly see the face of an unknown [user.gender == FEMALE ? "woman" : "man"] staring at me!</span>")
-					return
-				if(HL.STAPER >= 11)
-					to_chat(HL, "<span class='warning'>I feel a pair of unknown eyes on me.</span>")
+	for(var/datum/mind/mind as anything in SSticker.minds)
+		var/mob/living/carbon/human/to_scry = mind.current
+		if(QDELETED(to_scry))
+			continue
+		if(!LOWERSTRINGCOMP(to_scry.real_name, input))
+			continue
+		if(HAS_TRAIT(to_scry, TRAIT_ANTISCRYING))
+			to_chat(user, span_warning("I peer into the ball, but an impenetrable fog shrouds [input]."))
+			to_chat(to_scry, span_warning("My magical shrouding reacted to something."))
 			return
-	to_chat(user, "<span class='warning'>I peer into the ball, but can't find [input].</span>")
-	return
+		message_admins("SCRYING: [user.real_name] ([user.ckey]) has used the scrying orb to leer at [to_scry.real_name] ([to_scry.ckey])")
+		log_game("SCRYING: [user.real_name] ([user.ckey]) has used the scrying orb to leer at [to_scry.real_name] ([to_scry.ckey])")
+		var/mob/dead/observer/screye/S = user.scry_ghost()
+		if(!S)
+			return
+		S.ManualFollow(to_scry)
+		last_scry = world.time
+		user.visible_message("<span class='danger'>[user] stares into [src], [user.p_their()] eyes rolling back into [user.p_their()] head.</span>")
+		addtimer(CALLBACK(S, TYPE_PROC_REF(/mob/dead/observer, reenter_corpse)), 8 SECONDS)
+		if(to_scry.stat || to_scry.is_blind())
+			return
+		if(to_scry.STAPER >= 15)
+			var/name = to_scry.mind?.known_as(user.mind)
+			if(name)
+				to_chat(to_scry, span_warning("I can clearly see the face of [name] staring at me!."))
+				return
+			to_chat(to_scry, span_warning("I can clearly see the face of an unknown [user.gender == FEMALE ? "woman" : "man"] staring at me!"))
+			return
+		if(to_scry.STAPER >= 11)
+			to_chat(to_scry, span_warning("I feel a pair of unknown eyes on me."))
+		return
+	to_chat(user, span_warning("I peer into the ball, but can't find [input]."))
 
 /////////////////////////////////////////Crystal ball ghsot vision///////////////////
 
