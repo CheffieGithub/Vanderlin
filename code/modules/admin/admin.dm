@@ -70,7 +70,10 @@
 	body +="</head>"
 	body += "<body><div id='container'>"
 	body += "<div id='left'>"
-	body += "<body>Options panel for <b>[M]</b>"
+	if(M.ckey)
+		body += "<body>\[<A href='byond://?_src_=holder;[HrefToken()];ppbyckey=[M.ckey];ppbyckeyorigmob=[REF(M)]'>Find Updated Panel</A>\] <br>"
+
+	body += "Options panel for <b>[M]</b>"
 	if(M.client)
 		body += " played by <b>[M.client]</b> "
 		body += "\[<A href='?_src_=holder;[HrefToken()];editrights=[(GLOB.admin_datums[M.client.ckey] || GLOB.deadmins[M.client.ckey]) ? "rank" : "add"];key=[M.key]'>[M.client.holder ? M.client.holder.rank : "Player"]</A>\]"
@@ -83,7 +86,9 @@
 		body += " \[<A href='?_src_=holder;[HrefToken()];revive=[REF(M)]'>Heal</A>\] "
 
 	if(M.client)
-		body += "<br>\[<b>First Seen:</b> [M.client.player_join_date]\]\[<b>Byond account registered on:</b> [M.client.account_join_date]\] IP: [M.client.address]"
+		body += "<br>\[<b>First Seen:</b> [M.client.player_join_date]\]"
+		body += "<br>\[<b>Byond account registered on:</b> [M.client.account_join_date]\]"
+		body += "<br>\[<b>IP:</b> [M.client.address]\]"
 		body += "<br><br><b>CentCom Ban DB: </b> "
 		if(CONFIG_GET(string/centcom_ban_db))
 			body += "<a href='byond://?_src_=holder;[HrefToken()];centcomlookup=[M.client.ckey]'>Search</a>"
@@ -103,26 +108,30 @@
 		body += "<br>"
 		body += "<a href='?_src_=holder;[HrefToken()];roleban=add;mob=[REF(M)]'>\[Role Ban Panel\]</a> "
 
-		var/patron = "NA"
+		var/patron = ""
 		if(isliving(M))
 			var/mob/living/living = M
 			patron = initial(living.patron.name)
-		body += "<br><br>Current Patron: [patron]"
-
+		var/flaw = ""
 		var/curse_string = ""
+		var/job = ""
 		if(ishuman(M))
-			var/mob/living/carbon/human/living = M
-			for(var/datum/curse/curse in living.curses)
-				curse_string += "<br> - [curse.name]"
-		body += "<br>Curses: [curse_string]"
+			var/mob/living/carbon/human/human_mob = M
+			flaw = human_mob.charflaw
+			curse_string = human_mob.curses.Join(", ")
+			job = human_mob?.mind.assigned_role.title
+
+		body += "<br><br>Current Patron: <a href='?_src_=holder;[HrefToken()];changepatron=add;mob=[REF(M)]'>\[[patron ? patron : "NA"]\]</a>"
+		body += "<br>Current Flaw: <a href='?_src_=holder;[HrefToken()];changeflaw=add;mob=[REF(M)]'>\[[flaw ? flaw : "NA"]\]</a>"
+		body += "<br>Current Curses: <a href='?_src_=holder;[HrefToken()];modifycurses=add;mob=[REF(M)]'>\[[curse_string ? curse_string : "NA"]\]</a>"
+		body += "<br>Current Job: <a href='?_src_=holder;[HrefToken()];setjob=add;mob=[REF(M)]'>\[[job ? job : "NA"]\]</a>"
 
 		var/full_version = "Unknown"
 		if(M.client.byond_version)
 			full_version = "[M.client.byond_version].[M.client.byond_build ? M.client.byond_build : "xxx"]"
-		body += "<br>\[<b>Byond version:</b> [full_version]\]<br>"
+		body += "<br>\[<b>Byond version:</b> [full_version]\]"
 
-
-	body += "<br><br>\[ "
+	body += "<br><br>\["
 	body += "<a href='?_src_=vars;[HrefToken()];Vars=[REF(M)]'>VV</a> - "
 	if(M.mind)
 		body += "<a href='?_src_=holder;[HrefToken()];traitor=[REF(M)]'>TP</a> - "
@@ -156,7 +165,7 @@
 		body += "<A href='?_src_=holder;[HrefToken()];mute=[M.ckey];mute_type=[MUTE_PRAY]'><font color='[(muted & MUTE_PRAY)?"red":"blue"]'>PRAY</font></a> | "
 		body += "<A href='?_src_=holder;[HrefToken()];mute=[M.ckey];mute_type=[MUTE_ADMINHELP]'><font color='[(muted & MUTE_ADMINHELP)?"red":"blue"]'>ADMINHELP</font></a> | "
 		body += "<A href='?_src_=holder;[HrefToken()];mute=[M.ckey];mute_type=[MUTE_DEADCHAT]'><font color='[(muted & MUTE_DEADCHAT)?"red":"blue"]'>DEADCHAT</font></a> | "
-		body += "<A href='?_src_=holder;[HrefToken()];mute=[M.ckey];mute_type=[MUTE_LOOC]'><font color='[(muted & MUTE_LOOC)?"red":"blue"]'>LOOC</font></a>\]"
+		body += "<A href='?_src_=holder;[HrefToken()];mute=[M.ckey];mute_type=[MUTE_LOOC]'><font color='[(muted & MUTE_LOOC)?"red":"blue"]'>LOOC</font></a> | "
 		body += "<A href='?_src_=holder;[HrefToken()];mute=[M.ckey];mute_type=[MUTE_MEDITATE]'><font color='[(muted & MUTE_MEDITATE)?"red":"blue"]'>Meditate</font></a>\]"
 		body += "(<A href='?_src_=holder;[HrefToken()];mute=[M.ckey];mute_type=[MUTE_ALL]'><font color='[(muted & MUTE_ALL)?"red":"blue"]'>toggle all</font></a>)"
 

@@ -126,7 +126,7 @@
 	var/mob/living/living = AM
 	if(living.stat != CONSCIOUS)
 		return
-	if(living.incapacitated())
+	if(living.incapacitated(ignore_grab = TRUE))
 		return
 	// if it's in the same chain, it will actually stop a pulled thing being pulled, bandaid solution with a timer
 	addtimer(CALLBACK(src, PROC_REF(user_try_travel), living), 1)
@@ -160,7 +160,7 @@
 		show_travel_tile(user)
 		the_tile.show_travel_tile(user)
 	user.log_message("[user.mind?.key ? user.mind?.key : user.real_name] has travelled to [loc_name(the_tile)] from", LOG_GAME, color = "#0000ff")
-	mob_move_travel_z_level(user, get_turf(the_tile))
+	movable_travel_z_level(user, get_turf(the_tile))
 
 /obj/structure/fluff/traveltile/proc/reveal_travel_trait_to_others(mob/living/user)
 	if(!required_trait)

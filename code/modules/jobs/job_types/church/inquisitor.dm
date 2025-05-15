@@ -114,7 +114,7 @@
 	if(H == src)
 		to_chat(src, span_warning("I won't torture myself!"))
 		return
-	if(!H.restrained() && !H.buckled)
+	if(!HAS_TRAIT(H, TRAIT_RESTRAINED) && !H.buckled)
 		to_chat(src, span_warning("[H] needs to be restrained or buckled first!"))
 		return
 	if(H.stat == DEAD)
@@ -127,13 +127,14 @@
 		return
 	if(!do_after(src, 4 SECONDS, H))
 		return
-	if(!H.restrained() && !H.buckled)
+	if(!HAS_TRAIT(H, TRAIT_RESTRAINED) && !H.buckled)
 		to_chat(src, span_warning("[H] needs to be restrained or buckled first!"))
 		return
 	if(H.stat == DEAD)
 		to_chat(src, span_warning("[H] is dead already..."))
 		return
 	if(H.add_stress(/datum/stressevent/tortured))
+		SEND_SIGNAL(src, COMSIG_TORTURE_PERFORMED, H)
 		var/static/list/torture_lines = list(
 			"CONFESS YOUR WRONGDOINGS!",
 			"TELL ME YOUR SECRETS!",
@@ -158,7 +159,7 @@
 	if(H == src)
 		to_chat(src, span_warning("I won't torture myself!"))
 		return
-	if(!H.restrained() && !H.buckled)
+	if(!HAS_TRAIT(H, TRAIT_RESTRAINED) && !H.buckled)
 		to_chat(src, span_warning("[H] needs to be restrained or buckled first!"))
 		return
 	if(H.stat == DEAD)
@@ -171,13 +172,14 @@
 		return
 	if(!do_after(src, 4 SECONDS, H))
 		return
-	if(!H.restrained() && !H.buckled)
+	if(!HAS_TRAIT(H, TRAIT_RESTRAINED) && !H.buckled)
 		to_chat(src, span_warning("[H] needs to be restrained or buckled first!"))
 		return
 	if(H.stat == DEAD)
 		to_chat(src, span_warning("[H] is dead already..."))
 		return
 	if(H.add_stress(/datum/stressevent/tortured))
+		SEND_SIGNAL(src, COMSIG_TORTURE_PERFORMED, H)
 		var/static/list/faith_lines = list(
 			"DO YOU DENY PSYDON AND THE TEN?",
 			"WHO IS YOUR GOD?",

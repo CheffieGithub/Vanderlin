@@ -139,11 +139,6 @@ GLOBAL_VAR_INIT(mobids, 1)
 				type = alt_type
 				if(type & MSG_VISUAL && eye_blind)
 					return
-	// voice muffling
-	if(stat == UNCONSCIOUS)
-		if(type & MSG_AUDIBLE) //audio
-			to_chat(src, "<I>... You can almost hear something ...</I>")
-		return
 	to_chat(src, msg)
 
 /**
@@ -182,6 +177,8 @@ GLOBAL_VAR_INIT(mobids, 1)
 			msg = blind_message
 		if(!msg)
 			continue
+		if(M != src && !M.eye_blind)
+			M.log_message("saw [key_name(src)] emote: [message]", LOG_EMOTE, log_globally = FALSE)
 		M.show_message(msg, MSG_VISUAL, blind_message, MSG_AUDIBLE)
 		if(runechat_message && M.can_hear())
 			M.create_chat_message(src, raw_message = runechat_message, spans = list("emote"))
@@ -207,6 +204,9 @@ GLOBAL_VAR_INIT(mobids, 1)
 	if(self_message)
 		hearers -= src
 	for(var/mob/M in hearers)
+		if(M != src && M.client)
+			if(M.can_hear())
+				M.log_message("heard [key_name(src)] emote: [message]", LOG_EMOTE, log_globally = FALSE)
 		M.show_message(message, MSG_AUDIBLE, deaf_message, MSG_VISUAL)
 		if(runechat_message && M.can_see_runechat(src) && M.can_hear())
 			M.create_chat_message(src, raw_message = runechat_message, spans = list("emote"))
@@ -230,10 +230,6 @@ GLOBAL_VAR_INIT(mobids, 1)
 ///Get the item on the mob in the storage slot identified by the id passed in
 /mob/proc/get_item_by_slot(slot_id)
 	return null
-
-///Is the mob restrained
-/mob/proc/restrained(ignore_grab = TRUE)
-	return
 
 ///Is the mob incapacitated
 /mob/proc/incapacitated(ignore_restraints = FALSE, ignore_grab = TRUE)
@@ -528,7 +524,7 @@ GLOBAL_VAR_INIT(mobids, 1)
 	set hidden = 1
 	set src = usr
 
-	if(incapacitated())
+	if(incapacitated(ignore_grab = TRUE))
 		return
 
 	var/obj/item/I = get_active_held_item()
@@ -648,7 +644,6 @@ GLOBAL_VAR_INIT(mobids, 1)
 	if(href_list["refresh"])
 		if(machine && in_range(src, usr))
 			show_inv(machine)
-
 
 	if(href_list["item"] && usr.canUseTopic(src, BE_CLOSE, NO_DEXTERITY))
 		var/slot = text2num(href_list["item"])
@@ -772,7 +767,7 @@ GLOBAL_VAR_INIT(mobids, 1)
 		if(!TurfAdjacent(listed_turf))
 			listed_turf = null
 		else
-			var/obj/structure/mineral_door/secret/secret_door =  locate(/obj/structure/mineral_door/secret) in listed_turf
+			var/obj/structure/door/secret/secret_door =  locate(/obj/structure/door/secret) in listed_turf
 			if(!secret_door)
 				statpanel(listed_turf.name, null, listed_turf)
 			var/list/overrides = list()
@@ -805,7 +800,7 @@ GLOBAL_VAR_INIT(mobids, 1)
  * * no transform not set
  * * we are not restrained
  */
-/mob/proc/canface()
+/mob/proc/canface(atom/A)
 	if(client)
 		if(world.time < client.last_turn)
 			return FALSE
@@ -815,20 +810,48 @@ GLOBAL_VAR_INIT(mobids, 1)
 		return FALSE
 	if(notransform)
 		return FALSE
-	if(restrained())
+	if(HAS_TRAIT(src, TRAIT_RESTRAINED))
 		return FALSE
 	if( buckled || stat != CONSCIOUS)
 		return FALSE
 	return TRUE
 
 ///Checks mobility move as well as parent checks
-/mob/living/canface()
-	if(!(mobility_flags & MOBILITY_MOVE))
+/mob/living/canface(atom/A)
+	if(HAS_TRAIT(src, TRAIT_IMMOBILIZED))
 		return FALSE
 	if(world.time < last_dir_change + 5)
 		return
-	if(pulledby && pulledby.grab_state >= GRAB_AGGRESSIVE) //the reason this isn't a mobility_flags check is because you want them to be able to change dir if you're passively grabbing them
-		return FALSE
+	if(A && pulledby && pulledby.grab_state >= GRAB_AGGRESSIVE) //the reason this isn't a mobility_flags check is because you want them to be able to change dir if you're passively grabbing them
+		// get_cardinal_dir is inconsistent, reuse face_atom code
+		var/dx = A.x - src.x
+		var/dy = A.y - src.y
+		var/dir
+		if(!dx && !dy) // Wall items are graphically shifted but on the floor
+			if(A.pixel_y > 16)
+				dir = NORTH
+			else if(A.pixel_y < -16)
+				dir = SOUTH
+			else if(A.pixel_x > 16)
+				dir = EAST
+			else if(A.pixel_x < -16)
+				dir = WEST
+		else
+			if(abs(dx) < abs(dy))
+				if(dy > 0)
+					dir = NORTH
+				else
+					dir = SOUTH
+			else
+				if(dx > 0)
+					dir = EAST
+				else
+					dir = WEST
+		if(dir == pulledby.dir) // can never face away from the person grabbing you
+			return FALSE
+		for(var/obj/item/grabbing/G in grabbedby) // only chokeholds prevent turning
+			if(G.chokehold)
+				return FALSE
 	if(IsImmobilized())
 		return FALSE
 	return ..()
@@ -839,7 +862,7 @@ GLOBAL_VAR_INIT(mobids, 1)
 ///Hidden verb to turn east
 /mob/verb/eastface()
 	set hidden = TRUE
-	if(!canface())
+	if(!canface(get_step(src, EAST)))
 		return FALSE
 	setDir(EAST)
 	client.last_turn = world.time + MOB_FACE_DIRECTION_DELAY
@@ -848,7 +871,7 @@ GLOBAL_VAR_INIT(mobids, 1)
 ///Hidden verb to turn west
 /mob/verb/westface()
 	set hidden = TRUE
-	if(!canface())
+	if(!canface(get_step(src, WEST)))
 		return FALSE
 	setDir(WEST)
 	client.last_turn = world.time + MOB_FACE_DIRECTION_DELAY
@@ -857,7 +880,7 @@ GLOBAL_VAR_INIT(mobids, 1)
 ///Hidden verb to turn north
 /mob/verb/northface()
 	set hidden = TRUE
-	if(!canface())
+	if(!canface(get_step(src, NORTH)))
 		return FALSE
 	setDir(NORTH)
 	client.last_turn = world.time + MOB_FACE_DIRECTION_DELAY
@@ -866,7 +889,7 @@ GLOBAL_VAR_INIT(mobids, 1)
 ///Hidden verb to turn south
 /mob/verb/southface()
 	set hidden = TRUE
-	if(!canface())
+	if(!canface(get_step(src, SOUTH)))
 		return FALSE
 	setDir(SOUTH)
 	client.last_turn = world.time + MOB_FACE_DIRECTION_DELAY
@@ -1101,6 +1124,8 @@ GLOBAL_VAR_INIT(mobids, 1)
 
 ///Can this mob read (is literate and not blind)
 /mob/proc/can_read(obj/O, silent = FALSE)
+	if(isobserver(src))
+		return TRUE
 	if(is_blind(src) || eye_blurry)
 		if(!silent)
 			to_chat(src, span_warning("I'm too blind to read."))
@@ -1237,23 +1262,9 @@ GLOBAL_VAR_INIT(mobids, 1)
 ///Set the movement type of the mob and update it's movespeed
 /mob/setMovetype(newval)
 	. = ..()
+	if(isnull(.))
+		return
 	update_movespeed(FALSE)
-
-/// Updates the grab state of the mob and updates movespeed
-/mob/setGrabState(newstate)
-	. = ..()
-	if(!pulling)
-		remove_movespeed_modifier(MOVESPEED_ID_MOB_GRAB_STATE, update=TRUE)
-	else
-		if(!newstate)
-			remove_movespeed_modifier(MOVESPEED_ID_MOB_GRAB_STATE, update=TRUE)
-		else
-			if(grab_state == GRAB_PASSIVE)
-				remove_movespeed_modifier(MOVESPEED_ID_MOB_GRAB_STATE, update=TRUE)
-			else
-				var/usedmove = grab_state*3
-				if(usedmove)
-					add_movespeed_modifier(MOVESPEED_ID_MOB_GRAB_STATE, update=TRUE, priority=100, override=TRUE, multiplicative_slowdown=usedmove, blacklisted_movetypes=FLOATING)
 
 /mob/proc/update_equipment_speed_mods()
 	var/speedies = equipped_speed_mods()
@@ -1289,23 +1300,18 @@ GLOBAL_VAR_INIT(mobids, 1)
 	return "[message_spans_start(spans)][input]</span>"
 
 /// Send a menu that allows for the selection of an item. Randomly selects one after time_limit. selection_list should be an associative list of string and typepath
-/mob/proc/select_equippable(client/player_client, selection_list = list(), time_limit = 20 SECONDS, message = "", title = "")
-	set waitfor = FALSE
-	if(!length(selection_list))
+/mob/proc/select_equippable(list/selection_list, time_limit = 20 SECONDS, message = "", title = "")
+	if(QDELETED(src))
 		return
-	var/client/client_to_use = player_client
-	if(!client_to_use)
-		client_to_use = client
-	if(!client_to_use)
+	if(!client || !mind)
 		return
-	var/random_choice = selection_list[pick(selection_list)]
-	var/timerid = addtimer(CALLBACK(src, PROC_REF(equip_to_appropriate_slot), new random_choice()), time_limit, TIMER_STOPPABLE)
-	var/choice = input(player_client, message, title) as anything in selection_list
-	if(SStimer.timer_id_dict[timerid])
-		deltimer(timerid)
-	else
+	if(!LAZYLEN(selection_list))
 		return
-	var/spawn_item = selection_list[choice]
+	var/choice = browser_input_list(src, message, title, selection_list, timeout = time_limit)
+	if(!choice)
+		choice = pick(selection_list)
+	var/spawn_item = LAZYACCESS(selection_list, choice)
 	if(!spawn_item)
-		spawn_item = selection_list[pick(selection_list)]
+		return choice
 	equip_to_appropriate_slot(new spawn_item(get_turf(src)))
+	return choice

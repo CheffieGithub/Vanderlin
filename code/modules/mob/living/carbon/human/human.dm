@@ -1,4 +1,3 @@
-#ifdef MATURESERVER
 /mob/living/carbon/human/MiddleClick(mob/user, params)
 	..()
 	if(!user)
@@ -34,11 +33,6 @@
 							V.add_stress(/datum/stressevent/dwarfshaved)
 				else
 					held_item.melee_attack_chain(user, src, params)
-		return
-	if(user == src)
-		if(get_num_arms(FALSE) < 1)
-			return
-#endif
 
 /mob/living/carbon/human/Initialize()
 	// verbs += /mob/living/proc/mob_sleep
@@ -403,7 +397,7 @@
 /mob/living/carbon/human/update_health_hud(stamina_only = FALSE)
 	if(!client || !hud_used)
 		return
-	if(dna.species.update_health_hud())
+	if(dna?.species?.update_health_hud())
 		return
 	else
 		if(hud_used.bloods && !stamina_only)
@@ -565,6 +559,9 @@
 	if(pulling == target && stat == CONSCIOUS)
 		//If they dragged themselves and we're currently aggressively grabbing them try to piggyback
 		if(user == target && can_piggyback(target))
+			if(cmode)
+				to_chat(target, span_warning("[src] is too alert to let you piggyback!"))
+				return FALSE
 			piggyback(target)
 			return TRUE
 		//If you dragged them to you and you're aggressively grabbing try to carry them
@@ -588,7 +585,7 @@
 	return (istype(target) && target.stat == CONSCIOUS)
 
 /mob/living/carbon/human/proc/can_be_firemanned(mob/living/carbon/target)
-	return (ishuman(target) && !(target.mobility_flags & MOBILITY_STAND))
+	return (ishuman(target) && target.body_position == LYING_DOWN)
 
 /mob/living/carbon/human/proc/fireman_carry(mob/living/carbon/target)
 	var/carrydelay = 5 SECONDS //if you have latex you are faster at grabbing
