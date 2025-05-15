@@ -11,34 +11,32 @@
 	var/identify_difficulty = 15 //the stat threshold needed to pass the identify check
 
 /obj/effect/proc_holder/spell/self/message/cast(list/targets, mob/user)
-	var/input = input(user, "Who are you trying to contact?")
+	var/input = browser_input_text(user, "Who are you trying to contact?", "NOC'S GIFT")
 	if(!input)
 		return FALSE
-	if(!user.key)
-		to_chat(user, span_warning("I sense a body, but the mind does not seem to be there."))
-		return FALSE
-	if(!user.mind || !user.mind.do_i_know(name=input))
+	if(!user.mind?.known_as_name(input))
 		to_chat(user, span_warning("I don't know anyone by that name."))
 		return FALSE
-	for(var/mob/living/carbon/human/HL in GLOB.human_list)
-		if(HL.real_name == input)
-			var/message = input(user, "You make a connection. What are you trying to say?")
-			if(!message)
-				return ..()
-			if(alert(user, "Send anonymously?", "", "Yes", "No") == "No") //yes or no popup, if you say No run this code
-				identify_difficulty = 0 //anyone can clear this
+	for(var/datum/mind/mind as anything in SSticker.minds)
+		var/mob/living/carbon/human/recipient = mind.current
+		if(!LOWERSTRINGCOMP(recipient.real_name, input))
+			continue
+		var/message = browser_input_text(user, "You make a connection. What are you trying to say?", "NOC'S GIFT")
+		if(!message)
+			return FALSE
+		if(browser_alert(user, "Hide your identity?", "NOC'S GIFT", DEFAULT_INPUT_CHOICES) == CHOICE_NO) //yes or no popup, if you say No run this code
+			identify_difficulty = 0 //anyone can clear this
 
-			var/identified = FALSE
-			if(HL.STAPER >= identify_difficulty) //quick stat check
-				if(HL.mind)
-					if(HL.mind.do_i_know(name=user.real_name)) //do we know who this person is?
-						identified = TRUE // we do
-						to_chat(HL, "Arcyne whispers fill the back of my head, resolving into [user]'s voice: <font color=#7246ff>[message]</font>")
-			if(!identified) //we failed the check OR we just dont know who that is
-				to_chat(HL, "Arcyne whispers fill the back of my head, resolving into an unknown [user.gender == FEMALE ? "woman" : "man"]'s voice: <font color=#7246ff>[message]</font>")
-
-			user.log_message("[key_name(user)] sent a spell message to [key_name(HL)]; message: [message]", LOG_GAME, color = "#0000ff")
-			// maybe an option to return a message, here?
-			return ..()
-	to_chat(user, span_warning("I seek a mental connection, but can't find [input]."))
+		var/identified = FALSE
+		if(recipient.STAPER >= identify_difficulty) //quick stat check
+			var/name = recipient.mind?.known_as(user.mind)
+			if(name) //do we know who this person is?
+				identified = TRUE // we do
+				to_chat(recipient, "Arcyne whispers fill the back of my head, resolving into [name]'s voice: <font color=#7246ff>[message]</font>")
+		if(!identified) //we failed the check OR we just dont know who that is
+			to_chat(recipient, "Arcyne whispers fill the back of my head, resolving into an unknown [user.gender == FEMALE ? "woman" : "man"]'s voice: <font color=#7246ff>[message]</font>")
+		user.log_message("[key_name(user)] sent a spell message to [key_name(recipient)]; message: [message]", LOG_GAME, color = "#0000ff")
+		// maybe an option to return a message, here?
+		return ..()
+	to_chat(user, span_warning("I seek a mental connection... but find nothing, was [input] really their name?"))
 	return FALSE
