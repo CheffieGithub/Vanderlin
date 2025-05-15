@@ -52,13 +52,9 @@
 	owner.current.forceMove(pick(GLOB.bandit_starts))
 
 /datum/antagonist/bandit/proc/equip_bandit()
-
-	owner.unknow_all_people()
-	for(var/datum/mind/MF in get_minds())
-		owner.become_unknown_to(MF)
-	for(var/datum/mind/MF in get_minds("Bandit"))
-		owner.i_know_person(MF)
-		owner.person_knows_me(MF)
+	owner.reset_known()
+	for(var/datum/mind/MF as anything in get_minds("Bandit"))
+		owner.become_known_to_both(MF)
 
 	return TRUE
 

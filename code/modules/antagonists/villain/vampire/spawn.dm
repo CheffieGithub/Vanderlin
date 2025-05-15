@@ -31,17 +31,11 @@
 
 /datum/antagonist/vampire/lesser/equip()
 	. = ..()
-
-	owner.unknow_all_people()
-	for(var/datum/mind/MF in get_minds())
-		owner.become_unknown_to(MF)
-	for(var/datum/mind/MF in get_minds("Vampire Spawn"))
-		owner.i_know_person(MF)
-		owner.person_knows_me(MF)
-	for(var/datum/mind/MF in get_minds("Death Knight"))
-		owner.i_know_person(MF)
-		owner.person_knows_me(MF)
-
+	owner.reset_known()
+	for(var/datum/mind/MF as anything in get_minds("Vampire Spawn"))
+		owner.become_known_to_both(MF)
+	for(var/datum/mind/MF as anything in get_minds("Death Knight"))
+		owner.become_known_to_both(MF)
 
 	owner.adjust_skillrank(/datum/skill/magic/blood, 2, TRUE)
 
