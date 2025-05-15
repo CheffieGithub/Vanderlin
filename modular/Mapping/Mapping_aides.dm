@@ -280,8 +280,7 @@
 		var/mob/living/carbon/human/to_scry = mind.current
 		if(!to_scry)
 			return
-		if(LOWERSTRINGCOMP(to_scry.real_name, input))
-			to_chat(user, span_warning("I peer into the viewpiece, but Noc does not reveal where [input] is."))
+		if(!LOWERSTRINGCOMP(to_scry.real_name, input))
 			return
 		var/mob/dead/observer/screye/S = user.scry_ghost()
 		if(!S)
@@ -300,6 +299,8 @@
 			to_chat(to_scry, span_warning("I can clearly see the face of an unknown [user.gender == FEMALE ? "woman" : "man"] staring at me!"))
 		else if(to_scry.STAPER >= 11)
 			to_chat(to_scry, span_warning("I feel a pair of unknown eyes on me."))
+		return
+	to_chat(user, span_warning("I peer into the viewpiece, but Noc does not reveal where [input] is."))
 
 /*	..................   Floor decoration   ................... */
 /obj/structure/giantfur
