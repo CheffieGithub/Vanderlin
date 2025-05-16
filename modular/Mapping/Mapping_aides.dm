@@ -295,7 +295,7 @@
 		last_scry = world.time
 		user.visible_message(span_danger("[user] stares into [src], squinting and concentrating..."))
 		addtimer(CALLBACK(S, TYPE_PROC_REF(/mob/dead/observer, reenter_corpse)), 8 SECONDS)
-		if(to_scry.stat || to_scry.is_blind())
+		if(to_scry.stat || is_blind(to_scry))
 			return
 		if(to_scry.STAPER >= 15)
 			var/name = to_scry.mind?.known_as(user.mind)

@@ -30,7 +30,7 @@
 /obj/item/scrying/attack_self(mob/user)
 	. = ..()
 	if(world.time < last_scry + cooldown)
-		to_chat(user, "<span class='warning'>I look into the ball but only see inky smoke. Maybe I should wait.</span>")
+		to_chat(user, span_warning("I look into the ball but only see inky smoke. Maybe I should wait."))
 		return
 	var/input = stripped_input(user, "Who are you looking for?", "Scrying Orb")
 	if(!input)
@@ -55,9 +55,9 @@
 			return
 		S.ManualFollow(to_scry)
 		last_scry = world.time
-		user.visible_message("<span class='danger'>[user] stares into [src], [user.p_their()] eyes rolling back into [user.p_their()] head.</span>")
+		user.visible_message(span_danger("[user] stares into [src], [user.p_their()] eyes rolling back into [user.p_their()] head."))
 		addtimer(CALLBACK(S, TYPE_PROC_REF(/mob/dead/observer, reenter_corpse)), 8 SECONDS)
-		if(to_scry.stat || to_scry.is_blind())
+		if(to_scry.stat || is_blind(to_scry))
 			return
 		if(to_scry.STAPER >= 15)
 			var/name = to_scry.mind?.known_as(user.mind)
@@ -74,5 +74,5 @@
 /////////////////////////////////////////Crystal ball ghsot vision///////////////////
 
 /obj/item/crystalball/attack_self(mob/user)
-	user.visible_message("<span class='danger'>[user] stares into [src], their eyes rolling back into their head.</span>")
+	user.visible_message(span_danger("[user] stares into [src], their eyes rolling back into their head."))
 	user.ghostize(1)
