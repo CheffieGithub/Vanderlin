@@ -273,7 +273,7 @@
 	var/input = stripped_input(user, "Who are you looking for?", "Scrying Orb")
 	if(!input)
 		return
-	if(!user.mind?.known_as_name(input))
+	if(!user.mind?.know_name(input))
 		to_chat(user, span_warning("I don't know anyone by that name."))
 		return
 	for(var/datum/mind/mind as anything in SSticker.minds)

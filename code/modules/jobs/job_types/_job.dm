@@ -214,11 +214,11 @@
 		spawned.change_stat(stat_key, used_stats[stat_key])
 
 	for(var/X in peopleknowme)
-		for(var/datum/mind/MF in get_minds(X))
+		for(var/datum/mind/MF as anything in get_minds(X))
 			spawned.mind.person_knows_me(MF)
 	for(var/X in peopleiknow)
-		for(var/datum/mind/MF in get_minds(X))
-			spawned.mind.i_know_person(MF)
+		for(var/datum/mind/MF as anything in get_minds(X))
+			spawned.mind.know_person_forced(MF)
 
 	if(spawned.islatejoin && (job_flags & JOB_ANNOUNCE_ARRIVAL)) //to be moved somewhere more appropriate
 		var/used_title = get_informed_title(spawned)

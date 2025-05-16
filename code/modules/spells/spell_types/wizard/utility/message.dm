@@ -14,7 +14,7 @@
 	var/input = browser_input_text(user, "Who are you trying to contact?", "NOC'S GIFT")
 	if(!input)
 		return FALSE
-	if(!user.mind?.known_as_name(input))
+	if(!user.mind?.know_name(input))
 		to_chat(user, span_warning("I don't know anyone by that name."))
 		return FALSE
 	for(var/datum/mind/mind as anything in SSticker.minds)

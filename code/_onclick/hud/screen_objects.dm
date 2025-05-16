@@ -1353,7 +1353,7 @@
 
 /atom/movable/screen/healths/blood
 	name = "life"
-	icon_state = "blood100"
+	icon_state = "dam0"
 	screen_loc = rogueui_blood
 	icon = 'icons/mob/rogueheat.dmi'
 
@@ -1365,12 +1365,31 @@
 			H.check_for_injuries(H)
 			to_chat(H, "I am [H.get_encumbrance() * 100]% Encumbered")
 		if(modifiers["right"])
-			if(!H.mind)
+			if(browser_alert(H, "Introduce yourself?", "RELATIONS", DEFAULT_INPUT_CHOICES) != CHOICE_YES)
 				return
-			if(length(H.mind.known_people))
-				H.mind.display_known_people(H)
+			if(browser_alert(H, "Do you wish to lie?", "RELATIONS", DEFAULT_INPUT_CHOICES) == CHOICE_YES)
+				var/name = browser_input_text(H, "WHAT IS YOUR \"NAME\"?", "RELATIONS")
+				var/job = browser_input_text(H, "WHAT IS YOUR \"LIVING\"?", "RELATIONS")
+				H.introduce(name, job)
+				return
+			var/name = null
+			var/job = null
+			var/choice = browser_input_list(H, "What will you tell?", "RELATIONS", list("Name and Job", "Job", "Name", "Nothing"))
+			if(choice != "Nothing")
+				if(findtext(choice, "Job"))
+					var/used_title
+					if(H.job)
+						var/datum/job/J = SSjob.GetJob(H.job)
+						used_title = J.get_informed_title(H)
+					if(!used_title)
+						used_title = "Unknown"
+					job = used_title
+				if(findtext(choice, "Name"))
+					name = H.real_name
 			else
-				to_chat(H, "<span class='warning'>I don't know anyone.</span>")
+				if(browser_alert(H, "You will only be identifiable based on your physical traits and voice are you sure?", "RELATIONS", DEFAULT_INPUT_CHOICES) == CHOICE_NO)
+					return
+			H.introduce(name, job)
 
 /atom/movable/screen/splash
 	icon = 'icons/blank_title.png'
@@ -1611,6 +1630,13 @@
 			already_printed = list()
 			to_chat(M, "*--------*")
 		if(modifiers["right"])
+			if(!M.mind)
+				return
+			if(length(M.mind.known_people))
+				M.mind.display_known_people(M)
+			else
+				to_chat(M, "<span class='warning'>I don't know anyone.</span>")
+		if(modifiers["middle"])
 			if(M.get_triumphs() <= 0)
 				to_chat(M, "<span class='warning'>I haven't TRIUMPHED.</span>")
 				return

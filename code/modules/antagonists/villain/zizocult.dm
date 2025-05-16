@@ -565,7 +565,7 @@ GLOBAL_LIST_EMPTY(ritualslist)
 
 /proc/thecall(mob/user, turf/C)
 	for(var/obj/item/paper/P in C.contents)
-		if(!user.mind?.known_as_name(P.info, TRUE))
+		if(!user.mind?.know_name(P.info, TRUE))
 			to_chat(user, span_warning("The ritual fails... either I do not know the one on the note or they gave me a fake name."))
 			return
 		for(var/mob/living/carbon/human/HL in GLOB.human_list)
@@ -658,7 +658,7 @@ GLOBAL_LIST_EMPTY(ritualslist)
 /proc/darksunmark(mob/user, turf/C)
 	var/found_assassin = FALSE
 	for(var/obj/item/paper/P in C.contents)
-		if(!user.mind?.known_as_name(P.info, TRUE))
+		if(!user.mind?.know_name(P.info, TRUE))
 			to_chat(user, span_warning("The ritual fails... either I do not know the one on the note or they gave me a fake name."))
 			return
 		for(var/mob/living/carbon/human/HL in GLOB.human_list)
