@@ -71,21 +71,20 @@
 		to_chat(user, span_info("I put [money] mammon in \the [src]."))
 		playsound(get_turf(src), 'sound/misc/machinevomit.ogg', 100, TRUE, -1)
 		return attack_hand(user)
-
-/obj/structure/fake_machine/vendor/attack_right(mob/user)
-	. = ..()
+	if(user.cmode)
+		return ..()
 	var/held = user.get_active_held_item()
 	add_merchandise(held, user)
 
 /obj/structure/fake_machine/vendor/proc/add_merchandise(obj/item/I, mob/user)
 	if(locked())
-		to_chat(user, span_info("I cannot put [I] in [src] while it's locked."))
+		to_chat(user, span_info("I cannot put [I] in \the [src] while it's locked."))
 		return
 	if(I.w_class > WEIGHT_CLASS_BULKY)
-		to_chat(user, span_info("[I] is too big for [src]!"))
+		to_chat(user, span_info("[I] is too big for \the [src]!"))
 		return
 	if(length(held_items) > max_merchanise)
-		to_chat(user, span_info("[src] is full!"))
+		to_chat(user, span_info("\The [src] is full!"))
 		return
 	held_items[I] = list()
 	held_items[I]["NAME"] = I.name
