@@ -335,8 +335,9 @@ All foods are distributed among various categories. Use common sense.
 		if(isliving(current_loc))
 			var/mob/living/mob_location = current_loc
 			mob_location.put_in_hands(generate_trash(mob_location))
-		else
-			generate_trash(current_loc.drop_location())
+		else if(isarea(current_loc))
+			var/turf/T = get_turf(src)
+			generate_trash(T.drop_location())
 	update_icon()
 
 /obj/item/reagent_containers/food/snacks/attack_self(mob/user)
