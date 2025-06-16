@@ -4,12 +4,12 @@
 
 /obj/structure/orphan_smasher
 	name = "auto anvil"
-	desc ="An unholy amalgamation of buttons and levers built purposely to go against gods will."
+	desc = "An holy amalgamation of buttons and levers built purposely to fulfill Malum's will."
 
 	icon = 'icons/obj/autosmithy.dmi'
 	icon_state = "1"
 	rotation_structure = TRUE
-	stress_use = 128
+	initialize_dirs = CONN_DIR_FORWARD | CONN_DIR_LEFT | CONN_DIR_FLIP | CONN_DIR_Z_DOWN
 
 	var/list/anvil_recipes_to_craft = list()
 	var/list/completed_items = list()
@@ -32,8 +32,6 @@
 	var/list/pre_start_list = list(STEP_FIDDLE, STEP_BUTTON, STEP_LEVER)
 	var/list/post_start_list = list(STEP_BUTTON, STEP_LEVER, STEP_FIDDLE)
 
-	var/sound/anvil_smash
-
 /obj/structure/orphan_smasher/Initialize()
 	. = ..()
 	var/turf/turf = get_step(src, EAST)
@@ -46,6 +44,18 @@
 			regular_recipes |= new recipe_path
 
 	START_PROCESSING(SSobj, src)
+
+/obj/structure/orphan_smasher/Destroy()
+	if(current)
+		QDEL_NULL(current)
+	for(var/datum/anvil_recipe/recipe as anything in regular_recipes)
+		LAZYREMOVE(regular_recipes, recipe)
+		QDEL_NULL(recipe)
+	QDEL_NULL(bin)
+	current_requirements.Cut()
+	anvil_recipes_to_craft.Cut()
+	completed_items.Cut()
+	return ..()
 
 /obj/structure/orphan_smasher/process()
 	if(!working)
@@ -176,8 +186,10 @@
 			animate(icon_state = "b1", time = frame_stage)
 
 /obj/structure/orphan_smasher/set_rotations_per_minute(speed)
-	set_stress_use(128 * (speed / 8))
 	. = ..()
+	if(!.)
+		return
+	set_stress_use(128 * (speed / 8))
 
 /obj/structure/orphan_smasher/proc/try_set_recipe_stuff()
 
@@ -302,6 +314,10 @@
 /obj/structure/material_bin/Initialize()
 	. = ..()
 	AddComponent(/datum/component/storage/concrete/grid/anvil_bin)
+
+/obj/structure/material_bin/Destroy()
+	parent = null
+	return ..()
 
 /obj/structure/material_bin/update_icon_state()
 	. = ..()

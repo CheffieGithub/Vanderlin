@@ -55,14 +55,14 @@
 		if(user.STAEND > 10) // Every point over 10 END adds 10% damage
 			BB.damage = BB.damage * (user.STAEND / 10)
 		BB.damage *= damfactor // Apply blow's inherent damage multiplier regardless of PER
-		BB.bonus_accuracy += (user.mind.get_skill_level(/datum/skill/combat/bows) * 5) //+5 accuracy per level in bows. Bonus accuracy will not drop-off.
+		BB.bonus_accuracy += (user.get_skill_level(/datum/skill/combat/bows) * 5) //+5 accuracy per level in bows. Bonus accuracy will not drop-off.
 	. = ..()
 	if(.)
 		if(istype(user) && user.mind)
-			var/modifier = 1/(spread+1)
-			var/boon = user.mind.get_learning_boon(/datum/skill/combat/bows)
+			var/modifier = 1.25/(spread+1)
+			var/boon = user.get_learning_boon(/datum/skill/combat/bows)
 			var/amt2raise = user.STAINT/2
-			user.mind.adjust_experience(/datum/skill/combat/bows, amt2raise * boon * modifier, FALSE)
+			user.adjust_experience(/datum/skill/combat/bows, amt2raise * boon * modifier, FALSE)
 
 /obj/item/gun/ballistic/revolver/grenadelauncher/blowgun/update_icon()
 	. = ..()
@@ -89,20 +89,23 @@
 	item_damage_type = "piercing"
 
 /datum/intent/shoot/blowgun/can_charge()
-	if(mastermob)
-		if(mastermob.usable_hands < 1)
+	var/mob/living/master = get_master_mob()
+	if(master)
+		if(master.usable_hands < 1)
 			return FALSE
 	return TRUE
 
 /datum/intent/shoot/blowgun/prewarning()
-	if(masteritem && mastermob)
-		mastermob.visible_message("<span class='warning'>[mastermob] takes a deep breath!</span>")
+	var/mob/master = get_master_mob()
+	if(master)
+		master.visible_message("<span class='warning'>[master] takes a deep breath!</span>")
 
 /datum/intent/shoot/blowgun/get_chargetime()
-	if(mastermob && chargetime)
+	var/mob/living/master = get_master_mob()
+	if(master && chargetime)
 		var/newtime = 0
 		newtime = newtime + 3 SECONDS
-		newtime = newtime - (mastermob.mind.get_skill_level(/datum/skill/combat/bows) * (5))- (mastermob.STAEND * 0.5)
+		newtime = newtime - (master.get_skill_level(/datum/skill/combat/bows) * (5))- (master.STAEND * 0.5)
 		if(newtime > 0)
 			return newtime
 		else
@@ -115,27 +118,30 @@
 	charging_slowdown = 1
 
 /datum/intent/arc/blowgun/can_charge()
-	if(mastermob)
-		if(mastermob.usable_hands < 1)
+	var/mob/living/master = get_master_mob()
+	if(master)
+		if(master.usable_hands < 1)
 			return FALSE
 	return TRUE
 
 /datum/intent/arc/blowgun/prewarning()
-	if(masteritem && mastermob)
-		mastermob.visible_message("<span class='warning'>[mastermob] takes a deep breath!</span>")
+	var/mob/master = get_master_mob()
+	if(master)
+		master.visible_message("<span class='warning'>[master] takes a deep breath!</span>")
 
 /datum/intent/arc/blowgun/get_chargetime()
-	if(mastermob && chargetime)
+	var/mob/living/master = get_master_mob()
+	if(master && chargetime)
 		var/newtime = 0
 		//skill block
 		newtime = newtime + 10
-		newtime = newtime - (mastermob.mind.get_skill_level(/datum/skill/combat/bows) * (10/6))
+		newtime = newtime - (master.get_skill_level(/datum/skill/combat/bows) * (10/6))
 		//end block //rtd replace 10 with drawdiff on bows that are hard and scale end more (10/20 = 0.5)
 		newtime = newtime + 10
-		newtime = newtime - (mastermob.STAEND * (10/20))
+		newtime = newtime - (master.STAEND * (10/20))
 		//per block
 		newtime = newtime + 20
-		newtime = newtime - (mastermob.STAPER * 1) //20/20 is 1
+		newtime = newtime - (master.STAPER * 1) //20/20 is 1
 		if(newtime > 0)
 			return newtime
 		else

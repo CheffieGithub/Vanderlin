@@ -32,6 +32,7 @@ GLOBAL_PROTECT(admin_verbs_default)
 	/client/proc/admin_force_next_migrant_wave,
 	/client/proc/cmd_admin_say,
 	/client/proc/deadmin,				/*destroys our own admin datum so we can play as a regular player*/
+	/client/proc/toggle_context_menu,
 	/client/proc/delete_player_book,
 	/client/proc/manage_paintings,
 	/client/proc/ShowAllFamilies,
@@ -110,6 +111,7 @@ GLOBAL_PROTECT(admin_verbs_admin)
 	/client/proc/set_personal_admin_ooc_color,
 	/client/proc/reset_personal_admin_ooc_color,
 	/client/proc/set_ghost_sprite,
+	/client/proc/set_ui_theme,
 	/client/proc/toggleadminhelpsound,
 	/client/proc/respawn_character,
 	/client/proc/discord_id_manipulation,
@@ -178,6 +180,9 @@ GLOBAL_PROTECT(admin_verbs_debug)
 	/client/proc/test_movable_UI,
 	/client/proc/test_snap_UI,
 	/client/proc/check_bomb_impacts,
+	/client/proc/recipe_tree_debug_menu,
+	/client/proc/family_tree_debug_menu,
+	/client/verb/debug_loot_tables,
 	/client/proc/get_dynex_power,		//*debug verbs for dynex explosions.
 	/client/proc/get_dynex_range,		//*debug verbs for dynex explosions.
 	/client/proc/set_dynex_scale,
@@ -197,7 +202,8 @@ GLOBAL_PROTECT(admin_verbs_debug)
 	/client/proc/returntolobby,
 	/client/proc/tracy_next_round,
 	/client/proc/start_tracy,
-	/client/proc/set_tod_override
+	/client/proc/set_tod_override,
+	/client/proc/check_timer_sources,
 	)
 GLOBAL_LIST_INIT(admin_verbs_possess, list(/proc/possess, GLOBAL_PROC_REF(release)))
 GLOBAL_PROTECT(admin_verbs_possess)

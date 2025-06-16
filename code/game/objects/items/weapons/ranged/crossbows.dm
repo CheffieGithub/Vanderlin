@@ -32,14 +32,15 @@
 	chargedrain = 0 //no drain to aim a crossbow
 
 /datum/intent/shoot/crossbow/get_chargetime()
-	if(mastermob && chargetime)
+	var/mob/living/master = get_master_mob()
+	if(master && chargetime)
 		var/newtime = chargetime
 		//skill block
 		newtime = newtime + 18
-		newtime = newtime - (mastermob.mind?.get_skill_level(/datum/skill/combat/crossbows) * 3)
+		newtime = newtime - (master.get_skill_level(/datum/skill/combat/crossbows) * 3)
 		//per block
 		newtime = newtime + 20
-		newtime = newtime - (mastermob.STAPER)
+		newtime = newtime - (master.STAPER)
 		if(newtime > 0)
 			return newtime
 		else
@@ -63,14 +64,15 @@
 	return TRUE
 
 /datum/intent/shoot/musket/get_chargetime()
-	if(mastermob && chargetime)
+	var/mob/living/master = get_master_mob()
+	if(master && chargetime)
 		var/newtime = chargetime
 		//skill block
 		newtime = newtime + 18
-		newtime = newtime - (mastermob.mind.get_skill_level(/datum/skill/combat/firearms) * 3.5)
+		newtime = newtime - (master.get_skill_level(/datum/skill/combat/firearms) * 3.5)
 		//per block
 		newtime = newtime + 20
-		newtime = newtime - (mastermob.STAPER)
+		newtime = newtime - (master.STAPER)
 		if(newtime > 0)
 			return newtime
 		else
@@ -78,14 +80,15 @@
 	return chargetime
 
 /datum/intent/shoot/musket/pistol/get_chargetime()
-	if(mastermob && chargetime)
+	var/mob/living/master = get_master_mob()
+	if(master && chargetime)
 		var/newtime = chargetime
 		//skill block
 		newtime = newtime + 18
-		newtime = newtime - (mastermob.mind.get_skill_level(/datum/skill/combat/firearms) * 3.5)
+		newtime = newtime - (master.get_skill_level(/datum/skill/combat/firearms) * 3.5)
 		//per block
 		newtime = newtime + 20
-		newtime = newtime - (mastermob.STAPER)
+		newtime = newtime - (master.STAPER)
 		if(newtime > 0)
 			return newtime
 		else
@@ -97,14 +100,15 @@
 	chargedrain = 0 //no drain to aim a crossbow
 
 /datum/intent/arc/crossbow/get_chargetime()
-	if(mastermob && chargetime)
+	var/mob/living/master = get_master_mob()
+	if(master && chargetime)
 		var/newtime = chargetime
 		//skill block
 		newtime = newtime + 18
-		newtime = newtime - (mastermob.mind?.get_skill_level(/datum/skill/combat/crossbows) * 3)
+		newtime = newtime - (master.get_skill_level(/datum/skill/combat/crossbows) * 3)
 		//per block
 		newtime = newtime + 20
-		newtime = newtime - (mastermob.STAPER)
+		newtime = newtime - (master.STAPER)
 		if(newtime > 0)
 			return newtime
 		else
@@ -158,15 +162,15 @@
 			if(user.STAPER > 10)
 				BB.damage = BB.damage * (user.STAPER / 10)
 		BB.damage *= damfactor // Apply damfactor multiplier regardless of PER.
-		BB.bonus_accuracy += (user.mind.get_skill_level(/datum/skill/combat/crossbows) * 3) //+3 accuracy per level in crossbows
+		BB.bonus_accuracy += (user.get_skill_level(/datum/skill/combat/crossbows) * 3) //+3 accuracy per level in crossbows
 	cocked = FALSE
 	. = ..()
 	if(.)
 		if(istype(user) && user.mind)
-			var/modifier = 1/(spread+1)
-			var/boon = user.mind.get_learning_boon(/datum/skill/combat/crossbows)
+			var/modifier = 1.25/(spread+1)
+			var/boon = user.get_learning_boon(/datum/skill/combat/crossbows)
 			var/amt2raise = user.STAINT/2
-			user.mind.adjust_experience(/datum/skill/combat/crossbows, amt2raise * boon * modifier, FALSE)
+			user.adjust_experience(/datum/skill/combat/crossbows, amt2raise * boon * modifier, FALSE)
 
 /obj/item/gun/ballistic/revolver/grenadelauncher/crossbow/update_icon()
 	. = ..()

@@ -3,7 +3,7 @@
 	mid_sounds = list()
 	mid_length = 2400
 	volume = 100
-	falloff = 2
+	falloff_exponent = 2
 	extra_range = 5
 	var/stress2give = /datum/stressevent/music
 	persistent_loop = TRUE
@@ -23,7 +23,6 @@
 	icon_state = "mbox0"
 	gripped_intents = list(INTENT_GENERIC)
 	w_class = WEIGHT_CLASS_HUGE
-	twohands_required = TRUE
 	force = 20
 	throwforce = 20
 	throw_range = 2
@@ -35,10 +34,14 @@
 	var/curvol = 100
 
 /obj/item/dmusicbox/Initialize()
-	soundloop = new(src, FALSE)
-//	soundloop.start()
-	update_icon()
 	. = ..()
+	soundloop = new(src, FALSE)
+	update_icon()
+
+/obj/item/dmusicbox/Destroy()
+	if(soundloop)
+		QDEL_NULL(soundloop)
+	return ..()
 
 /obj/item/dmusicbox/update_icon()
 	if(playing)

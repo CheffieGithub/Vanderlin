@@ -217,7 +217,7 @@
 //Mannequin exploded.
 /obj/structure/mannequin/Destroy()
 	DropAll()
-	..()
+	return ..()
 
 /obj/structure/mannequin/examine(mob/user)
 	..()
@@ -512,7 +512,7 @@
 	sleeve_overlay.alpha = I.alpha
 	. += sleeve_overlay
 
-	if(HAS_BLOOD_DNA(I))
+	if(GET_ATOM_BLOOD_DNA_LENGTH(I))
 		var/icon/blood_overlay = bloody_layer[used]
 		if(!blood_overlay)
 			blood_overlay = icon(I.sleeved, used)

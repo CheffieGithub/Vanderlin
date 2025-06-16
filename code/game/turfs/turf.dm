@@ -47,8 +47,6 @@
 	var/neighborlay
 	/// If we were going to smooth with an Atom instead overlay this onto self
 	var/neighborlay_self
-	/// Current neighborlays, associative "DIR" = Overlay, neighborlays are always handled by the smoothing atom not what it smoothed with
-	var/list/neighborlay_list
 
 	vis_flags = VIS_INHERIT_PLANE|VIS_INHERIT_ID
 
@@ -152,6 +150,13 @@
 /turf/proc/can_traverse_safely(atom/movable/traveler)
 	return TRUE
 
+/// WARNING WARNING
+/// Turfs DO NOT lose their signals when they get replaced, REMEMBER THIS
+/// It's possible because turfs are fucked, and if you have one in a list and it's replaced with another one, the list ref points to the new turf
+/// We do it because moving signals over was needlessly expensive, and bloated a very commonly used bit of code
+/turf/clear_signal_refs()
+	return
+
 /turf/attack_hand(mob/user)
 	. = ..()
 	if(.)
@@ -225,7 +230,7 @@
 		return FALSE
 	if(isliving(A))
 		var/mob/living/O = A
-		var/dex_save = O.mind?.get_skill_level(/datum/skill/misc/climbing)
+		var/dex_save = O.get_skill_level(/datum/skill/misc/climbing)
 		if(dex_save >= 5)
 			if(O.m_intent != MOVE_INTENT_SNEAK) // If we're sneaking, don't show a message to anybody, shhh!
 				O.visible_message("<span class='danger'>[A] gracefully lands on top of [src]!</span>")
@@ -301,12 +306,11 @@
 	var/atom/firstbump
 	var/canPassSelf = CanPass(mover, src)
 	if(canPassSelf || CHECK_BITFIELD(mover.movement_type, UNSTOPPABLE))
-		for(var/i in contents)
+		for(var/atom/movable/thing as anything in contents)
 			if(QDELETED(mover))
 				return FALSE		//We were deleted, do not attempt to proceed with movement.
-			if(i == mover || i == mover.loc) // Multi tile objects and moving out of other objects
+			if(thing == mover || thing == mover.loc) // Multi tile objects and moving out of other objects
 				continue
-			var/atom/movable/thing = i
 			if(!thing.Cross(mover))
 				if(QDELETED(mover))		//Mover deleted from Cross/CanPass, do not proceed.
 					return FALSE
@@ -332,12 +336,6 @@
 	for(var/i in contents)
 		if(i == mover)
 			continue
-		var/atom/movable/thing = i
-		if(!thing.Uncross(mover, newloc))
-			if(thing.flags_1 & ON_BORDER_1)
-				mover.Bump(thing)
-			if(!CHECK_BITFIELD(mover.movement_type, UNSTOPPABLE))
-				return FALSE
 		if(QDELETED(mover))
 			return FALSE		//We were deleted.
 
@@ -461,7 +459,7 @@
 			. += 1 // extra tile penalty
 			break
 	var/obj/structure/door/door = locate() in src
-	if(door && door.density && !door.locked && door.anchored) // door will have to be opened
+	if(door && door.density && !door.locked() && door.anchored) // door will have to be opened
 		. += 2 // try to avoid closed doors where possible
 
 	for(var/obj/structure/O in contents)
@@ -612,3 +610,12 @@
 //Should return new turf
 /turf/proc/Melt()
 	return ScrapeAway(flags = CHANGETURF_INHERIT_AIR)
+
+// When our turf is washed, we may wash everything on top of the turf
+// By default we will only wash mopable things (like blood or vomit)
+// but you may optionally pass in all_contents = TRUE to wash everything
+/turf/wash(clean_types, all_contents = FALSE)
+	. = ..()
+	for(var/atom/movable/to_clean as anything in src)
+		if(all_contents)
+			to_clean.wash(clean_types)

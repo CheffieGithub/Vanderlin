@@ -37,7 +37,7 @@
 	for(var/datum/mind/MF as anything in get_minds("Death Knight"))
 		owner.become_known_to_both(MF)
 
-	owner.adjust_skillrank(/datum/skill/magic/blood, 2, TRUE)
+	owner.current.adjust_skillrank(/datum/skill/magic/blood, 2, TRUE)
 
 /datum/antagonist/vampire/lesser/greet()
 	to_chat(owner.current, span_userdanger("We are awakened from our slumber, Spawn of the feared Vampire Lord."))

@@ -1006,7 +1006,7 @@ SUBSYSTEM_DEF(gamemode)
 			var/sorted_scheduled = list()
 			for(var/datum/scheduled_event/scheduled as anything in scheduled_events)
 				sorted_scheduled[scheduled] = scheduled.start_time
-			sortTim(sorted_scheduled, cmp=/proc/cmp_numeric_asc, associative = TRUE)
+			sortTim(sorted_scheduled, associative = TRUE)
 			even = TRUE
 			for(var/datum/scheduled_event/scheduled as anything in sorted_scheduled)
 				even = !even
@@ -1098,7 +1098,7 @@ SUBSYSTEM_DEF(gamemode)
 			assoc_spawn_weight[event] = event.calculated_weight
 		else
 			assoc_spawn_weight[event] = 0
-	sortTim(assoc_spawn_weight, cmp=/proc/cmp_numeric_dsc, associative = TRUE)
+	sortTim(assoc_spawn_weight, cmp = GLOBAL_PROC_REF(cmp_numeric_dsc), associative = TRUE)
 	for(var/datum/round_event_control/event as anything in assoc_spawn_weight)
 		even = !even
 		var/background_cl = even ? "#17191C" : "#23273C"
@@ -1310,6 +1310,8 @@ SUBSYSTEM_DEF(gamemode)
 
 	GLOB.patron_follower_counts.Cut()
 
+	GLOB.featured_stats[FEATURED_STATS_FLAWS]["entries"] = list()
+
 	GLOB.vanderlin_round_stats[STATS_TOTAL_POPULATION] = 0
 	GLOB.vanderlin_round_stats[STATS_PSYCROSS_USERS] = 0
 	GLOB.vanderlin_round_stats[STATS_ALIVE_NOBLES] = 0
@@ -1321,7 +1323,6 @@ SUBSYSTEM_DEF(gamemode)
 	GLOB.vanderlin_round_stats[STATS_VAMPIRES] = 0
 	GLOB.vanderlin_round_stats[STATS_DEADITES_ALIVE] = 0
 
-	GLOB.vanderlin_round_stats[STATS_CLINGY_PEOPLE] = 0
 	GLOB.vanderlin_round_stats[STATS_ALCOHOLICS] = 0
 	GLOB.vanderlin_round_stats[STATS_JUNKIES] = 0
 	GLOB.vanderlin_round_stats[STATS_KLEPTOMANIACS] = 0
@@ -1347,6 +1348,7 @@ SUBSYSTEM_DEF(gamemode)
 	GLOB.vanderlin_round_stats[STATS_ALIVE_DARK_ELVES] = 0
 	GLOB.vanderlin_round_stats[STATS_ALIVE_SNOW_ELVES] = 0
 	GLOB.vanderlin_round_stats[STATS_ALIVE_HALF_ELVES] = 0
+	GLOB.vanderlin_round_stats[STATS_ALIVE_HALF_DROWS] = 0
 	GLOB.vanderlin_round_stats[STATS_ALIVE_HALF_ORCS] = 0
 	GLOB.vanderlin_round_stats[STATS_ALIVE_KOBOLDS] = 0
 	GLOB.vanderlin_round_stats[STATS_ALIVE_RAKSHARI] = 0
@@ -1400,6 +1402,8 @@ SUBSYSTEM_DEF(gamemode)
 					GLOB.vanderlin_round_stats[STATS_ELDERLY_POPULATION]++
 				if(AGE_IMMORTAL)
 					GLOB.vanderlin_round_stats[STATS_IMMORTAL_POPULATION]++
+			if(human_mob.charflaw)
+				record_featured_object_stat(FEATURED_STATS_FLAWS, human_mob.charflaw.name)
 			if(human_mob.is_noble())
 				GLOB.vanderlin_round_stats[STATS_ALIVE_NOBLES]++
 			if(human_mob.mind.assigned_role.title in GLOB.garrison_positions)
@@ -1410,8 +1414,6 @@ SUBSYSTEM_DEF(gamemode)
 				GLOB.vanderlin_round_stats[STATS_ALIVE_TRADESMEN]++
 			if(!human_mob.is_literate())
 				GLOB.vanderlin_round_stats[STATS_ILLITERATES]++
-			if(human_mob.has_flaw(/datum/charflaw/clingy))
-				GLOB.vanderlin_round_stats[STATS_CLINGY_PEOPLE]++
 			if(human_mob.has_flaw(/datum/charflaw/addiction/alcoholic))
 				GLOB.vanderlin_round_stats[STATS_ALCOHOLICS]++
 			if(human_mob.has_flaw(/datum/charflaw/addiction/junkie))
@@ -1422,11 +1424,15 @@ SUBSYSTEM_DEF(gamemode)
 				GLOB.vanderlin_round_stats[STATS_GREEDY_PEOPLE]++
 			if(HAS_TRAIT_NOT_FROM(human_mob, TRAIT_PACIFISM, "hugbox"))
 				GLOB.vanderlin_round_stats[STATS_PACIFISTS]++
-			if(human_mob.family_datum)
-				var/family_role = human_mob.family_datum.family[human_mob]
-				if(family_role in list(FAMILY_FATHER, FAMILY_MOTHER))
+			if(human_mob.family_datum && human_mob.family_member_datum)
+				var/datum/family_member/member = human_mob.family_member_datum
+
+				// Check if they have children (making them a parent)
+				if(member.children.len > 0)
 					GLOB.vanderlin_round_stats[STATS_PARENTS]++
-				if(human_mob.IsWedded() || (family_role in list(FAMILY_FATHER, FAMILY_MOTHER)))
+
+				// Check if married or has children
+				if(human_mob.IsWedded() || member.children.len > 0)
 					GLOB.vanderlin_round_stats[STATS_MARRIED]++
 
 			// Races
@@ -1442,6 +1448,8 @@ SUBSYSTEM_DEF(gamemode)
 				GLOB.vanderlin_round_stats[STATS_ALIVE_SNOW_ELVES]++
 			if(ishalfelf(human_mob))
 				GLOB.vanderlin_round_stats[STATS_ALIVE_HALF_ELVES]++
+			if(ishalfdrow(human_mob))
+				GLOB.vanderlin_round_stats[STATS_ALIVE_HALF_DROWS]++
 			if(ishalforc(human_mob))
 				GLOB.vanderlin_round_stats[STATS_ALIVE_HALF_ORCS]++
 			if(iskobold(human_mob))

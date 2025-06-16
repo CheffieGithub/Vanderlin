@@ -70,3 +70,7 @@
 	smeltresult = /obj/item/ingot/steel
 	equip_delay_self = 4 SECONDS
 	blocksound = SOFTHIT
+
+/obj/item/clothing/armor/medium/scale/inqcoat/Initialize()
+	. = ..()
+	AddComponent(/datum/component/item_equipped_movement_rustle, custom_sounds = SFX_INQUIS_BOOT_STEP)

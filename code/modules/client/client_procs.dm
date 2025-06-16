@@ -280,9 +280,9 @@ GLOBAL_LIST_EMPTY(respawncounts)
 
 	if(has_entries)
 		if(stat_is_object)
-			data += format_top_ten_objects(current_featured)
+			data += format_top_stats_objects(current_featured)
 		else
-			data += format_top_ten(current_featured)
+			data += format_top_stats(current_featured)
 	else
 		data += "<div style='margin-top: 20px;'>[stat_is_object ? "None" : "Nobody"]</div>"
 
@@ -309,10 +309,12 @@ GLOBAL_LIST_EMPTY(respawncounts)
 	data += "<font color='#ac5d5d'><span class='bold'>Ankles Broken:</span></font> [GLOB.vanderlin_round_stats[STATS_ANKLES_BROKEN]]<br>"
 	data += "<font color='#e6d927'><span class='bold'>People Smitten:</span></font> [GLOB.vanderlin_round_stats[STATS_PEOPLE_SMITTEN]]<br>"
 	data += "<font color='#50aeb4'><span class='bold'>People Drowned:</span></font> [GLOB.vanderlin_round_stats[STATS_PEOPLE_DROWNED]]<br>"
+	data += "<font color='#be8b37'><span class='bold'>Kleptomaniacs:</span></font> [GLOB.vanderlin_round_stats[STATS_KLEPTOMANIACS]]<br>"
 	data += "<font color='#8f816b'><span class='bold'>Items Stolen:</span></font> [GLOB.vanderlin_round_stats[STATS_ITEMS_PICKPOCKETED]]<br>"
 	data += "<font color='#c24bc2'><span class='bold'>Drugs Snorted:</span></font> [GLOB.vanderlin_round_stats[STATS_DRUGS_SNORTED]]<br>"
 	data += "<font color='#90a037'><span class='bold'>Laughs Had:</span></font> [GLOB.vanderlin_round_stats[STATS_LAUGHS_MADE]]<br>"
 	data += "<font color='#f5c02e'><span class='bold'>Taxes Collected:</span></font> [GLOB.vanderlin_round_stats[STATS_TAXES_COLLECTED]]<br>"
+	data += "<font color='#5d44af'><span class='bold'>Slurs Spoken:</span></font> [GLOB.vanderlin_round_stats[STATS_SLURS_SPOKEN]]<br>"
 	data += "</div>"
 
 	// Right column
@@ -320,7 +322,8 @@ GLOBAL_LIST_EMPTY(respawncounts)
 	data += "<font color='#36959c'><span class='bold'>Triumphs Awarded:</span></font> [GLOB.vanderlin_round_stats[STATS_TRIUMPHS_AWARDED]]<br>"
 	data += "<font color='#a02fa4'><span class='bold'>Triumphs Stolen:</span></font> [GLOB.vanderlin_round_stats[STATS_TRIUMPHS_STOLEN] * -1]<br>"
 	data += "<font color='#d7da2f'><span class='bold'>Prayers Made:</span></font> [GLOB.vanderlin_round_stats[STATS_PRAYERS_MADE]]<br>"
-	data += "<font color='#9c3e46'><span class='bold'>Active Deadites:</span></font> [GLOB.vanderlin_round_stats[STATS_DEADITES_ALIVE]]<br>"
+	data += "<font color='#bacfd6'><span class='bold'>Graves Consecrated:</span></font> [GLOB.vanderlin_round_stats[STATS_GRAVES_CONSECRATED]]<br>"
+	data += "<font color='#9c3e46'><span class='bold'>Wandering Deadites:</span></font> [GLOB.vanderlin_round_stats[STATS_DEADITES_ALIVE]]<br>"
 	data += "<font color='#0f555c'><span class='bold'>Beards Shaved:</span></font> [GLOB.vanderlin_round_stats[STATS_BEARDS_SHAVED]]<br>"
 	data += "<font color='#6e7c81'><span class='bold'>Skills Learned:</span></font> [GLOB.vanderlin_round_stats[STATS_SKILLS_LEARNED]]<br>"
 	data += "<font color='#23af4d'><span class='bold'>Plants Harvested:</span></font> [GLOB.vanderlin_round_stats[STATS_PLANTS_HARVESTED]]<br>"
@@ -329,6 +332,7 @@ GLOBAL_LIST_EMPTY(respawncounts)
 	data += "<font color='#af2323'><span class='bold'>Organs Eaten:</span></font> [GLOB.vanderlin_round_stats[STATS_ORGANS_EATEN]]<br>"
 	data += "<font color='#afa623'><span class='bold'>Locks Picked:</span></font> [GLOB.vanderlin_round_stats[STATS_LOCKS_PICKED]]<br>"
 	data += "<font color='#af2379'><span class='bold'>Kisses Made:</span></font> [GLOB.vanderlin_round_stats[STATS_KISSES_MADE]]<br>"
+	data += "<font color='#c02ef5'><span class='bold'>H*nds H*ld:</span></font> [GLOB.vanderlin_round_stats[STATS_HANDS_HELD]]<br>"
 	data += "</div>"
 	data += "</div></div>"
 	data += "</div>"
@@ -354,7 +358,8 @@ GLOBAL_LIST_EMPTY(respawncounts)
 	data += "<font color='#6b89e0'><span class='bold'>Males:</span></font> [GLOB.vanderlin_round_stats[STATS_MALE_POPULATION]]<br>"
 	data += "<font color='#d67daa'><span class='bold'>Females:</span></font> [GLOB.vanderlin_round_stats[STATS_FEMALE_POPULATION]]<br>"
 	data += "<font color='#FFD700'><span class='bold'>Children:</span></font> [GLOB.vanderlin_round_stats[STATS_CHILD_POPULATION]]<br>"
-	data += "<font color='#d0d67c'><span class='bold'>Adults:</span></font> [GLOB.vanderlin_round_stats[STATS_ADULT_POPULATION] + GLOB.vanderlin_round_stats[STATS_MIDDLEAGED_POPULATION] + GLOB.vanderlin_round_stats[STATS_IMMORTAL_POPULATION]]<br>"
+	data += "<font color='#d0d67c'><span class='bold'>Adults:</span></font> [GLOB.vanderlin_round_stats[STATS_ADULT_POPULATION] + GLOB.vanderlin_round_stats[STATS_IMMORTAL_POPULATION]]<br>"
+	data += "<font color='#a6ac6a'><span class='bold'>Middle-Aged:</span></font> [GLOB.vanderlin_round_stats[STATS_MIDDLEAGED_POPULATION]]<br>"
 	data += "<font color='#C0C0C0'><span class='bold'>Elderly:</span></font> [GLOB.vanderlin_round_stats[STATS_ELDERLY_POPULATION]]<br>"
 	data += "</div>"
 
@@ -364,6 +369,7 @@ GLOBAL_LIST_EMPTY(respawncounts)
 	data += "<font color='#808080'><span class='bold'>Dwarves:</span></font> [GLOB.vanderlin_round_stats[STATS_ALIVE_DWARVES]]<br>"
 	data += "<font color='#87CEEB'><span class='bold'>Pure Elves:</span></font> [GLOB.vanderlin_round_stats[STATS_ALIVE_SNOW_ELVES]]<br>"
 	data += "<font color='#9ACD32'><span class='bold'>Half-Elves:</span></font> [GLOB.vanderlin_round_stats[STATS_ALIVE_HALF_ELVES]]<br>"
+	data += "<font color='#bd83cc'><span class='bold'>Half-Drows:</span></font> [GLOB.vanderlin_round_stats[STATS_ALIVE_HALF_DROWS]]<br>"
 	data += "<font color='#7729af'><span class='bold'>Dark Elves:</span></font> [GLOB.vanderlin_round_stats[STATS_ALIVE_DARK_ELVES]]<br>"
 	data += "<font color='#DC143C'><span class='bold'>Tieflings:</span></font> [GLOB.vanderlin_round_stats[STATS_ALIVE_TIEFLINGS]]<br>"
 	data += "<font color='#228B22'><span class='bold'>Half-Orcs:</span></font> [GLOB.vanderlin_round_stats[STATS_ALIVE_HALF_ORCS]]<br>"
@@ -390,7 +396,7 @@ GLOBAL_LIST_EMPTY(respawncounts)
 	data += "</div>"
 
 	src.mob << browse(null, "window=vanderlin_influences")
-	var/datum/browser/popup = new(src.mob, "vanderlin_stats", "<center>End Round Statistics</center>", 1050, 725)
+	var/datum/browser/popup = new(src.mob, "vanderlin_stats", "<center>End Round Statistics</center>", 1050, 745)
 	popup.set_content(data.Join())
 	popup.open()
 
@@ -492,7 +498,7 @@ GLOBAL_LIST_EMPTY(respawncounts)
 		Number of nobles: [GLOB.vanderlin_round_stats[STATS_ALIVE_NOBLES]] ([get_colored_influence_value(SSgamemode.calculate_specific_influence(astrata_storyteller, STATS_ALIVE_NOBLES))])<br>\
 		Noble deaths: [GLOB.vanderlin_round_stats[STATS_NOBLE_DEATHS]] ([get_colored_influence_value(SSgamemode.calculate_specific_influence(astrata_storyteller, STATS_NOBLE_DEATHS))])<br>\
 		Laws and decrees: [GLOB.vanderlin_round_stats[STATS_LAWS_AND_DECREES_MADE]] ([get_colored_influence_value(SSgamemode.calculate_specific_influence(astrata_storyteller, STATS_LAWS_AND_DECREES_MADE))])<br>\
-		Taxes collected: [GLOB.vanderlin_round_stats[STATS_TAXES_COLLECTED]] ([get_colored_influence_value(SSgamemode.calculate_specific_influence(astrata_storyteller, STATS_TAXES_COLLECTED))])", astrata_storyteller)
+		Slurs spoken: [GLOB.vanderlin_round_stats[STATS_SLURS_SPOKEN]] ([get_colored_influence_value(SSgamemode.calculate_specific_influence(astrata_storyteller, STATS_SLURS_SPOKEN))])", astrata_storyteller)
 
 	// Dendor
 	data += god_ui_block("DENDOR", "#412938", "#66745c", "\
@@ -518,7 +524,7 @@ GLOBAL_LIST_EMPTY(respawncounts)
 		Marriages made: [GLOB.vanderlin_round_stats[STATS_MARRIAGES]] ([get_colored_influence_value(SSgamemode.calculate_specific_influence(eora_storyteller, STATS_MARRIAGES))])<br>\
 		Number of parents: [GLOB.vanderlin_round_stats[STATS_PARENTS]] ([get_colored_influence_value(SSgamemode.calculate_specific_influence(eora_storyteller, STATS_PARENTS))])<br>\
 		Hugs made: [GLOB.vanderlin_round_stats[STATS_HUGS_MADE]] ([get_colored_influence_value(SSgamemode.calculate_specific_influence(eora_storyteller, STATS_HUGS_MADE))])<br>\
-		Clingy people: [GLOB.vanderlin_round_stats[STATS_CLINGY_PEOPLE]] ([get_colored_influence_value(SSgamemode.calculate_specific_influence(eora_storyteller, STATS_CLINGY_PEOPLE))])<br>\
+		H*nds h*ld: [GLOB.vanderlin_round_stats[STATS_HANDS_HELD]] ([get_colored_influence_value(SSgamemode.calculate_specific_influence(eora_storyteller, STATS_HANDS_HELD))])<br>\
 		Number of pacifists: [GLOB.vanderlin_round_stats[STATS_PACIFISTS]] ([get_colored_influence_value(SSgamemode.calculate_specific_influence(eora_storyteller, STATS_PACIFISTS))])", eora_storyteller)
 
 	// Necra
@@ -1019,6 +1025,11 @@ GLOBAL_LIST_EMPTY(respawncounts)
 	get_message_output("watchlist entry", ckey)
 	check_overwatch()
 	validate_key_in_db()
+
+	// If we aren't already generating a ban cache, fire off a build request
+	// This way hopefully any users of request_ban_cache will never need to yield
+	if(!ban_cache_start && SSban_cache?.query_started)
+		INVOKE_ASYNC(GLOBAL_PROC, GLOBAL_PROC_REF(build_ban_cache), src)
 
 //	send_resources()
 
@@ -1691,8 +1702,6 @@ GLOBAL_LIST_EMPTY(respawncounts)
 	if(mob)
 		if(isliving(mob)) //no ghost can call this
 			mob.ghostize(can_reenter_corpse)
-		testing("[mob] [mob.type] YEA CLIE")
-
 
 /client/proc/whitelisted()
 	if(whitelisted != 2)

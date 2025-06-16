@@ -115,6 +115,10 @@
 				if(mmb_intent.no_early_release && client?.chargedprog < 100)
 					changeNext_move(mmb_intent.clickcd)
 					return
+		else if(client?.keys_held["Shift"])
+			spell_quickselect(A)
+			return
+
 	if(modifiers["left"])
 		if(atkswinging != "left")
 			return
@@ -153,28 +157,16 @@
 					changeNext_move(used_intent.clickcd,used_hand)
 					return
 
-
-//	if(modifiers["shift"] && modifiers["middle"])
-//		changeNext_move(CLICK_CD_MELEE)
-//		ShiftMiddleClickOn(A)
-//		return
-//	if(modifiers["shift"] && modifiers["ctrl"])
-//		CtrlShiftClickOn(A)
-//		return
 	if(modifiers["shift"] && modifiers["right"])
 		ShiftRightClickOn(A, params)
 		return
 	if(modifiers["ctrl"] && modifiers["right"])
-//		face_atom(A)
 		CtrlRightClickOn(A, params)
 		return
 	if(modifiers["alt"] && modifiers["right"])
 		face_atom(A)
 		AltRightClickOn(A, params)
 		return
-//	if(modifiers["shift"] && modifiers["middle"])
-//		ShiftMiddleClickOn(A)
-//		return
 	if(modifiers["middle"])
 		MiddleClickOn(A, params)
 		return
@@ -188,7 +180,6 @@
 		CtrlClickOn(A)
 		return
 	if(modifiers["right"])
-		testing("right")
 		if(!oactive)
 			RightClickOn(A, params)
 			return
@@ -278,7 +269,7 @@
 */
 
 	// Allows you to click on a box's contents, if that box is on the ground, but no deeper than that
-	if(isturf(A) || isturf(A.loc) || (A.loc && isturf(A.loc.loc)))
+	if(isturf(A) || isturf(A.loc) || (A.loc && (isturf(A.loc.loc) || isturf(A.loc.loc.loc))))
 		if(CanReach(A) || CanReach(A, W))
 			if(isopenturf(A))
 				var/turf/T = A
@@ -286,7 +277,6 @@
 					resolveAdjacentClick(A,W,params,used_hand)
 					return
 				if(T)
-					testing("beginautoaim")
 					var/list/mobs_here = list()
 					for(var/mob/M in T)
 						if(M.invisibility || M == src)
@@ -710,9 +700,6 @@
 	var/matrix/M = new
 	M.Scale(x1,y1)
 	transform = M
-
-/atom
-	var/xyoverride = FALSE //so we can 'face' the click catcher even though it doesn't have an x or a y
 
 /atom/movable/screen/click_catcher
 	icon = 'icons/mob/screen_gen.dmi'

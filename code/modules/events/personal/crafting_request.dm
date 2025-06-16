@@ -2,7 +2,7 @@
 	name = "Crafting Request"
 	track = EVENT_TRACK_PERSONAL
 	typepath = /datum/round_event/malum_crafting
-	weight = 10
+	weight = 7
 	earliest_start = 10 MINUTES
 	max_occurrences = 1
 	min_players = 15
@@ -21,7 +21,7 @@
 			continue
 		if(!H.patron || !istype(H.patron, /datum/patron/divine/malum))
 			continue
-		if(H.mind?.get_skill_level(/datum/skill/craft/crafting) < 3)
+		if(H.get_skill_level(/datum/skill/craft/crafting) < 3)
 			continue
 		return TRUE
 
@@ -35,7 +35,7 @@
 			continue
 		if(!human_mob.patron || !istype(human_mob.patron, /datum/patron/divine/malum))
 			continue
-		if(human_mob.mind?.get_skill_level(/datum/skill/craft/crafting) < 3)
+		if(human_mob.get_skill_level(/datum/skill/craft/crafting) < 3)
 			continue
 		valid_targets += human_mob
 
@@ -49,6 +49,6 @@
 
 	to_chat(chosen_one, span_userdanger("YOU ARE GOD'S CHOSEN!"))
 	to_chat(chosen_one, span_notice("Malum demands a physical manifestation of devotion! Build 2 sacred pantheon crosses to earn Malum's favor!"))
-	SEND_SOUND(chosen_one, 'sound/magic/dwarf_chant01.ogg')
+	chosen_one.playsound_local(chosen_one, 'sound/magic/dwarf_chant01.ogg', 100)
 
 	chosen_one.mind.announce_personal_objectives()

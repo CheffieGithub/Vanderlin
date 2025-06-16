@@ -127,6 +127,8 @@
 
 	var/datum/patron/A = H.patron
 	var/list/spelllist = list(A.t0, A.t1)
+	if(istype(A, /datum/patron/divine/necra))
+		spelllist += /obj/effect/proc_holder/spell/invoked/avert
 	for(var/spell_type in spelllist)
 		if(!spell_type || H.mind.has_spell(spell_type))
 			continue
@@ -140,6 +142,8 @@
 
 	var/datum/patron/A = H.patron
 	var/list/spelllist = list(/obj/effect/proc_holder/spell/targeted/abrogation, A.t0, A.t1)
+	if(istype(A, /datum/patron/divine/necra))
+		spelllist += /obj/effect/proc_holder/spell/invoked/avert
 	for(var/spell_type in spelllist)
 		if(!spell_type || H.mind.has_spell(spell_type))
 			continue
@@ -220,7 +224,7 @@
 				break
 			var/devotion_multiplier = 1
 			if(mind)
-				devotion_multiplier += (mind.get_skill_level(/datum/skill/magic/holy) / 4)
+				devotion_multiplier += (get_skill_level(/datum/skill/magic/holy) / 4)
 			C.update_devotion(floor(C.prayer_effectiveness * devotion_multiplier), floor(C.prayer_effectiveness * devotion_multiplier))
 			prayersesh += floor(C.prayer_effectiveness * devotion_multiplier)
 		else

@@ -24,7 +24,7 @@
 			continue
 		if(istype(H.mind?.assigned_role, /datum/job/bandit) || H.job == "Bandit")
 			continue
-		if(H.mind?.get_skill_level(/datum/skill/misc/stealing) < 2)
+		if(H.get_skill_level(/datum/skill/misc/stealing) < 2)
 			continue
 		return TRUE
 
@@ -40,7 +40,7 @@
 			continue
 		if(istype(human_mob.mind?.assigned_role, /datum/job/bandit) || human_mob.job == "Bandit")
 			continue
-		if(human_mob.mind?.get_skill_level(/datum/skill/misc/stealing) < 2)
+		if(human_mob.get_skill_level(/datum/skill/misc/stealing) < 2)
 			continue
 		valid_targets += human_mob
 
@@ -54,6 +54,6 @@
 
 	to_chat(chosen_one, span_userdanger("YOU ARE GOD'S CHOSEN!"))
 	to_chat(chosen_one, span_notice("Matthios demands you prove your cunning! Pickpocket fools to earn Matthios' favor!"))
-	SEND_SOUND(chosen_one, 'sound/items/matidol2.ogg')
+	chosen_one.playsound_local(chosen_one, 'sound/items/matidol2.ogg', 100)
 
 	chosen_one.mind.announce_personal_objectives()

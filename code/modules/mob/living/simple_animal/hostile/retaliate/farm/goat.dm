@@ -1,49 +1,3 @@
-/mob/living/simple_animal/hostile/retaliate/goat/Initialize()
-	. = ..()
-	AddElement(/datum/element/ai_retaliate)
-	RegisterSignal(src, COMSIG_HOSTILE_PRE_ATTACKINGTARGET, PROC_REF(on_pre_attack))
-	GLOB.farm_animals++
-	if(tame)
-		tamed(owner)
-
-/mob/living/simple_animal/hostile/retaliate/goat/Destroy()
-	..()
-	GLOB.farm_animals = max(GLOB.farm_animals - 1, 0)
-
-/// Called when we attack something in order to piece together the intent of the AI/user and provide desired behavior. The element might be okay here but I'd rather the fluff.
-/// Goats are really good at beating up plants by taking bites out of them, but we use the default attack for everything else
-/mob/living/simple_animal/hostile/retaliate/goat/proc/on_pre_attack(datum/source, atom/target)
-	if(is_type_in_list(target, food_type))
-		eat_plant(target)
-		return COMPONENT_HOSTILE_NO_ATTACK
-
-/mob/living/simple_animal/hostile/retaliate/goat/tamed(mob/user)
-	..()
-	deaggroprob = 50
-	if(can_buckle)
-		AddComponent(/datum/component/riding/gote)
-
-/mob/living/simple_animal/hostile/retaliate/goat/update_icon()
-	cut_overlays()
-	..()
-	if(stat != DEAD)
-		if(ssaddle)
-			var/mutable_appearance/saddlet = mutable_appearance(icon, "saddle-f-above", 4.3)
-			add_overlay(saddlet)
-			saddlet = mutable_appearance(icon, "saddle-f")
-			add_overlay(saddlet)
-		if(has_buckled_mobs())
-			var/mutable_appearance/mounted = mutable_appearance(icon, "goat_mounted", 4.3)
-			add_overlay(mounted)
-
-/mob/living/simple_animal/hostile/retaliate/goat/UniqueAttack()
-	if(istype(target, /obj/structure/vine))
-		var/obj/structure/vine/SV = target
-		SV.eat(src)
-		food = max(food + 30, food_max + 50)
-		return
-	return ..()
-
 /mob/living/simple_animal/hostile/retaliate/goat
 	icon = 'icons/roguetown/mob/monster/gote.dmi'
 	name = "gote"
@@ -78,19 +32,18 @@
 
 	health = FEMALE_GOTE_HEALTH
 	maxHealth = FEMALE_GOTE_HEALTH
-	food_type = list(/obj/item/reagent_containers/food/snacks/produce/wheat,
-					/obj/item/reagent_containers/food/snacks/produce/oat,
-					/obj/item/reagent_containers/food/snacks/produce/apple,
-					/obj/item/reagent_containers/food/snacks/produce/turnip,
-					/obj/item/reagent_containers/food/snacks/produce/cabbage,
-					/obj/item/reagent_containers/food/snacks/produce/jacksberry,
+	food_type = list(/obj/item/reagent_containers/food/snacks/produce/grain/wheat,
+					/obj/item/reagent_containers/food/snacks/produce/grain/oat,
+					/obj/item/reagent_containers/food/snacks/produce/fruit/apple,
+					/obj/item/reagent_containers/food/snacks/produce/vegetable/turnip,
+					/obj/item/reagent_containers/food/snacks/produce/vegetable/cabbage,
+					/obj/item/reagent_containers/food/snacks/produce/fruit/jacksberry,
 					/obj/structure/vine,
 					/obj/structure/kneestingers,
 					)
 	tame_chance = 25
 	bonus_tame_chance = 15
 	pooptype = /obj/item/natural/poo/horse
-	milk_reagent = /datum/reagent/consumable/milk/gote
 
 	base_intents = list(/datum/intent/simple/headbutt)
 	attack_verb_continuous = "headbutts"
@@ -106,8 +59,63 @@
 	remains_type = /obj/effect/decal/remains/cow
 
 	ai_controller = /datum/ai_controller/gote
-	AIStatus = AI_OFF
-	can_have_ai = FALSE
+
+	var/can_breed = TRUE
+
+/mob/living/simple_animal/hostile/retaliate/goat/Initialize()
+	. = ..()
+	AddElement(/datum/element/ai_retaliate)
+	RegisterSignal(src, COMSIG_HOSTILE_PRE_ATTACKINGTARGET, PROC_REF(on_pre_attack))
+	GLOB.farm_animals++
+	if(tame)
+		tamed(owner)
+
+	if(can_breed)
+		AddComponent(\
+			/datum/component/breed,\
+			list(/mob/living/simple_animal/hostile/retaliate/goat, /mob/living/simple_animal/hostile/retaliate/goatmale),\
+			3 MINUTES, \
+			list(/mob/living/simple_animal/hostile/retaliate/goat/goatlet = 90, /mob/living/simple_animal/hostile/retaliate/goat/goatlet/boy = 10),\
+			CALLBACK(src, PROC_REF(after_birth)),\
+		)
+	udder_component()
+
+/mob/living/simple_animal/hostile/retaliate/goat/proc/udder_component()
+	AddComponent(/datum/component/udder, reagent_produced_typepath = /datum/reagent/consumable/milk/gote)
+
+/mob/living/simple_animal/hostile/retaliate/goat/Destroy()
+	UnregisterSignal(src, COMSIG_HOSTILE_PRE_ATTACKINGTARGET)
+	GLOB.farm_animals = max(GLOB.farm_animals - 1, 0)
+	return ..()
+
+/mob/living/simple_animal/hostile/retaliate/goat/update_icon()
+	cut_overlays()
+	..()
+	if(stat != DEAD)
+		if(ssaddle)
+			var/mutable_appearance/saddlet = mutable_appearance(icon, "saddle-f-above", 4.3)
+			add_overlay(saddlet)
+			saddlet = mutable_appearance(icon, "saddle-f")
+			add_overlay(saddlet)
+		if(has_buckled_mobs())
+			var/mutable_appearance/mounted = mutable_appearance(icon, "goat_mounted", 4.3)
+			add_overlay(mounted)
+
+/mob/living/simple_animal/hostile/retaliate/goat/tamed(mob/user)
+	..()
+	deaggroprob = 50
+	if(can_buckle)
+		AddComponent(/datum/component/riding/gote)
+
+/mob/living/simple_animal/hostile/retaliate/goat/proc/after_birth(mob/living/simple_animal/hostile/retaliate/cow/cowlet/baby, mob/living/partner)
+	return
+
+/// Called when we attack something in order to piece together the intent of the AI/user and provide desired behavior. The element might be okay here but I'd rather the fluff.
+/// Goats are really good at beating up plants by taking bites out of them, but we use the default attack for everything else
+/mob/living/simple_animal/hostile/retaliate/goat/proc/on_pre_attack(datum/source, atom/target)
+	if(is_type_in_list(target, food_type))
+		eat_plant(target)
+		return COMPONENT_HOSTILE_NO_ATTACK
 
 /mob/living/simple_animal/hostile/retaliate/goat/get_sound(input)
 	switch(input)
@@ -194,12 +202,12 @@
 
 	health = MALE_GOTE_HEALTH
 	maxHealth = MALE_GOTE_HEALTH
-	food_type = list(/obj/item/reagent_containers/food/snacks/produce/wheat,
-					/obj/item/reagent_containers/food/snacks/produce/oat,
-					/obj/item/reagent_containers/food/snacks/produce/apple,
-					/obj/item/reagent_containers/food/snacks/produce/turnip,
-					/obj/item/reagent_containers/food/snacks/produce/cabbage,
-					/obj/item/reagent_containers/food/snacks/produce/jacksberry,
+	food_type = list(/obj/item/reagent_containers/food/snacks/produce/grain/wheat,
+					/obj/item/reagent_containers/food/snacks/produce/grain/oat,
+					/obj/item/reagent_containers/food/snacks/produce/fruit/apple,
+					/obj/item/reagent_containers/food/snacks/produce/vegetable/turnip,
+					/obj/item/reagent_containers/food/snacks/produce/vegetable/cabbage,
+					/obj/item/reagent_containers/food/snacks/produce/fruit/jacksberry,
 					/obj/structure/vine,
 					/obj/structure/kneestingers,
 					)
@@ -223,13 +231,21 @@
 	remains_type = /obj/effect/decal/remains/cow
 
 	ai_controller = /datum/ai_controller/gote
-	AIStatus = AI_OFF
-	can_have_ai = FALSE
+
+
 
 /mob/living/simple_animal/hostile/retaliate/goatmale/Initialize()
 	. = ..()
 	AddElement(/datum/element/ai_retaliate)
 	RegisterSignal(src, COMSIG_HOSTILE_PRE_ATTACKINGTARGET, PROC_REF(on_pre_attack))
+	GLOB.farm_animals++
+	if(tame)
+		tamed(owner)
+
+/mob/living/simple_animal/hostile/retaliate/goatmale/Destroy()
+	GLOB.farm_animals = max(GLOB.farm_animals - 1, 0)
+	UnregisterSignal(src, COMSIG_HOSTILE_PRE_ATTACKINGTARGET)
+	return ..()
 
 /// Called when we attack something in order to piece together the intent of the AI/user and provide desired behavior. The element might be okay here but I'd rather the fluff.
 /// Goats are really good at beating up plants by taking bites out of them, but we use the default attack for everything else
@@ -257,16 +273,6 @@
 	if(can_buckle)
 		AddComponent(/datum/component/riding/gote)
 
-/mob/living/simple_animal/hostile/retaliate/goatmale/Initialize()
-	..()
-	GLOB.farm_animals++
-	if(tame)
-		tamed(owner)
-
-/mob/living/simple_animal/hostile/retaliate/goatmale/Destroy()
-	..()
-	GLOB.farm_animals = max(GLOB.farm_animals - 1, 0)
-
 /mob/living/simple_animal/hostile/retaliate/goatmale/get_sound(input)
 	switch(input)
 		if("aggro")
@@ -280,8 +286,6 @@
 
 /mob/living/simple_animal/hostile/retaliate/goatmale/taunted(mob/user)
 	emote("aggro")
-	Retaliate()
-	GiveTarget(user)
 	return
 
 /mob/living/simple_animal/hostile/retaliate/proc/eat_plant(obj/target)
@@ -354,7 +358,6 @@
 
 	health = CALF_HEALTH
 	maxHealth = CALF_HEALTH
-	milk_reagent = null
 
 	base_intents = list(/datum/intent/simple/headbutt)
 	melee_damage_lower = 1
@@ -366,8 +369,10 @@
 
 	adult_growth = /mob/living/simple_animal/hostile/retaliate/goat
 	can_buckle = FALSE
+	can_breed = FALSE
 
-
+/mob/living/simple_animal/hostile/retaliate/goat/goatlet/udder_component()
+	return
 
 /mob/living/simple_animal/hostile/retaliate/goat/goatlet/boy
 	icon_state = "goatletboy"

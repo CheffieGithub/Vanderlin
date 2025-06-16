@@ -22,14 +22,12 @@
 /obj/effect/proc_holder/spell/invoked/avert/cast(list/targets, mob/living/carbon/human/user)
 	. = ..()
 	var/atom/target = targets[1]
-	if (!isliving(target))
-		revert_cast()
+	if(!isliving(target))
 		return FALSE
 
 	var/mob/living/living_target = target
-	if (!user.Adjacent(target))
+	if(!user.Adjacent(target))
 		to_chat(user, span_warning("I must be beside [living_target] to avert Her gaze from [living_target.p_them()]!"))
-		revert_cast()
 		return FALSE
 
 	// add the no-death trait to them....
@@ -39,7 +37,7 @@
 
 	ADD_TRAIT(living_target, TRAIT_NODEATH, "avert_spell")
 
-	var/our_holy_skill = user.mind?.get_skill_level(associated_skill)
+	var/our_holy_skill = user.get_skill_level(associated_skill)
 	var/tickspeed = 3 SECONDS + (5 * our_holy_skill)
 
 	while(do_after(user, tickspeed, living_target))
@@ -61,6 +59,7 @@
 	REMOVE_TRAIT(living_target, TRAIT_NODEATH, "avert_spell")
 
 	user.visible_message(span_danger("[user]'s concentration breaks, the motes receding from [living_target] and into [user.p_their()] hand once more."), span_danger("My concentration breaks, and the Intercession falls silent."))
+	return ..()
 
 /obj/effect/proc_holder/spell/targeted/abrogation
 	name = "Abrogation"
@@ -85,7 +84,7 @@
 	. = ..()
 	var/debuff_power = 1
 	if (user && user.mind)
-		debuff_power = clamp((user.mind.get_skill_level(/datum/skill/magic/holy) / 2), 1, 3)
+		debuff_power = clamp((user.get_skill_level(/datum/skill/magic/holy) / 2), 1, 3)
 
 	var/too_powerful = FALSE
 	var/list/things_to_churn = list()
