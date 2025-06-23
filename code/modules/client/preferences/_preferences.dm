@@ -781,7 +781,7 @@ GLOBAL_LIST_INIT(name_adjustments, list())
 				continue
 			ban_details = i
 			break //we only want to get the most recent ban's details
-		if(ban_details && ban_details.len)
+		if(LAZYLEN(ban_details))
 			var/expires = "This is a permanent ban."
 			if(ban_details["expiration_time"])
 				expires = " The ban is for [DisplayTimeText(text2num(ban_details["duration"]) MINUTES)] and expires on [ban_details["expiration_time"]] (server time)."
@@ -1135,7 +1135,7 @@ GLOBAL_LIST_INIT(name_adjustments, list())
 					var/pickedui = input(user, "Choose your UI style.", "Character Preference", UI_style)  as null|anything in sortList(GLOB.available_ui_styles)
 					if(pickedui)
 						UI_style = "Rogue"
-						if (parent && parent.mob && parent.mob.hud_used)
+						if (parent?.mob && parent.mob.hud_used)
 							parent.mob.hud_used.update_ui_style(ui_style2icon(UI_style))
 		else
 			switch(href_list["preference"])
@@ -1307,7 +1307,7 @@ GLOBAL_LIST_INIT(name_adjustments, list())
 
 				if("ambientocclusion")
 					ambientocclusion = !ambientocclusion
-					if(parent && parent.screen && parent.screen.len)
+					if(LAZYLEN(parent?.screen))
 						var/atom/movable/screen/plane_master/game_world/PM = locate(/atom/movable/screen/plane_master/game_world) in parent.screen
 						PM.backdrop(parent.mob)
 						PM = locate(/atom/movable/screen/plane_master/game_world_fov_hidden) in parent.screen

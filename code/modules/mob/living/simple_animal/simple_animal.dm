@@ -304,38 +304,42 @@ GLOBAL_VAR_INIT(farm_animals, FALSE)
 
 /mob/living/simple_animal/proc/handle_automated_speech(override)
 	set waitfor = FALSE
-	if(speak_chance)
-		if(prob(speak_chance) || override)
-			if(speak && speak.len)
-				if((emote_hear && emote_hear.len) || (emote_see && emote_see.len))
-					var/length = speak.len
-					if(emote_hear && emote_hear.len)
-						length += emote_hear.len
-					if(emote_see && emote_see.len)
-						length += emote_see.len
-					var/randomValue = rand(1,length)
-					if(randomValue <= speak.len)
-						say(pick(speak), forced = "poly")
-					else
-						randomValue -= speak.len
-						if(emote_see && randomValue <= emote_see.len)
-							emote("me [pick(emote_see)]", 1)
-						else
-							emote("me [pick(emote_hear)]", 2)
-				else
-					say(pick(speak), forced = "poly")
+	if(!speak_chance)
+		return
+	if(!override && !prob(speak_chance))
+		return
+	var/speak_length = LAZYLEN(speak)
+	var/initial_speak = LAZYLEN(speak)
+	var/hear_length = LAZYLEN(emote_hear)
+	var/see_length = LAZYLEN(emote_see)
+	if(speak_length)
+		if(!hear_length && !see_length)
+			say(pick(speak), forced = "poly")
+			return
+		speak_length += hear_length
+		speak_length += see_length
+		var/randomValue = rand(1, speak_length)
+		if(randomValue <= initial_speak)
+			say(pick(speak), forced = "poly")
+		else
+			randomValue -= initial_speak
+			if(emote_see && randomValue <= see_length)
+				emote("me", 1, pick(emote_see))
 			else
-				if(!(emote_hear && emote_hear.len) && (emote_see && emote_see.len))
-					emote("me", 1, pick(emote_see))
-				if((emote_hear && emote_hear.len) && !(emote_see && emote_see.len))
-					emote("me", 2, pick(emote_hear))
-				if((emote_hear && emote_hear.len) && (emote_see && emote_see.len))
-					var/length = emote_hear.len + emote_see.len
-					var/pick = rand(1,length)
-					if(pick <= emote_see.len)
-						emote("me", 1, pick(emote_see))
-					else
-						emote("me", 2, pick(emote_hear))
+				emote("me", 2, pick(emote_hear))
+		return
+
+	if(!(hear_length) && (see_length))
+		emote("me", 1, pick(emote_see))
+	else if((hear_length) && !(see_length))
+		emote("me", 2, pick(emote_hear))
+	else
+		var/length = hear_length + see_length
+		var/pick = rand(1, length)
+		if(pick <= see_length)
+			emote("me", 1, pick(emote_see))
+		else
+			emote("me", 2, pick(emote_hear))
 
 /mob/living/simple_animal/handle_environment()
 	var/atom/A = src.loc
@@ -591,7 +595,7 @@ GLOBAL_VAR_INIT(farm_animals, FALSE)
 	update_inv_hands()
 
 /mob/living/simple_animal/update_inv_hands()
-	if(client && hud_used && hud_used.hud_version != HUD_STYLE_NOHUD)
+	if(client && hud_used?.hud_version != HUD_STYLE_NOHUD)
 		var/obj/item/l_hand = get_item_for_held_index(1)
 		var/obj/item/r_hand = get_item_for_held_index(2)
 		if(r_hand)

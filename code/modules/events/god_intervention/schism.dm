@@ -62,12 +62,12 @@ GLOBAL_LIST_EMPTY(tennite_schisms)
 
 	for(var/datum/weakref/supporter_ref in supporters_astrata)
 		var/mob/living/carbon/human/supporter = supporter_ref.resolve()
-		if(supporter && supporter.stat != DEAD && is_tennite(supporter))
+		if(supporter?.stat != DEAD && is_tennite(supporter))
 			astrata_count++
 
 	for(var/datum/weakref/supporter_ref in supporters_challenger)
 		var/mob/living/carbon/human/supporter = supporter_ref.resolve()
-		if(supporter && supporter.stat != DEAD && is_tennite(supporter))
+		if(supporter?.stat != DEAD && is_tennite(supporter))
 			challenger_count++
 
 	if(astrata_count >= challenger_count)
@@ -76,7 +76,7 @@ GLOBAL_LIST_EMPTY(tennite_schisms)
 
 		for(var/datum/weakref/supporter_ref in supporters_astrata)
 			var/mob/living/carbon/human/supporter = supporter_ref.resolve()
-			if(supporter && supporter.patron == astrata)
+			if(supporter?.patron == astrata)
 				to_chat(supporter, span_notice("Astrata's light prevails! Your steadfast devotion is rewarded with many triumphs."))
 				supporter.adjust_triumphs(3)
 			else if(supporter)
@@ -96,7 +96,7 @@ GLOBAL_LIST_EMPTY(tennite_schisms)
 
 		for(var/datum/weakref/supporter_ref in supporters_challenger)
 			var/mob/living/carbon/human/supporter = supporter_ref.resolve()
-			if(supporter && supporter.patron == challenger)
+			if(supporter?.patron == challenger)
 				to_chat(supporter, span_notice("[challenger.name]'s challenge succeeds! Your persistent faith is rewarded with triumphs."))
 				supporter.adjust_triumphs(2)
 			else if(supporter)
@@ -119,7 +119,7 @@ GLOBAL_LIST_EMPTY(tennite_schisms)
 	// First try to find a challenger supporter who is also clergy
 	for(var/datum/weakref/supporter_ref in supporters_challenger)
 		var/mob/living/carbon/human/human_mob = supporter_ref.resolve()
-		if(human_mob && human_mob.stat != DEAD && human_mob.client && (human_mob.mind?.assigned_role.title in GLOB.church_positions) && human_mob.patron == challenger)
+		if(human_mob?.stat != DEAD && human_mob.client && (human_mob.mind?.assigned_role.title in GLOB.church_positions) && human_mob.patron == challenger)
 			selected_priest = human_mob
 			was_supporter = TRUE
 			was_clergy = TRUE
@@ -137,7 +137,7 @@ GLOBAL_LIST_EMPTY(tennite_schisms)
 	if(!selected_priest)
 		for(var/datum/weakref/supporter_ref in supporters_challenger)
 			var/mob/living/carbon/human/human_mob = supporter_ref.resolve()
-			if(human_mob && human_mob.stat != DEAD && human_mob.client && human_mob.patron == challenger && (human_mob.dna?.species.name in RACES_PLAYER_NONHERETICAL) && !human_mob.is_noble() && human_mob.age != AGE_CHILD && !(human_mob.mind?.assigned_role.title in GLOB.garrison_positions) && !(human_mob.mind?.assigned_role.title in GLOB.allmig_positions))
+			if(human_mob?.stat != DEAD && human_mob.client && human_mob.patron == challenger && (human_mob.dna?.species.name in RACES_PLAYER_NONHERETICAL) && !human_mob.is_noble() && human_mob.age != AGE_CHILD && !(human_mob.mind?.assigned_role.title in GLOB.garrison_positions) && !(human_mob.mind?.assigned_role.title in GLOB.allmig_positions))
 				selected_priest = human_mob
 				was_supporter = TRUE
 				break
@@ -193,12 +193,12 @@ GLOBAL_LIST_EMPTY(tennite_schisms)
 
 	for(var/datum/weakref/supporter_ref in supporters_astrata)
 		var/mob/living/carbon/human/supporter = supporter_ref.resolve()
-		if(supporter && supporter.stat != DEAD && is_tennite(supporter))
+		if(supporter?.stat != DEAD && is_tennite(supporter))
 			astrata_count++
 
 	for(var/datum/weakref/supporter_ref in supporters_challenger)
 		var/mob/living/carbon/human/supporter = supporter_ref.resolve()
-		if(supporter && supporter.stat != DEAD && is_tennite(supporter))
+		if(supporter?.stat != DEAD && is_tennite(supporter))
 			challenger_count++
 
 	if(astrata_count >= challenger_count)

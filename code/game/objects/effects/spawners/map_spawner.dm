@@ -16,7 +16,7 @@
 	..()
 	if(!prob(probby))
 		return INITIALIZE_HINT_QDEL
-	if(spawned && spawned.len > 1)
+	if(LAZYLEN(spawned) > 1)
 		var/turf/T = get_turf(src)
 		var/loot_spawned = 0
 		var/chosenamout = rand(lootmin,lootmax)

@@ -335,7 +335,7 @@
 //Just like a cartoon!
 /mob/living/carbon/human/proc/electrocution_animation(anim_duration)
 	//Handle mutant parts if possible
-	if(dna && dna.species)
+	if(dna?.species)
 		add_atom_colour("#000000", TEMPORARY_COLOUR_PRIORITY)
 		var/static/mutable_appearance/electrocution_skeleton_anim
 		if(!electrocution_skeleton_anim)
@@ -352,7 +352,7 @@
 	cut_overlay(MA)
 
 /mob/living/carbon/human/resist_restraints()
-	if(wear_armor && wear_armor.breakouttime)
+	if(wear_armor?.breakouttime)
 		changeNext_move(CLICK_CD_BREAKOUT)
 		last_special = world.time + CLICK_CD_BREAKOUT
 		cuff_resist(wear_armor)
@@ -482,7 +482,7 @@
 
 /mob/living/carbon/human/check_weakness(obj/item/weapon, mob/living/attacker)
 	. = ..()
-	if (dna && dna.species)
+	if (dna?.species)
 		. += dna.species.check_species_weakness(weapon, attacker, src)
 
 /mob/living/carbon/human/is_literate()

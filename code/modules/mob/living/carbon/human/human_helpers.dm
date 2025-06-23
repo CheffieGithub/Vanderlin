@@ -3,7 +3,7 @@
 	real_name = new_name
 
 // /mob/living/carbon/human/restrained(ignore_grab)
-// 	. = ((wear_armor && wear_armor.breakouttime) || ..())
+// 	. = ((wear_armor?.breakouttime) || ..())
 
 /mob/living/carbon/human/check_language_hear(language)
 	var/mob/living/carbon/V = src

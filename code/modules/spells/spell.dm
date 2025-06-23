@@ -428,7 +428,7 @@ GLOBAL_LIST_INIT(spells, typesof(/obj/effect/proc_holder/spell)) //needed for th
 			total_attunements[attunement] += pool.attunements[attunement]
 
 	set_attuned_strength(total_attunements)
-	if(user && user.ckey)
+	if(user?.ckey)
 		create_logs(user, targets)
 	if(recharge)
 		recharging = FALSE

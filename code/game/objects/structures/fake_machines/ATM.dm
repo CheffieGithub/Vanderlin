@@ -67,7 +67,7 @@
 		SStreasury.create_bank_account(H)
 		if(H.mind)
 			var/datum/job/target_job = SSjob.GetJob(H.mind.assigned_role)
-			if(target_job && target_job.noble_income)
+			if(target_job?.noble_income)
 				SStreasury.noble_incomes[H] = target_job.noble_income
 		spawn(5)
 			say("New account created.")

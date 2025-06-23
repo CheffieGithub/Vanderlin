@@ -1173,7 +1173,7 @@ GLOBAL_LIST_INIT(bounty_rep, list())  // ckey -> reputation score
 			if("assassination")
 				if(action_type == "death" && target.stat == DEAD)
 					// Verify the harlequinn was involved in the kill
-					if(actor && actor.ckey == contract.harlequinn_ckey)
+					if(actor?.ckey == contract.harlequinn_ckey)
 						contract_completed = TRUE
 						log_game("BOUNTY: Assassination contract [contract.contract_id] completed by [actor.ckey] on target [target.real_name]")
 					else
@@ -1422,7 +1422,7 @@ GLOBAL_LIST_INIT(bounty_rep, list())  // ckey -> reputation score
 				switch(contract.contract_type)
 					if("smuggling")
 						var/obj/item/storage/smuggling_pouch/pouch = locate() in harlequinn.get_contents()
-						if(pouch && pouch.contract_id == contract.contract_id)
+						if(pouch?.contract_id == contract.contract_id)
 							contract.complete_contract(src)
 							modify_reputation(harlequinn, 8)
 							to_chat(harlequinn, span_notice("Smuggling contract completed! Contraband delivered successfully."))
@@ -1449,14 +1449,14 @@ GLOBAL_LIST_INIT(bounty_rep, list())  // ckey -> reputation score
 						// Check for the specific target's corpse
 						if(contract.target_marker && contract.burial_corpse_available)
 							var/mob/target_corpse = contract.target_marker.get_target()
-							if(target_corpse && target_corpse.stat == DEAD)
+							if(target_corpse?.stat == DEAD)
 								// Check if corpse is being carried/dragged or nearby
 								if(harlequinn.pulling == target_corpse || get_dist(harlequinn, target_corpse) <= 2)
 									has_target_corpse = TRUE
 
 						// Check if there's a suitable dirthole (pit stage or deeper)
 						var/has_burial_site = FALSE
-						if(burial_hole && burial_hole.stage >= 3)
+						if(burial_hole?.stage >= 3)
 							has_burial_site = TRUE
 
 						if(has_shovel && has_target_corpse && has_burial_site)
@@ -1737,7 +1737,7 @@ GLOBAL_LIST_INIT(bounty_rep, list())  // ckey -> reputation score
 
 			for(var/obj/structure/bounty_board/board in GLOB.bounty_boards)
 				var/datum/bounty_contract/contract = board.find_contract_by_id(contract_id)
-				if(contract && contract.assigned_to_harlequinn)
+				if(contract?.assigned_to_harlequinn)
 					contract.complete_contract(board)
 					for(var/mob/M in GLOB.player_list)
 						if(M.ckey == contract.harlequinn_ckey)
@@ -1877,7 +1877,7 @@ GLOBAL_LIST_INIT(bounty_rep, list())  // ckey -> reputation score
 	if(used_in_contract)
 		return FALSE
 	var/mob/target = target_ref?.resolve()
-	return target && target.stat != DEAD // Allow unconscious targets
+	return target?.stat != DEAD // Allow unconscious targets
 
 /datum/marked_target/proc/get_display_name()
 	var/mob/target = target_ref?.resolve()

@@ -6,7 +6,7 @@
 	var/list/behindhands = list()
 
 	for(var/obj/item/I in held_items)
-		if(client && hud_used && hud_used.hud_version != HUD_STYLE_NOHUD)
+		if(client && hud_used?.hud_version != HUD_STYLE_NOHUD)
 			if(I.bigboy)
 				if(I.wielded)
 					if(get_held_index_of_item(I) == 1)
@@ -27,7 +27,7 @@
 				else
 					I.screen_loc = ui_hand_position(get_held_index_of_item(I))
 			client.screen += I
-			if(observers && observers.len)
+			if(LAZYLEN(observers))
 				for(var/M in observers)
 					var/mob/dead/observe = M
 					if(observe.client && observe.client.eye == src)

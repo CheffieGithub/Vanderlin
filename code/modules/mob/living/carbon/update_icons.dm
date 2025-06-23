@@ -80,7 +80,7 @@
 	var/list/behindhands = list()
 
 	for(var/obj/item/I in held_items)
-		if(client && hud_used && hud_used.hud_version != HUD_STYLE_NOHUD)
+		if(client && hud_used?.hud_version != HUD_STYLE_NOHUD)
 			if(I.bigboy)
 				if(I.wielded)
 					I.screen_loc = "WEST-4:16,SOUTH+7:-16"
@@ -95,7 +95,7 @@
 				else
 					I.screen_loc = ui_hand_position(get_held_index_of_item(I))
 			client.screen += I
-			if(observers && observers.len)
+			if(LAZYLEN(observers))
 				for(var/M in observers)
 					var/mob/dead/observe = M
 					if(observe.client && observe.client.eye == src)
@@ -243,7 +243,7 @@
 	if(!get_bodypart(BODY_ZONE_HEAD)) //Decapitated
 		return
 
-	if(client && hud_used && hud_used.inv_slots[SLOT_WEAR_MASK])
+	if(client && hud_used?.inv_slots[SLOT_WEAR_MASK])
 		var/atom/movable/screen/inventory/inv = hud_used.inv_slots[SLOT_WEAR_MASK]
 		inv.update_icon()
 
@@ -261,7 +261,7 @@
 		var/mob/living/carbon/human/human = src
 		age = human.age
 
-	if(client && hud_used && hud_used.inv_slots[SLOT_NECK])
+	if(client && hud_used?.inv_slots[SLOT_NECK])
 		var/atom/movable/screen/inventory/inv = hud_used.inv_slots[SLOT_NECK]
 		inv.update_icon()
 
@@ -283,7 +283,7 @@
 	if(!get_bodypart(BODY_ZONE_HEAD)) //Decapitated
 		return
 
-	if(client && hud_used && hud_used.inv_slots[SLOT_HEAD])
+	if(client && hud_used?.inv_slots[SLOT_HEAD])
 		var/atom/movable/screen/inventory/inv = hud_used.inv_slots[SLOT_HEAD]
 		inv.update_icon()
 

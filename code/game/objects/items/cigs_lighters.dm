@@ -286,7 +286,7 @@ CIGARETTE PACKETS ARE IN FANCY.DM
 	open_flame()
 	handle_reagents()
 //  Doesn't work with new system, instead we have a constant stream of reagents every tick
-/*	if((reagents && reagents.total_volume) && (nextdragtime <= world.time))
+/*	if((reagents?.total_volume) && (nextdragtime <= world.time))
 		nextdragtime = world.time + dragtime
 		handle_reagents()
 */
@@ -437,7 +437,7 @@ CIGARETTE PACKETS ARE IN FANCY.DM
 		STOP_PROCESSING(SSobj, src)
 		return
 	open_flame()
-	if(reagents && reagents.total_volume)	//	check if it has any reagents at all
+	if(reagents?.total_volume)	//	check if it has any reagents at all
 		handle_reagents()
 
 

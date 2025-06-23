@@ -69,7 +69,7 @@
 	var/start_time = world.time
 	var/max_duel_duration = 8 MINUTES
 
-	while(current_duel && current_duel.ongoing)
+	while(current_duel?.ongoing)
 		CHECK_TICK
 
 		if(world.time > start_time + max_duel_duration)

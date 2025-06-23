@@ -47,7 +47,7 @@
 			var/new_style = browser_input_list(user, "Choose your facial hairstyle", "Hair Styling", valid_facial_hairstyles)
 			if(new_style)
 				var/obj/item/bodypart/head/head = H.get_bodypart(BODY_ZONE_HEAD)
-				if(head && head.bodypart_features)
+				if(head?.bodypart_features)
 					var/datum/bodypart_feature/hair/facial/current_facial = null
 					for(var/datum/bodypart_feature/hair/facial/facial_feature in head.bodypart_features)
 						current_facial = facial_feature
@@ -79,7 +79,7 @@
 			var/new_style = browser_input_list(user, "Choose your hairstyle", "Hair Styling", valid_hairstyles)
 			if(new_style)
 				var/obj/item/bodypart/head/head = H.get_bodypart(BODY_ZONE_HEAD)
-				if(head && head.bodypart_features)
+				if(head?.bodypart_features)
 					var/datum/bodypart_feature/hair/head/current_hair = null
 					for(var/datum/bodypart_feature/hair/head/hair_feature in head.bodypart_features)
 						current_hair = hair_feature
@@ -136,7 +136,7 @@
 			var/new_detail = browser_input_list(user, "Choose your face detail", "Face Detail", valid_details)
 			if(new_detail)
 				var/obj/item/bodypart/head/head = H.get_bodypart(BODY_ZONE_HEAD)
-				if(head && head.bodypart_features)
+				if(head?.bodypart_features)
 					// Remove existing face detail if any
 					for(var/datum/bodypart_feature/face_detail/old_detail in head.bodypart_features)
 						head.remove_bodypart_feature(old_detail)

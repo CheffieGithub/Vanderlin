@@ -50,7 +50,7 @@
 
 /obj/item/organ/vocal_cords/harpy/Remove(mob/living/carbon/M, special = FALSE, drop_if_replaced = TRUE)
 	. = ..()
-	if(vocals && vocals.playing)
+	if(vocals?.playing)
 		vocals.terminate_playing(M)  // Stop singing when removed
 	if(harpy)
 		M.mind?.RemoveSpell(harpy)

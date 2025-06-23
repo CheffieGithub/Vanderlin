@@ -105,7 +105,7 @@ GLOBAL_LIST_INIT(roleplay_readme, world.file2list("strings/rt/Lore_Primer.json")
 		src << browse(null, "window=preferences_browser")
 		new_player_panel()
 
-	if(client && client.prefs.is_active_migrant())
+	if(client?.prefs.is_active_migrant())
 		to_chat(usr, span_boldwarning("You are in the migrant queue."))
 		return
 
@@ -150,7 +150,7 @@ GLOBAL_LIST_INIT(roleplay_readme, world.file2list("strings/rt/Lore_Primer.json")
 				to_chat(usr, "<span class='warning'>Server is full.</span>")
 				return
 
-		if(client && client.prefs.is_active_migrant())
+		if(client?.prefs.is_active_migrant())
 			to_chat(usr, span_boldwarning("You are in the migrant queue."))
 			return
 

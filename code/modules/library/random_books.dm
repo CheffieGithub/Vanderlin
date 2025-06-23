@@ -78,7 +78,7 @@
 		ORDER BY RAND() LIMIT 1
 	"}, list("category" = book_category))
 
-	if (query_get_random_book && query_get_random_book.Execute())
+	if (query_get_random_book?.Execute())
 		if (query_get_random_book.NextRow())
 			src.author = query_get_random_book.item[1]
 			src.title = query_get_random_book.item[2]

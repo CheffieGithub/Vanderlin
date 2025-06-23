@@ -76,7 +76,7 @@ SUBSYSTEM_DEF(move_manager)
 ///Adds a loop to our parent. Returns the created loop if a success, null otherwise
 /datum/movement_packet/proc/add_loop(datum/controller/subsystem/movement/subsystem, datum/move_loop/loop_type, priority, flags, datum/extra_info)
 	var/datum/move_loop/existing_loop = existing_loops[subsystem]
-	if(existing_loop && existing_loop.priority > priority)
+	if(existing_loop?.priority > priority)
 		if(!(existing_loop.flags & MOVEMENT_LOOP_IGNORE_PRIORITY) && !(flags & MOVEMENT_LOOP_IGNORE_PRIORITY))
 			return //Give up
 
@@ -127,7 +127,7 @@ SUBSYSTEM_DEF(move_manager)
 		var/datum/move_loop/checking = existing_loops[owner]
 		if(checking.flags & MOVEMENT_LOOP_IGNORE_PRIORITY)
 			continue
-		if(favorite && favorite.priority < checking.priority)
+		if(favorite?.priority < checking.priority)
 			continue
 		favorite = checking
 

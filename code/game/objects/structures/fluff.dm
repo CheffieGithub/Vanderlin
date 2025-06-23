@@ -833,7 +833,7 @@
 		if(do_after(H, 2.5 SECONDS, src))
 			var/obj/item/bodypart/affecting = H.get_bodypart("head")
 			to_chat(H, "<span class='warning'>The blinding light causes you intense pain!</span>")
-			if(affecting && affecting.receive_damage(0, 5))
+			if(affecting?.receive_damage(0, 5))
 				H.update_damage_overlays()
 
 	if(message2send == "You can see noc rotating!")

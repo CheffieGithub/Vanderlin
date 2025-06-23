@@ -56,7 +56,7 @@
 		if(!material.artrecipe.hammered)
 			playsound(src, pick('sound/combat/hits/onwood/fence_hit1.ogg', 'sound/combat/hits/onwood/fence_hit2.ogg', 'sound/combat/hits/onwood/fence_hit3.ogg'), 100, FALSE)
 			material.artrecipe.advance(I, user)
-	if(material && material.artrecipe && material.artrecipe.hammered && istype(I, material.artrecipe.needed_item))
+	if(material?.artrecipe && material.artrecipe.hammered && istype(I, material.artrecipe.needed_item))
 		material.artrecipe.item_added(user)
 		qdel(I)
 		return

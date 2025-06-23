@@ -730,7 +730,7 @@
 /datum/heritage/proc/LateJoinAddToUI(mob/living/carbon/human/new_fam)
 	for(var/datum/family_member/member in members)
 		var/mob/living/carbon/human/H = member.person
-		if(H && H.family_UI && H.client && H != new_fam)
+		if(H?.family_UI && H.client && H != new_fam)
 			if(new_fam in family_icons)
 				H.client.images.Add(family_icons[new_fam])
 

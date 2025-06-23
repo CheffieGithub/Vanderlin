@@ -72,7 +72,7 @@
 		totallums += L.lum_r + L.lum_b + L.lum_g
 		totalSunFalloff += L.sunFalloff
 
-	if(outdoor_effect && outdoor_effect.state)
+	if(outdoor_effect?.state)
 		totalSunFalloff = 4
 
 	totallums += totalSunFalloff / 4
@@ -106,7 +106,7 @@
 /turf/Exited(atom/movable/Obj, atom/newloc)
 	. = ..()
 
-	if (Obj && Obj.opacity)
+	if (Obj?.opacity)
 		recalc_atom_opacity() // Make sure to do this before reconsider_lights(), incase we're on instant updates.
 		reconsider_lights()
 

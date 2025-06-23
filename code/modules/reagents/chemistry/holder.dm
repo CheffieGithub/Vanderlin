@@ -84,7 +84,7 @@
 		qdel(reagent)
 	reagent_list = null
 	addiction_list = null
-	if(my_atom && my_atom.reagents == src)
+	if(my_atom?.reagents == src)
 		my_atom.reagents = null
 	my_atom = null
 	return ..()

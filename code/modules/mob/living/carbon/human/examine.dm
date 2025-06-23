@@ -161,10 +161,11 @@
 			if(virginity)
 				. += span_userdanger("VIRGIN!")
 
-		if(mind && mind.special_role)
-			if(mind && mind.special_role == "Bandit" && HAS_TRAIT(user, TRAIT_KNOWBANDITS))
+		var/special = mind?.special_role
+		if(special)
+			if(special == "Bandit" && HAS_TRAIT(user, TRAIT_KNOWBANDITS))
 				. += span_userdanger("BANDIT!")
-			if(mind && mind.special_role == "Vampire Lord")
+			if(special == "Vampire Lord")
 				. += span_userdanger("A MONSTER!")
 
 		var/list/known_frumentarii = user.mind?.cached_frumentarii
@@ -306,7 +307,7 @@
 
 	var/temp = getBruteLoss() + getFireLoss() //no need to calculate each of these twice
 
-	if(!(user == src && src.hal_screwyhud == SCREWYHUD_HEALTHY)) //fake healthy
+	if(!(user == src?.hal_screwyhud == SCREWYHUD_HEALTHY)) //fake healthy
 		// Damage
 		var/max_health = 1 //let's not divide by 0
 		for(var/obj/item/bodypart/bodypart as anything in bodyparts)
@@ -387,7 +388,7 @@
 		msg += missing_limb_message
 
 	//Grabbing
-	if(pulledby && pulledby.grab_state)
+	if(pulledby?.grab_state)
 		msg += "[m1] being grabbed by [pulledby]."
 
 	//Nutrition and Thirst
@@ -542,7 +543,7 @@
 
 	if(IsAdminGhost(user))
 		var/obj/item/organ/heart/heart = getorganslot(ORGAN_SLOT_HEART)
-		if(heart && heart.maniacs)
+		if(heart?.maniacs)
 			for(var/datum/antagonist/maniac/M in heart.maniacs)
 				var/K = LAZYACCESS(heart.inscryptions, M)
 				var/W = LAZYACCESS(heart.maniacs2wonder_ids, M)

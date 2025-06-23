@@ -1125,7 +1125,7 @@ GLOBAL_LIST_EMPTY(roundstart_races)
 		to_chat(user, "<span class='warning'>My grab at [target] was blocked!</span>")
 		return FALSE
 
-	if(attacker_style && attacker_style.grab_act(user,target))
+	if(attacker_style?.grab_act(user,target))
 		return TRUE
 	else
 /*		//Steal them shoes
@@ -1159,7 +1159,7 @@ GLOBAL_LIST_EMPTY(roundstart_races)
 						"<span class='danger'>I block [user]'s attack!</span>", "<span class='hear'>I hear a swoosh!</span>", COMBAT_MESSAGE_RANGE, user)
 		to_chat(user, "<span class='warning'>My attack at [target] was blocked!</span>")
 		return FALSE
-	if(attacker_style && attacker_style.harm_act(user,target))
+	if(attacker_style?.harm_act(user,target))
 		return TRUE
 	else
 
@@ -1273,7 +1273,7 @@ GLOBAL_LIST_EMPTY(roundstart_races)
 						"<span class='danger'>I block [user]'s shove!</span>", "<span class='hear'>I hear a swoosh!</span>", COMBAT_MESSAGE_RANGE, user)
 		to_chat(user, "<span class='warning'>My shove at [target] was blocked!</span>")
 		return FALSE
-	if(attacker_style && attacker_style.disarm_act(user,target))
+	if(attacker_style?.disarm_act(user,target))
 		return TRUE
 	if(HAS_TRAIT(user, TRAIT_FLOORED))
 		return FALSE

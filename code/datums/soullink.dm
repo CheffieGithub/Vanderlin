@@ -113,7 +113,7 @@
 		soulsharer.death(gibbed)
 
 /datum/soullink/sharedbody/sharerDies(gibbed, mob/living/sharer)
-	if(soulowner && soulsharer && soulsharer.mind)
+	if(soulowner && soulsharer?.mind)
 		soulsharer.mind.transfer_to(soulowner)
 
 

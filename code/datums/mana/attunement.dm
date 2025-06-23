@@ -180,7 +180,7 @@ GLOBAL_LIST_INIT(attunement_colors, list(
 	particles.color = spell_color
 
 	spawn(3.6 SECONDS)
-		if(caster && caster.spell_rune)
+		if(caster?.spell_rune)
 			start_spell_particles(caster, spell_color)
 
 /proc/finish_spell_visual_effects(mob/caster, obj/effect/proc_holder/spell/spell_obj)

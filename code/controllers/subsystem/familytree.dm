@@ -542,7 +542,7 @@ SUBSYSTEM_DEF(familytree)
 
 /datum/controller/subsystem/familytree/proc/ReturnAllFamilies()
 	. = ""
-	if(ruling_family && ruling_family.members.len)
+	if(LAZYLEN(ruling_family?.members))
 		. += ruling_family.FormatFamilyList()
 	for(var/datum/heritage/house in families)
 		if(!house.housename && !house.members.len)
@@ -550,7 +550,7 @@ SUBSYSTEM_DEF(familytree)
 		. += house.FormatFamilyList()
 
 /datum/controller/subsystem/familytree/proc/ValidateAllFamilies()
-	if(ruling_family && ruling_family.members.len)
+	if(LAZYLEN(ruling_family?.members))
 		ValidateFamily(ruling_family)
 	for(var/datum/heritage/family in families)
 		if(family.members.len)

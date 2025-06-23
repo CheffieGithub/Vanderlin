@@ -80,12 +80,12 @@
 	var/obj/item/bodypart/chesty = get_bodypart("chest")
 	var/obj/item/bodypart/headdy = get_bodypart("head")
 	if(!headdy)
-		if(chesty && chesty.skeletonized)
+		if(chesty?.skeletonized)
 			body_overlay = mutable_appearance(icon, "orc_skel_decap", -BODY_LAYER)
 		else
 			body_overlay = mutable_appearance(icon, "[G.raceicon]_decap", -BODY_LAYER)
 	else
-		if(chesty && chesty.skeletonized)
+		if(chesty?.skeletonized)
 			body_overlay = mutable_appearance(icon, "orc_skel", -BODY_LAYER)
 		else
 			body_overlay = mutable_appearance(icon, "[G.raceicon]", -BODY_LAYER)

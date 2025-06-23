@@ -304,7 +304,7 @@ There are several things that need to be remembered:
 	if(age == AGE_CHILD)
 		offsets = dna?.species?.offset_features_child
 
-	if(client && hud_used && hud_used.inv_slots[SLOT_NECK])
+	if(client && hud_used?.inv_slots[SLOT_NECK])
 		var/atom/movable/screen/inventory/inv = hud_used.inv_slots[SLOT_NECK]
 		inv.update_icon()
 
@@ -340,7 +340,7 @@ There are several things that need to be remembered:
 
 	if(wear_ring)
 		wear_ring.screen_loc = rogueui_ringr
-		if(client && hud_used && hud_used.hud_shown)
+		if(client && hud_used?.hud_shown)
 			client.screen += wear_ring
 		update_observer_view(wear_ring)
 		var/use_female_sprites = dna?.species.sexes ? (gender == FEMALE && !dna.species.use_m) || dna.species.use_f : FALSE
@@ -365,7 +365,7 @@ There are several things that need to be remembered:
 	if(age == AGE_CHILD)
 		offsets = dna?.species?.offset_features_child
 
-	if(client && hud_used && hud_used.inv_slots[SLOT_GLOVES])
+	if(client && hud_used?.inv_slots[SLOT_GLOVES])
 		var/atom/movable/screen/inventory/inv = hud_used.inv_slots[SLOT_GLOVES]
 		inv.update_icon()
 
@@ -377,7 +377,7 @@ There are several things that need to be remembered:
 			else if(has_right_hand(FALSE))
 				bloody_overlay.icon_state = "bloodyhands_right"
 
-		if(dna && dna.species.sexes)
+		if(dna?.species.sexes)
 			var/G = (gender == FEMALE) ? "f" : "m"
 			if(G == "f")
 				bloody_overlay.icon_state += "_f"
@@ -386,11 +386,11 @@ There are several things that need to be remembered:
 
 	if(gloves)
 		gloves.screen_loc = rogueui_gloves
-		if(client && hud_used && hud_used.hud_shown)
+		if(client && hud_used?.hud_shown)
 			if(hud_used.inventory_shown)
 				client.screen += gloves
 		update_observer_view(gloves,1)
-		if(dna && dna.species.sexes)
+		if(dna?.species.sexes)
 			var/racecustom
 			var/mutable_appearance/gloves_overlay
 			if(dna.species.custom_clothes)
@@ -444,17 +444,17 @@ There are several things that need to be remembered:
 	if(age == AGE_CHILD)
 		offsets = dna?.species?.offset_features_child
 
-	if(client && hud_used && hud_used.inv_slots[SLOT_WRISTS])
+	if(client && hud_used?.inv_slots[SLOT_WRISTS])
 		var/atom/movable/screen/inventory/inv = hud_used.inv_slots[SLOT_WRISTS]
 		inv.update_icon()
 
 	if(wear_wrists)
 		wear_wrists.screen_loc = rogueui_wrists
-		if(client && hud_used && hud_used.hud_shown)
+		if(client && hud_used?.hud_shown)
 			if(hud_used.inventory_shown)
 				client.screen += wear_wrists
 		update_observer_view(wear_wrists,1)
-		if(dna && dna.species.sexes)
+		if(dna?.species.sexes)
 			var/racecustom
 			if(dna.species.custom_clothes)
 				if(dna.species.custom_id)
@@ -512,11 +512,11 @@ There are several things that need to be remembered:
 
 	if(shoes)
 		shoes.screen_loc = rogueui_shoes					//move the item to the appropriate screen loc
-		if(client && hud_used && hud_used.hud_shown)
+		if(client && hud_used?.hud_shown)
 			if(hud_used.inventory_shown)			//if the inventory is open
 				client.screen += shoes					//add it to client's screen
 		update_observer_view(shoes,1)
-		if(dna && dna.species.sexes)
+		if(dna?.species.sexes)
 			var/G = (gender == FEMALE) ? "f" : "m"
 			var/footindex = get_limbloss_index(LEG_RIGHT, LEG_LEFT)
 			var/racecustom
@@ -562,7 +562,7 @@ There are several things that need to be remembered:
 	if(age == AGE_CHILD)
 		offsets = dna?.species?.offset_features_child
 
-	if(client && hud_used && hud_used.inv_slots[SLOT_HEAD])
+	if(client && hud_used?.inv_slots[SLOT_HEAD])
 		var/atom/movable/screen/inventory/inv = hud_used.inv_slots[SLOT_HEAD]
 		inv.update_icon()
 
@@ -605,7 +605,7 @@ There are several things that need to be remembered:
 			beltr.screen_loc = "WEST-4:-16,SOUTH+2:-16"
 		else
 			beltr.screen_loc = rogueui_beltr
-		if(client && hud_used && hud_used.hud_shown)
+		if(client && hud_used?.hud_shown)
 			client.screen += beltr
 		update_observer_view(beltr)
 		if(!(cloak && (cloak.flags_inv & HIDEBELT)))
@@ -666,7 +666,7 @@ There are several things that need to be remembered:
 			beltl.screen_loc = "WEST-2:-16,SOUTH+2:-16"
 		else
 			beltl.screen_loc = rogueui_beltl
-		if(client && hud_used && hud_used.hud_shown)
+		if(client && hud_used?.hud_shown)
 			client.screen += beltl
 		update_observer_view(beltl)
 		if(!(cloak && (cloak.flags_inv & HIDEBELT)))
@@ -724,11 +724,11 @@ There are several things that need to be remembered:
 
 	if(belt)
 		belt.screen_loc = rogueui_belt
-		if(client && hud_used && hud_used.hud_shown)
+		if(client && hud_used?.hud_shown)
 			client.screen += belt
 		update_observer_view(belt)
 		if(!(cloak && (cloak.flags_inv & HIDEBELT)))
-			if(dna && dna.species.sexes)
+			if(dna?.species.sexes)
 				var/G = (gender == FEMALE) ? "f" : "m"
 				var/racecustom
 				var/mutable_appearance/mbeltoverlay
@@ -950,11 +950,11 @@ There are several things that need to be remembered:
 
 	if(cloak)
 		cloak.screen_loc = rogueui_cloak					//move the item to the appropriate screen loc
-		if(client && hud_used && hud_used.hud_shown)
+		if(client && hud_used?.hud_shown)
 			if(hud_used.inventory_shown)			//if the inventory is open
 				client.screen += cloak					//add it to client's screen
 		update_observer_view(cloak,1)
-		if(dna && dna.species.sexes)
+		if(dna?.species.sexes)
 			var/G = (gender == FEMALE) ? "f" : "m"
 			var/racecustom
 			var/mutable_appearance/cloak_overlay
@@ -1003,9 +1003,9 @@ There are several things that need to be remembered:
 							S.pixel_x += offsets[OFFSET_CLOAK_F][1]
 							S.pixel_y += offsets[OFFSET_CLOAK_F][2]
 					cloaklays += S
-	if(backr && backr.alternate_worn_layer == CLOAK_BEHIND_LAYER)
+	if(backr?.alternate_worn_layer == CLOAK_BEHIND_LAYER)
 		update_hud_backr(backr)
-		if(dna && dna.species.sexes)
+		if(dna?.species.sexes)
 			var/G = (gender == FEMALE) ? "f" : "m"
 			var/racecustom
 			var/mutable_appearance/cloak_overlay
@@ -1072,11 +1072,11 @@ There are several things that need to be remembered:
 
 	if(wear_shirt)
 		wear_shirt.screen_loc = rogueui_shirt					//move the item to the appropriate screen loc
-		if(client && hud_used && hud_used.hud_shown)
+		if(client && hud_used?.hud_shown)
 			if(hud_used.inventory_shown)			//if the inventory is open
 				client.screen += wear_shirt					//add it to client's screen
 		update_observer_view(wear_shirt,1)
-		if(dna && dna.species.sexes)
+		if(dna?.species.sexes)
 			var/mutable_appearance/shirt_overlay
 			var/armsindex = get_limbloss_index(ARM_RIGHT, ARM_LEFT)
 			var/G = (gender == FEMALE) ? "f" : "m"
@@ -1152,11 +1152,11 @@ There are several things that need to be remembered:
 
 	if(wear_armor)
 		wear_armor.screen_loc = rogueui_armor					//move the item to the appropriate screen loc
-		if(client && hud_used && hud_used.hud_shown)
+		if(client && hud_used?.hud_shown)
 			if(hud_used.inventory_shown)			//if the inventory is open
 				client.screen += wear_armor					//add it to client's screen
 		update_observer_view(wear_armor,1)
-		if(dna && dna.species.sexes)
+		if(dna?.species.sexes)
 			var/G = (gender == FEMALE) ? "f" : "m"
 			var/racecustom
 			var/armsindex = get_limbloss_index(ARM_RIGHT, ARM_LEFT)
@@ -1230,11 +1230,11 @@ There are several things that need to be remembered:
 
 	if(wear_pants)
 		wear_pants.screen_loc = rogueui_pants					//move the item to the appropriate screen loc
-		if(client && hud_used && hud_used.hud_shown)
+		if(client && hud_used?.hud_shown)
 			if(hud_used.inventory_shown)			//if the inventory is open
 				client.screen += wear_pants					//add it to client's screen
 		update_observer_view(wear_pants,1)
-		if(dna && dna.species.sexes)
+		if(dna?.species.sexes)
 			var/G = (gender == FEMALE) ? "f" : "m"
 			var/racecustom
 			var/legsindex = get_limbloss_index(LEG_RIGHT, LEG_LEFT)
@@ -1297,7 +1297,7 @@ There are several things that need to be remembered:
 	if(!get_bodypart(BODY_ZONE_HEAD)) //Decapitated
 		return
 
-	if(client && hud_used && hud_used.inv_slots[SLOT_MOUTH])
+	if(client && hud_used?.inv_slots[SLOT_MOUTH])
 		var/atom/movable/screen/inventory/inv = hud_used.inv_slots[SLOT_MOUTH]
 		inv.update_icon()
 
@@ -1362,7 +1362,7 @@ There are several things that need to be remembered:
 //update whether our head item appears on our hud.
 /mob/living/carbon/human/update_hud_head(obj/item/I)
 	I.screen_loc = rogueui_head
-	if(client && hud_used && hud_used.hud_shown)
+	if(client && hud_used?.hud_shown)
 		if(hud_used.inventory_shown)
 			client.screen += I
 	update_observer_view(I,1)
@@ -1370,14 +1370,14 @@ There are several things that need to be remembered:
 //update whether our mask item appears on our hud.
 /mob/living/carbon/human/update_hud_wear_mask(obj/item/I)
 	I.screen_loc = rogueui_mask
-	if(client && hud_used && hud_used.hud_shown)
+	if(client && hud_used?.hud_shown)
 		if(hud_used.inventory_shown)
 			client.screen += I
 	update_observer_view(I,1)
 
 /mob/living/carbon/human/update_hud_mouth(obj/item/I)
 	I.screen_loc = rogueui_mouth
-	if(client && hud_used && hud_used.hud_shown)
+	if(client && hud_used?.hud_shown)
 		if(hud_used.inventory_shown)
 			client.screen += I
 	update_observer_view(I,1)
@@ -1385,7 +1385,7 @@ There are several things that need to be remembered:
 //update whether our neck item appears on our hud.
 /mob/living/carbon/human/update_hud_neck(obj/item/I)
 	I.screen_loc = rogueui_neck
-	if(client && hud_used && hud_used.hud_shown)
+	if(client && hud_used?.hud_shown)
 		if(hud_used.inventory_shown)
 			client.screen += I
 	update_observer_view(I,1)
@@ -1396,7 +1396,7 @@ There are several things that need to be remembered:
 		I.screen_loc = "WEST-4:-16,SOUTH+5:-16"
 	else
 		I.screen_loc = rogueui_backr
-	if(client && hud_used && hud_used.hud_shown)
+	if(client && hud_used?.hud_shown)
 		client.screen += I
 	update_observer_view(I)
 
@@ -1406,7 +1406,7 @@ There are several things that need to be remembered:
 		I.screen_loc = "WEST-2:-16,SOUTH+5:-16"
 	else
 		I.screen_loc = rogueui_backl
-	if(client && hud_used && hud_used.hud_shown)
+	if(client && hud_used?.hud_shown)
 		client.screen += I
 	update_observer_view(I)
 
@@ -1498,7 +1498,7 @@ generate/load female uniform sprites matching all previously decided variables
 	//Get the overlays for this item when it's being worn
 	//eg: ammo counters, primed grenade flashes, etc.
 	var/list/worn_overlays = worn_overlays(isinhands, file2use)
-	if(worn_overlays && worn_overlays.len)
+	if(LAZYLEN(worn_overlays))
 //		for(var/mutable_appearance/MA in worn_overlays)
 //			MA.blend_mode = BLEND_MULTIPLY
 		standing.overlays.Add(worn_overlays)
@@ -1701,7 +1701,7 @@ generate/load female uniform sprites matching all previously decided variables
 
 
 /mob/living/carbon/human/proc/update_observer_view(obj/item/I, inventory)
-	if(observers && observers.len)
+	if(LAZYLEN(observers))
 		for(var/M in observers)
 			var/mob/dead/observe = M
 			if(observe.client && observe.client.eye == src)

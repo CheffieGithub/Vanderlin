@@ -317,8 +317,8 @@
 		var/chest_damage = damage_to_apply
 		var/obj/item/armor = target.get_item_by_slot(SLOT_ARMOR)
 		var/obj/item/shirt = target.get_item_by_slot(SLOT_SHIRT)
-		var/armor_can_heat = armor && armor.smeltresult && armor.smeltresult != /obj/item/ash
-		var/shirt_can_heat = shirt && shirt.smeltresult && shirt.smeltresult != /obj/item/ash //Full damage if no shirt
+		var/armor_can_heat = armor?.smeltresult && armor.smeltresult != /obj/item/ash
+		var/shirt_can_heat = shirt?.smeltresult && shirt.smeltresult != /obj/item/ash //Full damage if no shirt
 		if(armor_can_heat && (shirt && !shirt_can_heat))
 			chest_damage = damage_to_apply / 2 //Halve the damage if only armor can heat but shirt can't.
 		else if(armor_can_heat && shirt_can_heat)

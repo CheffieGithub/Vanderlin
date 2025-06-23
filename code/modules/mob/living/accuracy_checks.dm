@@ -23,7 +23,7 @@
  * @return The zone that was hit (potentially different from the targeted zone)
  */
 /proc/accuracy_check(zone, mob/living/user, mob/living/target, associated_skill, datum/intent/used_intent, obj/item/I)
-	if(!zone || user == target || zone == BODY_ZONE_CHEST || (target.grabbedby == user && user.grab_state >= GRAB_AGGRESSIVE) ||  target.body_position == LYING_DOWN || (target.dir == turn(get_dir(target, user), 180)))
+	if(!zone || user == target || zone == BODY_ZONE_CHEST || (target.grabbedby == user?.grab_state >= GRAB_AGGRESSIVE) ||  target.body_position == LYING_DOWN || (target.dir == turn(get_dir(target, user), 180)))
 		return zone
 
 	var/chance2hit = calculate_hit_chance(zone, user, target, associated_skill, used_intent, I)
@@ -67,7 +67,7 @@
 		else if(used_intent.blade_class == BCLASS_CUT)
 			chance2hit += 12
 
-	if(I && I.wlength == WLENGTH_SHORT)
+	if(I?.wlength == WLENGTH_SHORT)
 		chance2hit += 10
 
 	if(user.STAPER > 10)

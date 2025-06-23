@@ -10,7 +10,7 @@ again.
 
 /obj/effect/spawner/structure/Initialize()
 	. = ..()
-	if(spawn_list && spawn_list.len)
+	if(LAZYLEN(spawn_list))
 		for(var/I in spawn_list)
 			new I(get_turf(src))
 	return INITIALIZE_HINT_QDEL

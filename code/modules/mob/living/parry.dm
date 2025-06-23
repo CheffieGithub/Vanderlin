@@ -89,11 +89,11 @@
 	var/force_shield = FALSE
 	var/weapon_parry = FALSE
 
-	if(mainhand && mainhand.can_parry)
+	if(mainhand?.can_parry)
 		mainhand_defense += (mind ? (get_skill_level(mainhand.associated_skill) * 20) : 20)
 		mainhand_defense += (mainhand.wdefense * 10)
 
-	if(offhand && offhand.can_parry)
+	if(offhand?.can_parry)
 		offhand_defense += (mind ? (get_skill_level(offhand.associated_skill) * 20) : 20)
 		offhand_defense += (offhand.wdefense * 10)
 		if(istype(offhand, /obj/item/weapon/shield))

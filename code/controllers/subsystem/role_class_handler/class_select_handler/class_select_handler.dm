@@ -85,7 +85,7 @@
 	var/mob/living/carbon/human/H = linked_client.mob
 
 	// Time to sort and find our viable classes depending on what conditions we gotta deal w
-	if(class_cat_alloc_attempts && class_cat_alloc_attempts.len)
+	if(LAZYLEN(class_cat_alloc_attempts))
 		for(var/SORT_CAT_KEY in class_cat_alloc_attempts)
 			var/list/subsystem_ctag_list = SSrole_class_handler.sorted_class_categories[SORT_CAT_KEY]
 			var/list/local_insert_sortlist = list()
@@ -127,7 +127,7 @@
 				local_sorted_class_cache[SORT_CAT_KEY] = local_insert_sortlist
 
 	// If we got forced class additions
-	if(forced_class_additions && forced_class_additions.len)
+	if(LAZYLEN(forced_class_additions))
 		if(forced_class_bypass_reqs)
 			for(var/uninstanced_azz_types in forced_class_additions)
 				var/datum/advclass/FORCE_IT_IN = new uninstanced_azz_types
@@ -252,7 +252,7 @@
 			</div>
 	"}
 
-	if(special_session_queue && special_session_queue.len)
+	if(LAZYLEN(special_session_queue))
 		for(var/datum/advclass/datums in special_session_queue)
 			data += {"
 			<div class='class_bar_div'>

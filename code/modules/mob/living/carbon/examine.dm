@@ -48,7 +48,7 @@
 
 	var/list/msg = list("<span class='warning'>")
 	var/temp = getBruteLoss()
-	if(!(user == src && src.hal_screwyhud == SCREWYHUD_HEALTHY)) //fake healthy
+	if(!(user == src?.hal_screwyhud == SCREWYHUD_HEALTHY)) //fake healthy
 		if(temp)
 			if (temp < 25)
 				msg += "[m3] some bruises.\n"
@@ -83,7 +83,7 @@
 	if(fire_stacks < 0 && !on_fire)
 		msg += "[t_He] look[p_s()] a little soaked.\n"
 
-	if(pulledby && pulledby.grab_state)
+	if(pulledby?.grab_state)
 		msg += "[m1] restrained by [pulledby]'s grip.\n"
 
 	msg += "</span>"
@@ -119,7 +119,7 @@
 
 	if(aghost_privilege)
 		var/obj/item/organ/heart/heart = getorganslot(ORGAN_SLOT_HEART)
-		if(heart && heart.maniacs)
+		if(heart?.maniacs)
 			for(var/datum/antagonist/maniac/M in heart.maniacs)
 				var/K = LAZYACCESS(heart.inscryptions, M)
 				var/W = LAZYACCESS(heart.maniacs2wonder_ids, M)

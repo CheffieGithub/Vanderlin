@@ -137,7 +137,7 @@
 	if(istype(machinery, /obj/machinery/essence/reservoir))
 		var/obj/machinery/essence/reservoir/reservoir = machinery
 		var/datum/essence_storage/storage = reservoir.return_storage()
-		if(storage && storage.get_essence_amount(essence_type) > 0)
+		if(storage?.get_essence_amount(essence_type) > 0)
 			return TRUE
 
 
@@ -480,7 +480,7 @@
 	var/obj/machinery/light/fueled/cauldron/cauldron = controller.blackboard[BB_GNOME_TARGET_CAULDRON]
 	var/obj/item/bottle = controller.blackboard[BB_SIMPLE_CARRY_ITEM]
 
-	if(get_dist(pawn, cauldron) <= 1 && bottle && bottle.reagents)
+	if(get_dist(pawn, cauldron) <= 1 && bottle?.reagents)
 		cauldron.reagents.trans_to(bottle, bottle.reagents.maximum_volume - bottle.reagents.total_volume)
 		pawn.visible_message(span_notice("[pawn] fills [bottle] with the finished potion."))
 		controller.set_blackboard_key(BB_GNOME_ALCHEMY_STATE, ALCHEMY_STATE_RETURN_BOTTLE)
@@ -557,7 +557,7 @@
 		pawn.visible_message(span_notice("[pawn] stores the finished potion in the bottle storage."))
 
 		controller.clear_blackboard_key(BB_SIMPLE_CARRY_ITEM)
-		if(cauldron && cauldron.reagents && cauldron.reagents.total_volume > 10)
+		if(cauldron?.reagents && cauldron.reagents.total_volume > 10)
 			controller.set_blackboard_key(BB_GNOME_ALCHEMY_STATE, ALCHEMY_STATE_NEED_BOTTLES)
 		else
 			controller.set_blackboard_key(BB_GNOME_ALCHEMY_STATE, ALCHEMY_STATE_NEED_WATER)
@@ -630,7 +630,7 @@
 		search_areas += get_turf(machinery)
 
 	for(var/turf/area in search_areas)
-		if(cauldron && cauldron.reagents.reagent_list.len > 0)
+		if(length(cauldron?.reagents?.reagent_list) > 0)
 			var/datum/reagent/main_reagent = cauldron.reagents.reagent_list[1]
 			for(var/obj/item/reagent_containers/I in range(2, area))
 				if(I.reagents && I.reagents.has_reagent(main_reagent.type))

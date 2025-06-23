@@ -531,7 +531,7 @@ GLOBAL_LIST_EMPTY(personal_objective_minds)
 
 		if(recipient == challenger)
 			if(target)
-				if(target_heart && target_heart.owner && target_heart.owner != target) // Rival is not gone but their heart is in someone else
+				if(target_heart?.owner && target_heart.owner != target) // Rival is not gone but their heart is in someone else
 					output += "<br>[target.real_name], the [target.job]"
 					output += "<br>Your rival's heart beats in [target_heart.owner.real_name]'s chest in [target_heart_location]"
 					output += "<br>Retrieve and consume it to claim victory! Graggar will not forgive failure."
@@ -552,7 +552,7 @@ GLOBAL_LIST_EMPTY(personal_objective_minds)
 
 		else if(recipient == target)
 			if(challenger)
-				if(challenger_heart && challenger_heart.owner && challenger_heart.owner != challenger) // Rival is not gone but their heart is in someone else
+				if(challenger_heart?.owner && challenger_heart.owner != challenger) // Rival is not gone but their heart is in someone else
 					output += "<br>[challenger.real_name], the [challenger.job]"
 					output += "<br>Your rival's heart beats in [challenger_heart.owner.real_name]'s chest in [challenger_heart_location]"
 					output += "<br>Retrieve and consume it to claim victory! Graggar will not forgive failure."
@@ -820,7 +820,7 @@ GLOBAL_LIST_EMPTY(personal_objective_minds)
 			martial_art.teach(new_character)
 
 /datum/mind/proc/transfer_actions(mob/living/new_character)
-	if(current && current.actions)
+	if(current?.actions)
 		for(var/datum/action/antag_datum_ref in current.actions)
 			antag_datum_ref.Grant(new_character)
 	transfer_mindbound_actions(new_character)

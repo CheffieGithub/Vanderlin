@@ -42,7 +42,7 @@
 	var/ref_line = "@[copytext(refid, 2, -1)]" // get rid of the brackets, add a @ prefix for copy pasting in asay
 
 	var/marked_line
-	if(holder && holder.marked_datum && holder.marked_datum == D)
+	if(holder?.marked_datum == D)
 		marked_line = VV_MSG_MARKED
 	var/varedited_line
 	if(!islist && (D.datum_flags & DF_VAR_EDITED))

@@ -83,7 +83,7 @@
 				span_notice("[user] is trying to pull me off [src]! It hurts!"),\
 				span_hear("I hear the sound of torn flesh and whimpering..."))
 			if(!do_after(user, 30 SECONDS, src))
-				if(M && M.buckled)
+				if(M?.buckled)
 					M.visible_message(span_notice("[user] fails to free [M]!"),\
 					span_notice("[user] fails to pull me off of [src]!"))
 				return
@@ -93,7 +93,7 @@
 				span_hear("I hear the sound of torn flesh and whimpering..."))
 			M.adjustBruteLoss(30)
 			if(!do_after(M, 2 MINUTES, src))
-				if(M && M.buckled)
+				if(M?.buckled)
 					to_chat(M, span_warning("I fail to free myself!"))
 				return
 			if(!M.buckled)
@@ -115,7 +115,7 @@
 
 	var/obj/item/reagent_containers/container = locate(/obj/item/reagent_containers) in get_turf(src)
 	playsound(get_turf(src), 'sound/misc/bleed (3).ogg', 100, FALSE)
-	if(container && container.is_open_container() && container.reagents.total_volume < container.reagents.maximum_volume)
+	if(container?.is_open_container() && container.reagents.total_volume < container.reagents.maximum_volume)
 		var/datum/blood_type/type = L.get_blood_type()
 		container.reagents.add_reagent(initial(type.reagent_type), 5)
 	else

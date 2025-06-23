@@ -146,7 +146,7 @@
 
 /obj/effect/proc_holder/spell/targeted/churn/cast(list/targets,mob/living/user = usr)
 	var/prob2explode = 100
-	if(user && user.mind)
+	if(user?.mind)
 		prob2explode = 0
 		for(var/i in 1 to user.get_skill_level(/datum/skill/magic/holy))
 			prob2explode += 80

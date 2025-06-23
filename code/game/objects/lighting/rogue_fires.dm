@@ -35,7 +35,7 @@
 			if(do_after(H, 1.5 SECONDS, src))
 				// var/obj/item/bodypart/affecting = H.get_bodypart("[(user.active_hand_index % 2 == 0) ? "r" : "l" ]_arm")
 				// to_chat(H, "<span class='warning'>HOT!</span>")
-				// if(affecting && affecting.receive_damage( 0, 5 ))		// 5 burn damage
+				// if(affecting?.receive_damage( 0, 5 ))		// 5 burn damage
 				// 	H.update_damage_overlays()
 				H.adjust_bodytemperature(40)
 		return TRUE //fires that are on always have this interaction with lmb unless its a torch
@@ -317,7 +317,7 @@
 		icon_state = "torchwall"
 
 /obj/machinery/light/fueled/torchholder/burn_out()
-	if(torchy && torchy.on)
+	if(torchy?.on)
 		torchy.turn_off()
 	..()
 
@@ -572,7 +572,7 @@
 			if(do_after(H, 10 SECONDS, src))
 				// var/obj/item/bodypart/affecting = H.get_bodypart("[(user.active_hand_index % 2 == 0) ? "r" : "l" ]_arm")
 				// to_chat(H, "<span class='warning'>HOT!</span>")
-				// if(affecting && affecting.receive_damage( 0, 5 ))		// 5 burn damage
+				// if(affecting?.receive_damage( 0, 5 ))		// 5 burn damage
 				// 	H.update_damage_overlays()
 				H.adjust_bodytemperature(40)
 		return TRUE //fires that are on always have this interaction with lmb unless its a torch

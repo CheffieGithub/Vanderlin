@@ -104,7 +104,7 @@
 
 /obj/item/reagent_containers/food/snacks/grown/on_grind()
 	var/nutriment = reagents.get_reagent_amount(/datum/reagent/consumable/nutriment)
-	if(grind_results&&grind_results.len)
+	if(LAZYLEN(grind_results))
 		for(var/i in 1 to grind_results.len)
 			grind_results[grind_results[i]] = nutriment
 		reagents.del_reagent(/datum/reagent/consumable/nutriment)
@@ -112,7 +112,7 @@
 
 /obj/item/reagent_containers/food/snacks/grown/on_juice()
 	var/nutriment = reagents.get_reagent_amount(/datum/reagent/consumable/nutriment)
-	if(juice_results&&juice_results.len)
+	if(LAZYLEN(juice_results))
 		for(var/i in 1 to juice_results.len)
 			juice_results[juice_results[i]] = nutriment
 		reagents.del_reagent(/datum/reagent/consumable/nutriment)

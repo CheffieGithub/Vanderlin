@@ -33,7 +33,7 @@ GLOBAL_VAR_INIT(mobids, 1)
 
 	for (var/alert in alerts)
 		clear_alert(alert, TRUE)
-	if(observers && observers.len)
+	if(LAZYLEN(observers))
 		for(var/M in observers)
 			var/mob/dead/observe = M
 			observe.reset_perspective(null)
@@ -735,7 +735,7 @@ GLOBAL_VAR_INIT(mobids, 1)
 			stat("Ping: [round(client?.lastping, 1)]ms (Average: [round(client?.avgping, 1)]ms)")
 			stat("Time Dilation: [round(SStime_track.time_dilation_current,1)]% AVG: ([round(SStime_track.time_dilation_avg_fast,1)]%, [round(SStime_track.time_dilation_avg,1)]%, [round(SStime_track.time_dilation_avg_slow,1)]%)")
 
-	if(client && client.holder && check_rights(R_ADMIN,0))
+	if(client?.holder && check_rights(R_ADMIN,0))
 		if(statpanel("MC"))
 			var/turf/T = get_turf(client.eye)
 			stat("Location:", COORD(T))
@@ -825,7 +825,7 @@ GLOBAL_VAR_INIT(mobids, 1)
 		return FALSE
 	if(world.time < last_dir_change + 5)
 		return
-	if(A && pulledby && pulledby.grab_state >= GRAB_AGGRESSIVE) //the reason this isn't a mobility_flags check is because you want them to be able to change dir if you're passively grabbing them
+	if(A && pulledby?.grab_state >= GRAB_AGGRESSIVE) //the reason this isn't a mobility_flags check is because you want them to be able to change dir if you're passively grabbing them
 		// get_cardinal_dir is inconsistent, reuse face_atom code
 		var/dx = A.x - src.x
 		var/dy = A.y - src.y

@@ -57,7 +57,7 @@
 
 /obj/effect/whirlpool/process()
 	for(var/mob/living/L in range(pull_range, src))
-		if(creator && creator.faction_check_mob(L))
+		if(creator?.faction_check_mob(L))
 			continue
 
 		var/dist = get_dist(src, L)

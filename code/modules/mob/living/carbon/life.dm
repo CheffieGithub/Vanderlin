@@ -799,7 +799,7 @@ GLOBAL_LIST_INIT(ballmer_windows_me_msg, list("Yo man, what if, we like, uh, put
 		if(limb && !limb.skeletonized)
 			if(limb.get_damage() >= (limb.max_damage - 5))
 				limb.cremation_progress += rand(2,5)
-				if(dna && dna.species && !(NOBLOOD in dna.species.species_traits))
+				if(dna?.species && !(NOBLOOD in dna.species.species_traits))
 					blood_volume = max(blood_volume - 10, 0)
 				if(limb.cremation_progress >= 50)
 					if(limb.status == BODYPART_ORGANIC) //Non-organic limbs don't burn
@@ -840,8 +840,8 @@ GLOBAL_LIST_INIT(ballmer_windows_me_msg, list("Yo man, what if, we like, uh, put
 					var/mob/living/carbon/human/H = src
 					H.underwear = "Nude"
 				should_update_body = TRUE
-				if(dna && dna.species)
-					if(dna && dna.species && !(NOBLOOD in dna.species.species_traits))
+				if(dna?.species)
+					if(dna?.species && !(NOBLOOD in dna.species.species_traits))
 						blood_volume = 0
 					dna.species.species_traits |= NOBLOOD
 
@@ -872,7 +872,7 @@ GLOBAL_LIST_INIT(ballmer_windows_me_msg, list("Yo man, what if, we like, uh, put
 /mob/living/carbon/proc/needs_heart()
 	if(HAS_TRAIT(src, TRAIT_STABLEHEART))
 		return FALSE
-	if(dna && dna.species && (NOBLOOD in dna.species.species_traits)) //not all carbons have species!
+	if(dna?.species && (NOBLOOD in dna.species.species_traits)) //not all carbons have species!
 		return FALSE
 	return TRUE
 

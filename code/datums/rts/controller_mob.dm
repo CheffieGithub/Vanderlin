@@ -110,7 +110,7 @@
 			addtimer(CALLBACK(src, PROC_REF(remove_inspiration), lucky_worker), 5 MINUTES)
 
 /mob/camera/strategy_controller/proc/remove_inspiration(mob/living/worker)
-	if(worker && worker.controller_mind)
+	if(worker?.controller_mind)
 		worker.controller_mind.work_speed /= 1.5
 
 /mob/camera/strategy_controller/proc/queue_building_build(datum/building_datum/building, turf/source_turf)

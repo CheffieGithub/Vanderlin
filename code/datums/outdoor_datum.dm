@@ -46,13 +46,9 @@ Sunlight System
 	disable_sunlight()
 
 	//Remove ourselves from our turf
-	if(source_turf && source_turf.outdoor_effect == src)
+	if(source_turf?.outdoor_effect == src)
 		source_turf.outdoor_effect = null
-
-
 	return ..()
-
-
 
 /atom/movable/outdoor_effect/Initialize(mapload)
 	. = ..()
@@ -61,7 +57,6 @@ Sunlight System
 		qdel(source_turf.outdoor_effect, force = TRUE)
 		source_turf.outdoor_effect = null //No qdel_null force
 	source_turf.outdoor_effect = src
-
 
 /atom/movable/outdoor_effect/proc/disable_sunlight()
 	var/turf/T = list()

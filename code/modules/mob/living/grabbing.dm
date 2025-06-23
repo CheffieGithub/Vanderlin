@@ -310,7 +310,7 @@
 	if(chokehold)
 		combat_modifier += 0.15
 
-	if(pulledby && pulledby.grab_state >= GRAB_AGGRESSIVE)
+	if(pulledby?.grab_state >= GRAB_AGGRESSIVE)
 		combat_modifier -= 0.2
 
 	// Apply spam penalty

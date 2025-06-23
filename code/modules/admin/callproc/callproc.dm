@@ -129,7 +129,7 @@ GLOBAL_PROTECT(AdminProcCallSpamPrevention)
 #ifdef TESTING
 	return FALSE
 #else
-	return usr && usr.client && GLOB.AdminProcrequester == usr.client.ckey
+	return usr?.client && GLOB.AdminProcrequester == usr.client.ckey
 #endif
 
 /client/proc/callproc_datum(datum/A as null|area|mob|obj|turf)

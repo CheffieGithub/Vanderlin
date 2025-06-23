@@ -262,7 +262,7 @@
 		playsound(get_turf(src), used_sound, 60, FALSE)
 
 // /mob/living/carbon/restrained(ignore_grab = TRUE)
-// //	. = (handcuffed || (!ignore_grab && pulledby && pulledby.grab_state >= GRAB_AGGRESSIVE))
+// //	. = (handcuffed || (!ignore_grab && pulledby?.grab_state >= GRAB_AGGRESSIVE))
 // 	if(handcuffed)
 // 		return TRUE
 // 	if(pulledby && !ignore_grab)
@@ -388,7 +388,7 @@
 	if(STASTR > 10)
 		cuff_break = FAST_CUFFBREAK
 		breakouttime = I.breakouttime
-	if(STASTR > 15 || (mind && mind.has_antag_datum(/datum/antagonist/zombie)) )
+	if(STASTR > 15 || (mind?.has_antag_datum(/datum/antagonist/zombie)) )
 		cuff_break = INSTANT_CUFFBREAK
 	if(!cuff_break)
 		to_chat(src, span_notice("I try to get out of \the [I]\s..."))
@@ -412,7 +412,7 @@
 	if (handcuffed)
 		var/obj/item/W = handcuffed
 		set_handcuffed(null)
-		if (buckled && buckled.buckle_requires_restraints)
+		if (buckled?.buckle_requires_restraints)
 			buckled.unbuckle_mob(src)
 		update_handcuffed()
 		if (client)

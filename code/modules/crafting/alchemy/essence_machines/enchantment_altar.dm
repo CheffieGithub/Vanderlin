@@ -485,7 +485,7 @@
 		for(var/essence_type in altar_storage.stored_essences)
 			var/datum/thaumaturgical_essence/essence = new essence_type
 			var/amount_text = "[altar_storage.stored_essences[essence_type]] units"
-			if(selected_recipe && selected_recipe.essence_recipe && (essence_type in selected_recipe.essence_recipe))
+			if(selected_recipe?.essence_recipe && (essence_type in selected_recipe.essence_recipe))
 				var/required = selected_recipe.essence_recipe[essence_type]
 				var/current = altar_storage.stored_essences[essence_type]
 				amount_text += " ([min(current, required)]/[required] for recipe)"

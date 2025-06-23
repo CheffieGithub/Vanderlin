@@ -144,7 +144,7 @@
 /obj/machinery/deconstruct(disassembled = TRUE)
 	if(!(flags_1 & NODECONSTRUCT_1))
 		on_deconstruction()
-		if(component_parts && component_parts.len)
+		if(LAZYLEN(component_parts))
 			for(var/obj/item/I in component_parts)
 				I.forceMove(loc)
 			component_parts.Cut()

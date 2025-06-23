@@ -186,11 +186,11 @@
 	if(!keep) // wait for a keep portal to set
 		return
 	var/list/possible_temp = get_linked()
-	if(possible_temp && possible_temp.len)
+	if(LAZYLEN(possible_temp))
 		for(var/obj/effect/portal/permanent/other in possible_temp)
 			possible_exits += get_turf(other)
 			qdel(other)
-	if(possible_exits && possible_exits.len)
+	if(LAZYLEN(possible_exits))
 		hard_target = pick(possible_exits)
 
 /obj/effect/portal/permanent/one_way/keep // because its nice to be able to tell which is which on the map

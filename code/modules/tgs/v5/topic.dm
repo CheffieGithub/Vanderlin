@@ -147,7 +147,7 @@
 			return TopicResponse()
 
 		if(DMAPI5_TOPIC_COMMAND_HEALTHCHECK)
-			if(event_handler && event_handler.receive_health_checks)
+			if(event_handler?.receive_health_checks)
 				event_handler.HandleEvent(TGS_EVENT_HEALTH_CHECK)
 			var/list/health_check_response = TopicResponse()
 			health_check_response[DMAPI5_TOPIC_RESPONSE_CLIENT_COUNT] = TGS_CLIENT_COUNT

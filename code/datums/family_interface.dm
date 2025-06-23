@@ -998,7 +998,7 @@
 	if(H.members && islist(H.members))
 		member_count = H.members.len
 		for(var/datum/family_member/member in H.members)
-			if(member && member.adoption_status)
+			if(member?.adoption_status)
 				adopted_count++
 
 	var/founder_name = "None"

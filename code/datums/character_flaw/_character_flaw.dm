@@ -708,7 +708,7 @@ GLOBAL_LIST_INIT(character_flaws, list(
 				head = BP
 				break
 
-		if(head && head.lingering_pain > 20)
+		if(head?.lingering_pain > 20)
 			if(H.loc && H.loc.luminosity > 2)
 				head.lingering_pain += rand(5, 10)
 				to_chat(H, span_warning("The flickering flames make your migraine worse!"))

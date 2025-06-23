@@ -181,7 +181,7 @@ TOGGLE_CHECKBOX(/datum/verbs/menu/Settings/Sound, togglemidis)()
 		to_chat(usr, "You will no longer hear sounds uploaded by admins")
 		usr.stop_sound_channel(CHANNEL_ADMIN)
 		var/client/C = usr.client
-		if(C && C.chatOutput && !C.chatOutput.broken && C.chatOutput.loaded)
+		if(C?.chatOutput && !C.chatOutput.broken && C.chatOutput.loaded)
 			C.chatOutput.stopMusic()
 	SSblackbox.record_feedback("nested tally", "preferences_verb", 1, list("Toggle Hearing Midis", "[usr.client.prefs.toggles & SOUND_MIDI ? "Enabled" : "Disabled"]")) //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 /datum/verbs/menu/Settings/Sound/togglemidis/Get_checked(client/C)
@@ -259,7 +259,7 @@ TOGGLE_CHECKBOX(/datum/verbs/menu/Settings/Sound, toggle_announcement_sound)()
 	set desc = ""
 	SEND_SOUND(usr, sound(null))
 	var/client/C = usr.client
-	if(C && C.chatOutput && !C.chatOutput.broken && C.chatOutput.loaded)
+	if(C?.chatOutput && !C.chatOutput.broken && C.chatOutput.loaded)
 		C.chatOutput.stopMusic()
 	SSblackbox.record_feedback("nested tally", "preferences_verb", 1, list("Stop Self Sounds")) //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 

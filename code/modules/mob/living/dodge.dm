@@ -7,7 +7,7 @@
  */
 /mob/living/proc/attempt_dodge(datum/intent/intenty, mob/living/user)
 	// Early return conditions specifically for dodging
-	if((pulledby && pulledby.grab_state >= GRAB_AGGRESSIVE) || pulling == user || (world.time < last_dodge + dodgetime && !istype(rmb_intent, /datum/rmb_intent/riposte)) ||  has_status_effect(/datum/status_effect/debuff/riposted) || src.loc == user.loc || (intenty && !intenty.candodge) || !candodge)
+	if((pulledby?.grab_state >= GRAB_AGGRESSIVE) || pulling == user || (world.time < last_dodge + dodgetime && !istype(rmb_intent, /datum/rmb_intent/riposte)) ||  has_status_effect(/datum/status_effect/debuff/riposted) || src.loc == user.loc || (intenty && !intenty.candodge) || !candodge)
 		return FALSE
 	last_dodge = world.time
 

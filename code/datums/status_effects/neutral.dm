@@ -89,7 +89,7 @@
 		qdel(src)
 
 /datum/status_effect/bounty/proc/rewards()
-	if(rewarded && rewarded.mind && rewarded.stat != DEAD)
+	if(rewarded?.mind && rewarded.stat != DEAD)
 		to_chat(owner, "<span class='boldnotice'>I hear something behind you talking...</span> <span class='notice'>Bounty claimed.</span>")
 		playsound(owner, 'sound/blank.ogg', 75, FALSE)
 		to_chat(rewarded, "<span class='greentext'>I feel a surge of mana flow into you!</span>")

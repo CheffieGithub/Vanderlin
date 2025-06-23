@@ -764,7 +764,7 @@
 		if(body_position == LYING_DOWN)
 			if(!silent)
 				to_chat(src, span_notice("You will now try to stay lying down on the floor."))
-		else if(buckled && buckled.buckle_lying != NO_BUCKLE_LYING)
+		else if(buckled?.buckle_lying != NO_BUCKLE_LYING)
 			if(!silent)
 				to_chat(src, span_notice("You will now lay down as soon as you are able to."))
 		else
@@ -776,7 +776,7 @@
 		if(body_position == STANDING_UP)
 			if(!silent)
 				to_chat(src, span_notice("You will now try to remain standing up."))
-		else if(HAS_TRAIT(src, TRAIT_FLOORED) || (buckled && buckled.buckle_lying != NO_BUCKLE_LYING))
+		else if(HAS_TRAIT(src, TRAIT_FLOORED) || (buckled?.buckle_lying != NO_BUCKLE_LYING))
 			if(!silent)
 				to_chat(src, span_notice("You will now stand up as soon as you are able to."))
 		else
@@ -1012,7 +1012,7 @@
 			lying_angle = 270
 		update_transform()
 		lying_prev = lying_angle
-	if (buckled && buckled.loc != newloc) //not updating position
+	if (buckled?.loc != newloc) //not updating position
 		if (!buckled.anchored)
 			return buckled.Move(newloc, direct, glide_size)
 		else
@@ -1437,7 +1437,7 @@
 
 	var/grab_count = 0
 	for(var/obj/item/grabbing/G in L.held_items)
-		if(G && G.grabbed)
+		if(G?.grabbed)
 			grab_count++
 	if(grab_count > 1)
 		combat_modifier += (grab_count - 1) * 0.2 // Harder to maintain multiple grabs
@@ -1529,7 +1529,7 @@
 	if(throwing)
 		return
 	var/fixed = 0
-	if(anchored || (buckled && buckled.anchored))
+	if(anchored || (buckled?.anchored))
 		fixed = 1
 	if(on && !(movement_type & FLOATING) && !fixed)
 		animate(src, pixel_y = pixel_y + 2, time = 10, loop = -1)
@@ -1862,7 +1862,7 @@
 	..()
 
 /mob/living/can_be_pulled()
-	return ..() && !(buckled && buckled.buckle_prevents_pull)
+	return ..() && !(buckled?.buckle_prevents_pull)
 
 /mob/living/proc/fall(forced)
 	if(!(mobility_flags & MOBILITY_USE))
@@ -2026,7 +2026,7 @@
 
 /mob/living/update_mouse_pointer()
 	..()
-	if (client && ranged_ability && ranged_ability.ranged_mousepointer)
+	if (client && ranged_ability?.ranged_mousepointer)
 		client.mouse_pointer_icon = ranged_ability.ranged_mousepointer
 
 /mob/living/vv_get_dropdown()

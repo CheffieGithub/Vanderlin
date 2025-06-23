@@ -685,7 +685,7 @@
 
 	var/draw_organ_features = TRUE
 	var/draw_bodypart_features = TRUE
-	if(owner && owner.dna)
+	if(owner?.dna)
 		var/datum/species/owner_species = owner.dna.species
 		if(NO_ORGAN_FEATURES in owner_species.species_traits)
 			draw_organ_features = FALSE

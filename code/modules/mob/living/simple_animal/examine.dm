@@ -67,7 +67,7 @@
 		msg += "[m1] soaked."
 
 	//Grabbing
-	if(pulledby && pulledby.grab_state)
+	if(pulledby?.grab_state)
 		msg += "[m1] being grabbed by [pulledby]."
 
 	if(stat >= UNCONSCIOUS)

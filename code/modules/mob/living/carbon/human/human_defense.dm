@@ -84,12 +84,12 @@
 						return TRUE
 
 /mob/living/carbon/human/on_hit(obj/projectile/P)
-	if(dna && dna.species)
+	if(dna?.species)
 		dna.species.on_hit(P, src)
 
 
 /mob/living/carbon/human/bullet_act(obj/projectile/P, def_zone = BODY_ZONE_CHEST)
-	if(dna && dna.species)
+	if(dna?.species)
 		var/spec_return = dna.species.bullet_act(P, src, def_zone)
 		if(spec_return)
 			return spec_return
@@ -176,7 +176,7 @@
 	return FALSE
 
 /mob/living/carbon/human/hitby(atom/movable/AM, skipcatch = FALSE, hitpush = TRUE, blocked = FALSE, datum/thrownthing/throwingdatum, damage_type = "blunt")
-	if(dna && dna.species)
+	if(dna?.species)
 		var/spec_return = dna.species.spec_hitby(AM, src)
 		if(spec_return)
 			return spec_return
@@ -382,7 +382,7 @@
 /mob/living/carbon/human/electrocute_act(shock_damage, source, siemens_coeff = 1, flags = NONE)
 	//Calculates the siemens coeff based on clothing. Completely ignores the arguments
 	if(flags & SHOCK_TESLA) //I hate this entire block. This gets the siemens_coeff for tesla shocks
-		if(gloves && gloves.siemens_coefficient <= 0)
+		if(gloves?.siemens_coefficient <= 0)
 			siemens_coeff -= 0.5
 		if(wear_armor)
 			if(wear_armor.siemens_coefficient == -1)

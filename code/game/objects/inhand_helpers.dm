@@ -296,7 +296,7 @@ GLOBAL_LIST_INIT(IconStates_cache, list())
 			var/list/tegst = list()
 			to_chat(mob, "\"[X]\"")
 			tegst += "return list("
-			if(L && L.len)
+			if(LAZYLEN(L))
 				for(var/P in L)
 					tegst += "\"[P]\" = [L[P]],"
 			to_chat(mob, "[tegst.Join()]")

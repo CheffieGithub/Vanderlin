@@ -20,7 +20,7 @@
  * Has no sanity other than checking density
  */
 /client/proc/Move_object(direct)
-	if(mob && mob.control_object)
+	if(mob?.control_object)
 		if(mob.control_object.density)
 			step(mob.control_object,direct)
 			if(!mob.control_object)
@@ -405,7 +405,7 @@
 
 ///Validate the client's mob has a valid zone selected
 /client/proc/check_has_body_select()
-	return mob && mob.hud_used && mob.hud_used.zone_select && istype(mob.hud_used.zone_select, /atom/movable/screen/zone_sel)
+	return mob?.hud_used && mob.hud_used.zone_select && istype(mob.hud_used.zone_select, /atom/movable/screen/zone_sel)
 
 /**
  * Hidden verb to set the target zone of a mob to the head
@@ -588,7 +588,7 @@
 		m_intent = MOVE_INTENT_WALK
 	else
 		m_intent = MOVE_INTENT_RUN
-	if(hud_used && hud_used.static_inventory)
+	if(hud_used?.static_inventory)
 		for(var/atom/movable/screen/mov_intent/selector in hud_used.static_inventory)
 			selector.update_icon()
 
@@ -644,7 +644,7 @@
 						to_chat(H, span_info("Your armor is too heavy to run in!"))
 						return
 			m_intent = MOVE_INTENT_RUN
-	if(hud_used && hud_used.static_inventory)
+	if(hud_used?.static_inventory)
 		for(var/atom/movable/screen/rogmove/selector in hud_used.static_inventory)
 			selector.update_icon()
 	if(!silent)

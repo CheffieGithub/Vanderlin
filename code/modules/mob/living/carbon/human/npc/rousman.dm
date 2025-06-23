@@ -176,12 +176,12 @@ GLOBAL_LIST_EMPTY(rousman_ambush_objects)
 	var/obj/item/bodypart/chesty = get_bodypart("chest")
 	var/obj/item/bodypart/headdy = get_bodypart("head")
 	if(!headdy)
-		if(chesty && chesty.skeletonized)
+		if(chesty?.skeletonized)
 			body_overlay = mutable_appearance(icon, "rousman_skel_decap", -BODY_LAYER)
 		else
 			body_overlay = mutable_appearance(icon, "[R.raceicon]_decap", -BODY_LAYER)
 	else
-		if(chesty && chesty.skeletonized)
+		if(chesty?.skeletonized)
 			body_overlay = mutable_appearance(icon, "rousman_skel", -BODY_LAYER)
 		else
 			body_overlay = mutable_appearance(icon, "[R.raceicon]", -BODY_LAYER)

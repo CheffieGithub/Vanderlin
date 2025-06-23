@@ -9,7 +9,7 @@
 	var/base_icon_state
 
 /obj/abstract/proc/get_view_size()
-	if(usr && usr.client)
+	if(usr?.client)
 		. = usr.client.view
 	else
 		. = world.view

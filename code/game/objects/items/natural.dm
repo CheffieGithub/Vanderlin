@@ -111,7 +111,7 @@
 		qdel(src)
 		return
 	var/atom/item = user.get_active_held_item()
-	if(item && item.type != stacktype)
+	if(item?.type != stacktype)
 		return ..()
 	var/mob/living/carbon/human/H = user
 	switch(amount)

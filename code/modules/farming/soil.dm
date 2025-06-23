@@ -479,7 +479,7 @@
 	// Blessed soil will have the weeds die
 	if(blessed_time > 0)
 		adjust_weeds(-dt * BLESSING_WEED_DECAY_RATE)
-	if(plant && plant.weed_immune)
+	if(plant?.weed_immune)
 		// Weeds die if the plant is immune to them
 		adjust_weeds(-dt * WEED_RESISTANCE_DECAY_RATE)
 		return

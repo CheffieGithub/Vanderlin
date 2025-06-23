@@ -48,7 +48,7 @@
 		var/mob/M = target
 		if(M.anti_magic_check(check_antimagic, check_holy))
 			return FALSE
-		if(ignored_factions && ignored_factions.len && faction_check(M.faction,ignored_factions))
+		if(LAZYLEN(ignored_factions) && faction_check(M.faction,ignored_factions))
 			return FALSE
 
 

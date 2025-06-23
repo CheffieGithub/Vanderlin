@@ -83,7 +83,7 @@
 /obj/effect/proc_holder/spell/targeted/abrogation/cast(list/targets, mob/living/user = usr)
 	. = ..()
 	var/debuff_power = 1
-	if (user && user.mind)
+	if (user?.mind)
 		debuff_power = clamp((user.get_skill_level(/datum/skill/magic/holy) / 2), 1, 3)
 
 	var/too_powerful = FALSE

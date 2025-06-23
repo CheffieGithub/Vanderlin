@@ -209,7 +209,7 @@
 	for(var/mob/M in GLOB.player_list)
 		SEND_SOUND(M, sound(null))
 		var/client/C = M.client
-		if(C && C.chatOutput && !C.chatOutput.broken && C.chatOutput.loaded)
+		if(C?.chatOutput && !C.chatOutput.broken && C.chatOutput.loaded)
 			C.chatOutput.stopMusic()
 	SSblackbox.record_feedback("tally", "admin_verb", 1, "Stop All Playing Sounds") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 

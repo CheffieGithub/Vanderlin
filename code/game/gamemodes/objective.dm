@@ -26,7 +26,7 @@ GLOBAL_LIST(admin_objective_list) //Prefilled admin assignable objective list
 	return
 
 /datum/objective/proc/get_owners() // Combine owner and team into a single list.
-	. = (team && team.members) ? team.members.Copy() : list()
+	. = (team?.members) ? team.members.Copy() : list()
 	if(owner)
 		. += owner
 
@@ -46,7 +46,7 @@ GLOBAL_LIST(admin_objective_list) //Prefilled admin assignable objective list
 			possible_targets += possible_target.current
 
 
-	if(target && target.current)
+	if(target?.current)
 		def_value = target.current
 
 	var/mob/new_target = input(admin,"Select target:", "Objective target", def_value) as null|anything in sortNames(possible_targets)
@@ -141,7 +141,7 @@ GLOBAL_LIST(admin_objective_list) //Prefilled admin assignable objective list
 
 /datum/objective/proc/give_special_equipment(special_equipment)
 	var/datum/mind/receiver = pick(get_owners())
-	if(receiver && receiver.current)
+	if(receiver?.current)
 		if(ishuman(receiver.current))
 			var/mob/living/carbon/human/H = receiver.current
 			var/list/slots = list("backpack" = SLOT_IN_BACKPACK)
@@ -160,7 +160,7 @@ GLOBAL_LIST(admin_objective_list) //Prefilled admin assignable objective list
 
 /datum/objective/assassinate/update_explanation_text()
 	..()
-	if(target && target.current)
+	if(target?.current)
 		explanation_text = "Put [target.name] the [!target_role_type ? target.assigned_role.title : target.special_role] to sleep forever."
 
 /datum/objective/assassinate/admin_edit(mob/admin)
@@ -187,7 +187,7 @@ GLOBAL_LIST(admin_objective_list) //Prefilled admin assignable objective list
 
 /datum/objective/mutiny/update_explanation_text()
 	..()
-	if(target && target.current)
+	if(target?.current)
 		explanation_text = "Assassinate or exile [target.name], the [!target_role_type ? target.assigned_role.title : target.special_role]."
 	else
 		explanation_text = "Free Objective"
@@ -201,7 +201,7 @@ GLOBAL_LIST(admin_objective_list) //Prefilled admin assignable objective list
 	return !target || !considered_alive(target) || (!target.current.onCentCom())
 
 /datum/objective/maroon/update_explanation_text()
-	if(target && target.current)
+	if(target?.current)
 		explanation_text = "Prevent [target.name], the [!target_role_type ? target.assigned_role.title : target.special_role], from escaping alive."
 	else
 		explanation_text = "Free Objective"
@@ -230,7 +230,7 @@ GLOBAL_LIST(admin_objective_list) //Prefilled admin assignable objective list
 
 /datum/objective/debrain/update_explanation_text()
 	..()
-	if(target && target.current)
+	if(target?.current)
 		explanation_text = "Steal the brain of [target.name], the [!target_role_type ? target.assigned_role.title : target.special_role]."
 	else
 		explanation_text = "Free Objective"
@@ -249,7 +249,7 @@ GLOBAL_LIST(admin_objective_list) //Prefilled admin assignable objective list
 
 /datum/objective/protect/update_explanation_text()
 	..()
-	if(target && target.current)
+	if(target?.current)
 		explanation_text = "Protect [target.name], the [!target_role_type ? target.assigned_role.title : target.special_role]."
 	else
 		explanation_text = "Free Objective"

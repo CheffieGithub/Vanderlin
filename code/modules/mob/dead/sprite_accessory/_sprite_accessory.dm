@@ -73,7 +73,7 @@
 	if(!color_keys)
 		return colors
 	var/list/color_list = color_string_to_list(colors)
-	if(color_list && color_list.len == color_keys)
+	if(LAZYLEN(color_list) == color_keys)
 		return colors
 
 	if(!owner)

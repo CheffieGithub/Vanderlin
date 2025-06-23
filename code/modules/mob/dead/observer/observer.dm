@@ -526,7 +526,7 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 		if(source)
 			var/atom/movable/screen/alert/A = throw_alert("[REF(source)]_notify_cloning", /atom/movable/screen/alert/notify_cloning)
 			if(A)
-				if(client && client.prefs && client.prefs.UI_style)
+				if(client?.prefs && client.prefs.UI_style)
 					A.icon = ui_style2icon(client.prefs.UI_style)
 				A.desc = message
 				var/old_layer = source.layer
@@ -840,7 +840,7 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 	if(!target)
 		return FALSE
 
-	if(can_reenter_corpse && mind && mind.current)
+	if(can_reenter_corpse && mind?.current)
 		if(alert(src, "Your soul is still tied to your former life as [mind.current.name], if you go forward there is no going back to that life. Are you sure you wish to continue?", "Move On", "Yes", "No") == "No")
 			return FALSE
 	if(target.key)
@@ -958,7 +958,7 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 	if(!check_rights(0))
 		return
 	set_ghost_appearance()
-	if(client && client.prefs)
+	if(client?.prefs)
 		deadchat_name = client.prefs.real_name
 		mind.ghostname = client.prefs.real_name
 		name = client.prefs.real_name

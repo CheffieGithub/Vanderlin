@@ -600,7 +600,7 @@ GLOBAL_DATUM_INIT(fire_overlay, /mutable_appearance, mutable_appearance('icons/e
 			user.visible_message("<span class='warning'>[user] burns [user.p_their()] hand putting out the fire on [src]!</span>")
 			extinguish()
 			var/obj/item/bodypart/affecting = C.get_bodypart("[(user.active_hand_index % 2 == 0) ? "r" : "l" ]_arm")
-			if(affecting && affecting.receive_damage( 0, 5 ))		// 5 burn damage
+			if(affecting?.receive_damage( 0, 5 ))		// 5 burn damage
 				C.update_damage_overlays()
 			return
 
@@ -610,7 +610,7 @@ GLOBAL_DATUM_INIT(fire_overlay, /mutable_appearance, mutable_appearance('icons/e
 			if(!C.gloves || (!(C.gloves.resistance_flags & (UNACIDABLE|ACID_PROOF))))
 				to_chat(user, "<span class='warning'>The acid on [src] burns my hand!</span>")
 				var/obj/item/bodypart/affecting = C.get_bodypart("[(user.active_hand_index % 2 == 0) ? "r" : "l" ]_arm")
-				if(affecting && affecting.receive_damage( 0, 5 ))		// 5 burn damage
+				if(affecting?.receive_damage( 0, 5 ))		// 5 burn damage
 					C.update_damage_overlays()
 
 	if(!(interaction_flags_item & INTERACT_ITEM_ATTACK_HAND_PICKUP))		//See if we're supposed to auto pickup.

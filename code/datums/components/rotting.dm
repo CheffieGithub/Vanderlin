@@ -85,7 +85,7 @@
 		var/turf/open/T = C.loc
 		if(istype(T) && amount < 16 MINUTES && !(FACTION_MATTHIOS in C.faction))
 			T.pollute_turf(/datum/pollutant/rot, 9)
-			if(soundloop && soundloop.stopped && !is_zombie)
+			if(soundloop?.stopped && !is_zombie)
 				soundloop.start()
 		else
 			if(soundloop && !soundloop.stopped)
@@ -98,7 +98,7 @@
 			if(ishuman(C))
 				var/mob/living/carbon/human/H = C
 				H.skin_tone = "878f79" //elf ears
-			if(soundloop && soundloop.stopped && !is_zombie)
+			if(soundloop?.stopped && !is_zombie)
 				soundloop.start()
 		C.update_body()
 
@@ -110,7 +110,7 @@
 		qdel(R)
 		return
 	if(amount > 10 MINUTES)
-		if(soundloop && soundloop.stopped)
+		if(soundloop?.stopped)
 			soundloop.start()
 		var/turf/open/T = get_turf(L)
 		if(istype(T)  && amount < 16 MINUTES && !(FACTION_MATTHIOS in L.faction))

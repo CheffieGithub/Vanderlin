@@ -74,7 +74,7 @@
 
 /mob/living/update_vision_cone()
 	if(client)
-		if(hud_used && hud_used.fov)
+		if(hud_used?.fov)
 			hud_used.fov.dir = src.dir
 			hud_used.fov_blocker.dir = src.dir
 		START_PROCESSING(SSincone, client)
@@ -90,7 +90,7 @@
 	if(hud_used?.fov)
 		if(hud_used.fov.alpha == 0)
 			return
-/*	if(hud_used && hud_used.fov_blocker)
+/*	if(hud_used?.fov_blocker)
 		fov_blocker
 
 		var/icon/new_blocker = icon("icon"='icons/mob/vision_cone.dmi', "icon_state"=hud_used.fov_blocker.icon_state)
@@ -110,7 +110,7 @@
 		src.client.hidden_atoms = list()
 		src.client.hidden_mobs = list()
 		client.hidden_images = list()
-		if(hud_used && hud_used.fov)
+		if(hud_used?.fov)
 //			hud_used.fov.dir = src.dir
 			if(hud_used.fov.alpha != 0)
 				var/mob/living/M
@@ -168,7 +168,7 @@
 		return
 	if(!client)
 		return TRUE
-	if(hud_used && hud_used.fov)
+	if(hud_used?.fov)
 		if(hud_used.fov.alpha != 0)
 			var/list/mobs2hide = list()
 

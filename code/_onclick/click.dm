@@ -81,7 +81,7 @@
 	var/list/modifiers = params2list(params)
 
 	if(LAZYACCESS(modifiers, RIGHT_CLICK) && LAZYACCESS(modifiers, "shift"))
-		if(mind && mind.active_uis["quake_console"])
+		if(mind?.active_uis["quake_console"])
 			if(client.holder)
 				client.holder.marked_datum = A
 				var/datum/visual_ui/console/console =  mind.active_uis["quake_console"]
@@ -769,7 +769,7 @@
 
 /mob/proc/check_click_intercept(params,A)
 	//Client level intercept
-	if(client && client.click_intercept)
+	if(client?.click_intercept)
 		if(call(client.click_intercept, "InterceptClickOn")(src, params, A))
 			return TRUE
 

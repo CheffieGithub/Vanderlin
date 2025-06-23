@@ -41,7 +41,7 @@
 					GLOB.job_respawn_delays[src.ckey] = world.time + target_job.same_job_respawn_delay
 			if(ishuman(mind?.current))
 				var/mob/living/carbon/human/D = mind?.current
-				if(D && D.buried && D.funeral)
+				if(D?.buried && D.funeral)
 					mob.returntolobby()
 					return
 			if(!length(GLOB.underworldspiritspawns)) //That cant be good.

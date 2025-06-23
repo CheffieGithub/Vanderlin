@@ -165,13 +165,13 @@
 		if(user)
 			if(user == target)
 				user.visible_message("<span class='notice'>[user] decided not to shoot.</span>")
-			else if(target && target.Adjacent(user))
+			else if(target?.Adjacent(user))
 				target.visible_message("<span class='notice'>[user] has decided to spare [target]</span>", "<span class='notice'>[user] has decided to spare your life!</span>")
 		return
 
 	target.visible_message("<span class='warning'>[user] pulls the trigger!</span>", "<span class='danger'>[(user == target) ? "You pull" : "[user] pulls"] the trigger!</span>")
 
-	if(chambered && chambered.BB)
+	if(chambered?.BB)
 		chambered.BB.damage *= 5
 
 	process_fire(target, user, TRUE, params, BODY_ZONE_HEAD)
