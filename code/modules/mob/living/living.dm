@@ -1012,8 +1012,8 @@
 			lying_angle = 270
 		update_transform()
 		lying_prev = lying_angle
-	if (buckled?.loc != newloc) //not updating position
-		if (!buckled.anchored)
+	if(buckled && buckled.loc != newloc) //not updating position
+		if(!buckled.anchored)
 			return buckled.Move(newloc, direct, glide_size)
 		else
 			return FALSE
