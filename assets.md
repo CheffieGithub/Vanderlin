@@ -1,11 +1,11 @@
 # Assets Attribution
 This file contains assets from other places
 
-
 ## Crystal Edge
 https://github.com/crystallpunk-14/crystall-punk-14
 
 ### All carpets
+icons/obj/smooth_structures/*
 carpet_blue.dmi
 carpet_brown.dmi
 carpet_cyan.dmi
