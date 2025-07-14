@@ -200,9 +200,13 @@ GLOBAL_DATUM_INIT(fire_overlay, /mutable_appearance, mutable_appearance('icons/e
 
 	var/thrown_bclass = BCLASS_BLUNT
 
-	var/icon/experimental_inhand = TRUE
-	var/icon/experimental_onhip = FALSE
-	var/icon/experimental_onback = FALSE
+	/// Variables for the transform based on_mob system
+	/// Generate inhand icons based on the icon_state and transformations
+	var/experimental_inhand = TRUE
+	/// Generate onhip icons based on the icon_state and transformations
+	var/experimental_onhip = FALSE
+	/// Generate onback icons based on the icon_state and transformations
+	var/experimental_onback = FALSE
 
 	// Trying to emote or talk with this in our mouth makes us muffled
 	var/muteinmouth = TRUE

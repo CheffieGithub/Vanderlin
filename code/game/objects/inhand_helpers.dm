@@ -5,12 +5,17 @@
 GLOBAL_LIST_INIT(IconStates_cache, list())
 
 // 32x32 in-hand helper item
-/obj/item/inhand_tester
+/obj/item/on_mob_tester
+	name = "transform on mob tester"
 	icon = 'icons/roguetown/items/misc.dmi'
 	icon_state = "inhand_test"
+	experimental_inhand = TRUE
+	experimental_onback = TRUE
+	experimental_onhip = TRUE
+	slot_flags = ITEM_SLOT_BACK | ITEM_SLOT_HIP
 
 // 64x64 in-hand helper item
-/obj/item/inhand_tester/big
+/obj/item/on_mob_tester/big
 	icon = 'icons/roguetown/misc/64x64.dmi'
 
 // START OF ROGUE PROCS NECESSARY FOR ITEM TRANSFORMS, ETC
@@ -37,15 +42,15 @@ GLOBAL_LIST_INIT(IconStates_cache, list())
 	if(tag)
 		switch(tag)
 			if("gen")
-				return list("shrink" = 0.2,"sx" = -7,"sy" = -4,"nx" = 7,"ny" = -4,"wx" = -4,"wy" = -4,"ex" = 2,"ey" = -4,"nturn" = 0,"sturn" = 0,"wturn" = 0,"eturn" = 0,"nflip" = 0,"sflip" = 0,"wflip" = 0,"eflip" = 0,"northabove" = 0,"southabove" = 1,"eastabove" = 1,"westabove" = 0)
+				return ON_MOB_DEFAULT_HANDS
+			if("onbelt")
+				return ON_MOB_DEFAULT_BELT
+			if("onback")
+				return ON_MOB_DEFAULT_BACK
 			if("wielded")
 				return null
 			if("altgrip")
 				return null
-			if("onbelt")
-				return list("shrink" = 0.3,"sx" = -2,"sy" = -5,"nx" = 4,"ny" = -5,"wx" = 0,"wy" = -5,"ex" = 2,"ey" = -5,"nturn" = 0,"sturn" = 0,"wturn" = 0,"eturn" = 0,"nflip" = 0,"sflip" = 0,"wflip" = 0,"eflip" = 0,"northabove" = 0,"southabove" = 1,"eastabove" = 1,"westabove" = 0)
-			if("onback")
-				return list("shrink" = 0.5,"sx" = 1,"sy" = -1,"nx" = 1,"ny" = -1,"wx" = 4,"wy" = -1,"ex" = -1,"ey" = -1,"nturn" = 0,"sturn" = 0,"wturn" = 0,"eturn" = 0,"nflip" = 8,"sflip" = 0,"wflip" = 0,"eflip" = 0,"northabove" = 1,"southabove" = 0,"eastabove" = 0,"westabove" = 0)
 
 /obj/item/proc/mirror_fix(shrink, big)
 	if(!shrink)

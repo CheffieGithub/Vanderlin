@@ -94,10 +94,24 @@
 	. = ..()
 	if(tag)
 		switch(tag)
-			if("gen")
-				return list("shrink" = 0.6,"sx" = -9,"sy" = 1,"nx" = 12,"ny" = 1,"wx" = -8,"wy" = 1,"ex" = 6,"ey" = 0,"northabove" = 0,"southabove" = 1,"eastabove" = 1,"westabove" = 0,"nturn" = 0,"sturn" = 0,"wturn" = 0,"eturn" = 0,"nflip" = 0,"sflip" = 8,"wflip" = 8,"eflip" = 0)
-			if("onbelt")
-				return list("shrink" = 0.3,"sx" = -2,"sy" = -5,"nx" = 4,"ny" = -5,"wx" = 0,"wy" = -5,"ex" = 2,"ey" = -5,"nturn" = 0,"sturn" = 0,"wturn" = 0,"eturn" = 0,"nflip" = 0,"sflip" = 0,"wflip" = 0,"eflip" = 0,"northabove" = 0,"southabove" = 1,"eastabove" = 1,"westabove" = 0)
+			if(TRANSFORM_IN_HAND)
+				return list(
+					ON_MOB_SHRINK(0.6),
+					ON_MOB_SHIFT_X(12, 6, -9, -8),
+					ON_MOB_SHIFT_Y(1, 0, 1, 1),
+					ON_MOB_TURN(0, 0, 0, 0),
+					ON_MOB_FLIP(NONE, NONE, VERTICAL, VERTICAL),
+					ON_MOB_ABOVE(FALSE, TRUE, TRUE, FALSE),
+				)
+			if(TRANSFORM_ON_BELT)
+				return list(
+					ON_MOB_SHRINK(0.3),
+					ON_MOB_SHIFT_X(4, 2, -2, 0),
+					ON_MOB_SHIFT_Y(-5, -5, -5, -5),
+					ON_MOB_TURN(0, 0, 0, 0),
+					ON_MOB_FLIP(NONE, NONE, VERTICAL, VERTICAL),
+					ON_MOB_ABOVE(FALSE, TRUE, TRUE, FALSE),
+				)
 
 /obj/item/weapon/tongs/stone
 	name = "stone tongs"
