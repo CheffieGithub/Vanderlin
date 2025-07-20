@@ -35,37 +35,43 @@
 	. = ..()
 	if(. & SPELL_CANCEL_CAST)
 		return
-	if(!LAZYLEN(owner.mind?.known_people))
+
+	if(!length(owner.mind?.known_people))
 		to_chat(owner, span_warning("I don't know anyone!"))
 		return . | SPELL_CANCEL_CAST
+
 	var/recipient = browser_input_text(owner, "Who are you trying to contact?", "BEYOND THE VEIL")
 	if(QDELETED(src) || QDELETED(cast_on) || !can_cast_spell())
 		return . | SPELL_CANCEL_CAST
 	if(!recipient)
 		reset_cooldown()
 		return . | SPELL_CANCEL_CAST
-	if(!owner.mind?.do_i_know(name = recipient))
-		to_chat(owner, span_warning("I don't know anyone by that name."))
+
+	if(!user.mind?.know_name(input))
+		to_chat(user, span_warning("I don't know anyone by that name."))
 		return . | SPELL_CANCEL_CAST
-	for(var/client/C as anything in GLOB.clients)
-		var/mob/M = C.mob
-		if(QDELETED(M))
+
+	for(var/datum/mind/mind as anything in SSticker.minds)
+		var/mob/living/carbon/human/recipient = mind.current
+		if(!LOWERSTRINGCOMP(recipient.real_name, input))
 			continue
-		if(M.real_name == recipient)
-			recipient_ref = WEAKREF(M)
-			break
+		recipient_ref = WEAKREF(recipient)
+
 	if(!recipient_ref)
 		to_chat(owner, span_warning("I seek a mental connection, but can't find [recipient]."))
 		return . | SPELL_CANCEL_CAST
+
 	message = browser_input_text(owner, "You make a connecton, what are you trying to say?", "BEYOND THE VEIL")
 	if(QDELETED(src) || QDELETED(cast_on) || !can_cast_spell())
 		return . | SPELL_CANCEL_CAST
 	if(!message)
 		reset_cooldown()
 		return . | SPELL_CANCEL_CAST
+
 	var/answer = browser_alert(owner, "Send anonymously?", "BEYOND THE VEIL", DEFAULT_INPUT_CHOICES)
 	if(QDELETED(src) || QDELETED(cast_on) || !can_cast_spell())
 		return . | SPELL_CANCEL_CAST
+
 	if(answer == CHOICE_CONFIRM)
 		anonymous = TRUE
 
