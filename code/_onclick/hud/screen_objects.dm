@@ -1318,7 +1318,7 @@
 
 #define INTRO_NAME (1 << 0)
 #define INTRO_JOB (1 << 1)
-#define INTRO_PRONOUN (1 << 2)
+#define INTRO_PRONOUNS (1 << 2)
 
 /atom/movable/screen/healths/blood/Click(location, control, params)
 	var/list/modifiers = params2list(params)
@@ -1328,36 +1328,53 @@
 			H.check_for_injuries(H)
 			to_chat(H, "I am [H.get_encumbrance() * 100]% Encumbered")
 		if(LAZYACCESS(modifiers, RIGHT_CLICK))
-			if(!H.mind)
+			if(!H.can_speak_vocal())
+				to_chat(H, span_warning("I can't introduce myself if I can't speak!"))
 				return
+			var/name
+			var/job
+			var/pronouns
 			if(browser_alert(H, "Do you wish to lie?", "RELATIONS", DEFAULT_INPUT_CHOICES) == CHOICE_YES)
-				var/name = browser_input_text(H, "WHAT IS YOUR \"NAME\"?", "RELATIONS")
-				var/job = browser_input_text(H, "WHAT IS YOUR \"LIVING\"?", "RELATIONS")
-				H.introduce(name, job)
+				name = browser_input_text(H, "WHAT IS YOUR \"NAME\"?", "NAME")
+				job = browser_input_text(H, "WHAT IS YOUR \"LIVING\"?", "JOB")
+				pronouns = browser_input_list(H, "WHAT SHOULD THEY REFER TO YOU BY?", "IDENTITY", PRONOUNS_LIST)
+				H.introduce(name, job, pronouns)
 				return
-			var/static/list/options = list(
-				"Nothing" = NONE,
-				"Everything" = ALL,
-
+			// Psydon forgive me
+			var/list/options = list(
+				list("checked" = FALSE, "value" = INTRO_NAME, "name" = "Name", "allowed_edit" = TRUE),
+				list("checked" = FALSE, "value" = INTRO_JOB, "name" = "Job", "allowed_edit" = TRUE),
 			)
-			var/name = null
-			var/job = null
-			var/choice = browser_input_list(H, "What will you tell?", "RELATIONS", list("Name and Job", "Job", "Name", "Nothing"))
-			if(choice != "Nothing")
-				if(findtext(choice, "Job"))
+			// There is no reason to do pronouns if they are are the same as the gender
+			if(PRONOUN_MAP_DEFAULT[H.pronouns] != H.gender)
+				options += list(list("checked" = FALSE, "value" = INTRO_PRONOUNS, "name" = "Pronouns", "allowed_edit" = TRUE),)
+			var/list/result = presentpicker(H, "What will you tell?", "RELATIONS", Button1 = "Confirm", Button2 = "Nothing", Button3 = "Cancel", Timeout = NONE, values = options)
+			if(!islist(result))
+				return
+			if(LAZYACCESS(result, "button") == 3)
+				return
+			if(LAZYACCESS(result, "button") == 2)
+				if(browser_alert(H, "You will only be identifiable based on your physical traits and voice are you sure?", "RELATIONS", DEFAULT_INPUT_CHOICES) == CHOICE_NO)
+					return
+			else
+				var/flags = LAZYACCESS(result, "values")
+				if(flags & INTRO_NAME)
+					name = H.real_name
+				if(flags & INTRO_JOB)
 					var/used_title
 					if(H.job)
 						var/datum/job/J = SSjob.GetJob(H.job)
 						used_title = J.get_informed_title(H)
-					if(!used_title)
-						used_title = "Unknown"
-					job = used_title
-				if(findtext(choice, "Name"))
-					name = H.real_name
-			else
-				if(browser_alert(H, "You will only be identifiable based on your physical traits and voice are you sure?", "RELATIONS", DEFAULT_INPUT_CHOICES) == CHOICE_NO)
-					return
-			H.introduce(name, job)
+					if(used_title)
+						job = used_title
+				if(flags & INTRO_PRONOUNS)
+					pronouns = H.pronouns
+
+			H.introduce(name, job, pronouns)
+
+#undef INTRO_NAME
+#undef INTRO_JOB
+#undef INTRO_PRONOUNS
 
 /atom/movable/screen/splash
 	icon = 'icons/blank_title.png'

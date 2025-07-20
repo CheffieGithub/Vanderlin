@@ -143,6 +143,14 @@
 #define PRONOUNS_LIST_NO_IT list(HE_HIM, SHE_HER, THEY_THEM)
 #define PRONOUNS_LIST_IT_ONLY list(IT_ITS)
 
+/// Determine if pronouns are different to bodytype/gender
+#define PRONOUN_MAP_DEFAULT list(\
+	MALE = HE_HIM,\
+	FEMALE = SHE_HER,\
+	PLURAL = THEY_THEM,\
+	NEUTER = IT_ITS,\
+)
+
 // Voice types
 
 #define VOICE_TYPE_MASC		"Masculine"
@@ -150,9 +158,16 @@
 #define VOICE_TYPE_ANDRO	"Androgynous"
 
 #define VOICE_TYPES_LIST list(VOICE_TYPE_MASC, VOICE_TYPE_FEM, VOICE_TYPE_ANDRO)
-
 #define VOICE_TYPES_MASCANDRO list(VOICE_TYPE_MASC, VOICE_TYPE_ANDRO)
 #define VOICE_TYPES_FEMANDRO list(VOICE_TYPE_FEM, VOICE_TYPE_ANDRO)
+
+/// Determine if voice type are different to bodytype/gender
+#define VOICE_MAP_DEFAULT list(\
+	MALE = VOICE_TYPES_MASCANDRO,\
+	FEMALE = VOICE_TYPES_FEMANDRO,\
+	PLURAL = VOICE_TYPES_LIST,\
+	NEUTER = VOICE_TYPES_LIST,\
+)
 
 //alignment
 #define ALIGNMENT_LG		"Lawful Good"

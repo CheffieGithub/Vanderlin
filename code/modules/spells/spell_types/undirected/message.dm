@@ -40,25 +40,25 @@
 		to_chat(owner, span_warning("I don't know anyone!"))
 		return . | SPELL_CANCEL_CAST
 
-	var/recipient = browser_input_text(owner, "Who are you trying to contact?", "BEYOND THE VEIL")
+	var/to_find = browser_input_text(owner, "Who are you trying to contact?", "BEYOND THE VEIL")
 	if(QDELETED(src) || QDELETED(cast_on) || !can_cast_spell())
 		return . | SPELL_CANCEL_CAST
-	if(!recipient)
+	if(!to_find)
 		reset_cooldown()
 		return . | SPELL_CANCEL_CAST
 
-	if(!user.mind?.know_name(input))
-		to_chat(user, span_warning("I don't know anyone by that name."))
+	if(!owner.mind?.know_name(to_find))
+		to_chat(owner, span_warning("I don't know anyone by that name."))
 		return . | SPELL_CANCEL_CAST
 
 	for(var/datum/mind/mind as anything in SSticker.minds)
 		var/mob/living/carbon/human/recipient = mind.current
-		if(!LOWERSTRINGCOMP(recipient.real_name, input))
+		if(!LOWERSTRINGCOMP(recipient.real_name, to_find))
 			continue
 		recipient_ref = WEAKREF(recipient)
 
 	if(!recipient_ref)
-		to_chat(owner, span_warning("I seek a mental connection, but can't find [recipient]."))
+		to_chat(owner, span_warning("I seek a mental connection, but can't find [to_find]."))
 		return . | SPELL_CANCEL_CAST
 
 	message = browser_input_text(owner, "You make a connecton, what are you trying to say?", "BEYOND THE VEIL")
@@ -84,7 +84,7 @@
 	if(!recipient.mind)
 		return
 	if(anonymous && (recipient.STAPER >= 15))
-		if(recipient.mind?.do_i_know(name = owner.real_name))
+		if(recipient.mind?.know_name(owner.real_name))
 			to_chat(recipient, "Arcyne whispers fill the back of my head, resolving into [owner]'s voice: <font color=#7246ff>[message]</font>")
 			return
 	to_chat(recipient, "Arcyne whispers fill the back of my head, resolving into an unknown [owner.gender == FEMALE ? "woman" : "man"]'s voice: <font color=#7246ff>[message]</font>")

@@ -109,8 +109,8 @@
 
 /mob/living/carbon/human/species/orc/proc/configure_mind()
 	if(!mind)
-		mind = new /datum/mind(src)
-	mind.current = src
+		mind = new /datum/mind()
+	mind.set_current(src)
 
 	adjust_skillrank(/datum/skill/combat/polearms, 3, TRUE)
 	adjust_skillrank(/datum/skill/combat/swords, 3, TRUE)

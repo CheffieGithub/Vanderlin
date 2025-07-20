@@ -82,7 +82,7 @@ GLOBAL_LIST_EMPTY(personal_objective_minds)
 
 	var/list/areas_entered = list()
 
-	var/list/known_people = list() //contains person, their job, and their voice color
+	var/list/known_people = list()
 
 	var/list/notes = list() //RTD add notes button
 
@@ -99,6 +99,7 @@ GLOBAL_LIST_EMPTY(personal_objective_minds)
 	///the bitflag our job applied
 	var/job_bitflag = NONE
 
+	var/list/active_uis = list()
 
 /datum/mind/New(key)
 	src.key = key
@@ -110,8 +111,16 @@ GLOBAL_LIST_EMPTY(personal_objective_minds)
 /datum/mind/Destroy()
 	SSticker.minds -= src
 	QDEL_NULL(sleep_adv)
-	if(islist(antag_datums))
-		QDEL_LIST(antag_datums)
+	QDEL_NULL(antag_hud)
+	QDEL_LIST(antag_datums)
+	remove_all_uis()
+	active_uis = null
+	if(length(known_people))
+		for(var/id as anything in known_people)
+			QDEL_NULL(known_people[id])
+			known_people -= id
+		known_people = null
+	set_current(null)
 	return ..()
 
 /proc/get_minds(role)
@@ -136,6 +145,19 @@ GLOBAL_LIST_EMPTY(personal_objective_minds)
 
 	return language_holder
 
+/datum/mind/proc/set_current(mob/new_current)
+	if(new_current && QDELETED(new_current))
+		CRASH("Tried to set a mind's current var to a qdeleted mob, what the fuck")
+	if(current)
+		UnregisterSignal(src, COMSIG_PARENT_QDELETING)
+	current = new_current
+	if(current)
+		RegisterSignal(src, COMSIG_PARENT_QDELETING, PROC_REF(clear_current))
+
+/datum/mind/proc/clear_current(datum/source)
+	SIGNAL_HANDLER
+	set_current(null)
+
 /// transfers this mind's control to a new mob
 /datum/mind/proc/transfer_to(mob/new_character, force_key_move = 0)
 	if(current)	// remove ourself from our old body's mind variable
@@ -155,14 +177,14 @@ GLOBAL_LIST_EMPTY(personal_objective_minds)
 		key = new_character.key
 
 	if(new_character.mind)								//disassociate any mind currently in our new body's mind variable
-		new_character.mind.current = null
+		new_character.mind.current = set_current(null)
 
 	var/datum/atom_hud/antag/hud_to_transfer = antag_hud//we need this because leave_hud() will clear this list
 	var/mob/living/old_current = current
 	if(current)
 		current.transfer_observers_to(new_character)	//transfer anyone observing the old character to the new one
 	current = new_character								//associate ourself with our new body
-	new_character.mind = src							//and associate our new body with ourself
+	set_current(new_character) //and associate our new body with ourself
 	for(var/datum/antagonist/antag_datum_ref in antag_datums)	//Makes sure all antag datums effects are applied in the new body
 		antag_datum_ref.on_body_transfer(old_current, current)
 	if(iscarbon(current))
@@ -629,13 +651,12 @@ GLOBAL_LIST_EMPTY(personal_objective_minds)
 /mob/proc/mind_initialize()
 	if(mind)
 		mind.key = key
-
 	else
 		mind = new /datum/mind(key)
 		SSticker.minds += mind
 	if(!mind.name)
 		mind.name = real_name
-	mind.current = src
+	mind.set_current(src)
 
 /mob/living/carbon/mind_initialize()
 	..()

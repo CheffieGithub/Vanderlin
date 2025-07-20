@@ -238,7 +238,7 @@
 	closed = TRUE
 	close()
 
-/proc/presentpicker(mob/User,Message, Title, Button1="Ok", Button2, Button3, StealFocus = 1,Timeout = 6000,list/values, inputtype = "checkbox", width, height, slidecolor)
+/proc/presentpicker(mob/User,Message, Title, Button1="Ok", Button2, Button3, StealFocus = 1, Timeout = 6000, list/values, inputtype = "checkbox", width = 350, height = 350, slidecolor)
 	if (!istype(User))
 		if (istype(User, /client/))
 			var/client/C = User
