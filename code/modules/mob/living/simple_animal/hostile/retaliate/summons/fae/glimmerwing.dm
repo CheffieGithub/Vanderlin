@@ -10,7 +10,6 @@
 	emote_hear = null
 	emote_see = null
 	speak_chance = 1
-	turns_per_move = 6
 	see_in_dark = 6
 	move_to_delay = 6
 	base_intents = list(/datum/intent/simple/bite)
@@ -47,7 +46,7 @@
 
 	ai_controller = /datum/ai_controller/glimmerwing
 
-
+	del_on_death = TRUE
 
 /mob/living/simple_animal/hostile/retaliate/fae/glimmerwing/Initialize()
 	. = ..()
@@ -55,7 +54,6 @@
 	AddComponent(/datum/component/ai_aggro_system)
 
 /mob/living/simple_animal/hostile/retaliate/fae/glimmerwing/death(gibbed)
-	..()
 	var/turf/deathspot = get_turf(src)
 	new /obj/item/natural/iridescentscale(deathspot)
 	new /obj/item/natural/iridescentscale(deathspot)
@@ -65,6 +63,5 @@
 	new /obj/item/natural/fairydust(deathspot)
 	new /obj/item/natural/fairydust(deathspot)
 	new /obj/item/natural/fairydust(deathspot)
-	update_icon()
 	spill_embedded_objects()
-	qdel(src)
+	return ..()

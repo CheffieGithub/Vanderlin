@@ -10,7 +10,6 @@
 	emote_hear = null
 	emote_see = null
 	speak_chance = 1
-	turns_per_move = 3
 	see_in_dark = 6
 	move_to_delay = 16
 	base_intents = list(/datum/intent/simple/elementalt2_unarmed)
@@ -52,20 +51,17 @@
 
 	ai_controller = /datum/ai_controller/collossus
 
-
-
+	del_on_death = TRUE
 
 /mob/living/simple_animal/hostile/retaliate/elemental/collossus/Initialize()
 	. = ..()
 	AddComponent(/datum/component/ai_aggro_system)
 
 /mob/living/simple_animal/hostile/retaliate/elemental/collossus/death(gibbed)
-	..()
 	var/turf/deathspot = get_turf(src)
 	new /obj/item/natural/elementalrelic(deathspot)
-	update_icon()
 	spill_embedded_objects()
-	qdel(src)
+	return ..()
 
 /obj/projectile/earthenchunk
 	name = "Elemental Chunk"

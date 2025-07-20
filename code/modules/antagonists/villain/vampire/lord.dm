@@ -10,9 +10,6 @@
 	)
 
 	var/ascended = FALSE
-	var/obj/effect/proc_holder/spell/targeted/shapeshift/bat/batform //attached to the datum itself to avoid cloning memes, and other duplicates
-	var/obj/effect/proc_holder/spell/targeted/shapeshift/gaseousform/gas
-	var/obj/effect/proc_holder/spell/targeted/mansion_portal/portal
 
 /datum/antagonist/vampire/lord/apply_innate_effects(mob/living/mob_override)
 	. = ..()
@@ -28,10 +25,12 @@
 	var/mob/living/carbon/vampire = owner.current
 	remove_job()
 	owner.current?.roll_mob_stats()
-	owner.purge_combat_knowledge()
+	owner.current?.purge_combat_knowledge()
 	. = ..()
-	portal = new()
-	owner.current.AddSpell(portal)
+	owner.current?.mana_pool.ethereal_recharge_rate += 0.2
+	owner.special_role = span_redtext("[name]")
+	var/datum/action/cooldown/spell/undirected/mansion_portal/portal = new(src)
+	portal.Grant(owner.current)
 	addtimer(CALLBACK(owner.current, TYPE_PROC_REF(/mob/living/carbon/human, choose_name_popup), "[name]"), 5 SECONDS)
 	vampire.grant_undead_eyes()
 
@@ -40,22 +39,12 @@
 	owner.current.verbs |= /mob/living/carbon/human/proc/vamp_regenerate
 	owner.current.verbs |= /mob/living/carbon/human/proc/punish_spawn
 
-
 /datum/antagonist/vampire/lord/on_removal()
-	if(!isnull(batform))
-		owner.current.RemoveSpell(batform)
-		QDEL_NULL(batform)
-
-	if(!isnull(portal))
-		owner.current.RemoveSpell(portal)
-		QDEL_NULL(portal)
-
-	owner.current.verbs -= /mob/living/carbon/human/proc/demand_submission
-	owner.current.verbs |= /mob/living/carbon/human/proc/vamp_regenerate
-	owner.current.verbs -= /mob/living/carbon/human/proc/punish_spawn
-
-
 	. = ..()
+	owner.current.verbs -= /mob/living/carbon/human/proc/demand_submission
+	owner.current.verbs -= /mob/living/carbon/human/proc/vamp_regenerate
+	owner.current.verbs -= /mob/living/carbon/human/proc/punish_spawn
+	owner.current.mana_pool.ethereal_recharge_rate -= 0.2
 
 /datum/antagonist/vampire/lord/greet()
 	to_chat(owner.current, span_userdanger("I am ancient. I am the Land. And I am now awoken to trespassers upon my domain."))
@@ -63,6 +52,7 @@
 
 /datum/antagonist/vampire/lord/equip()
 	. = ..()
+
 	owner.reset_known()
 	for(var/datum/mind/MF as anything in get_minds("Vampire Spawn"))
 		owner.become_known_to_both(MF)

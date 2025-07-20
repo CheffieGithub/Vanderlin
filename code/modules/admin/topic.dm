@@ -1247,8 +1247,7 @@
 		message_admins("[key_name_admin(usr)] changed [key_name_admin(M)]'s flaw from [being_changed.charflaw ? being_changed.charflaw : "NA"] to [flaw_to_change_to]")
 		log_admin("[key_name_admin(usr)] changed [key_name_admin(M)]'s flaw from [being_changed.charflaw ? being_changed.charflaw : "NA"] to [flaw_to_change_to]")
 
-		var/datum/charflaw/C = new flaw_to_change_to()
-		being_changed.charflaw = C
+		being_changed.set_flaw(flaw_to_change_to)
 
 	else if(href_list["modifycurses"])
 
@@ -1483,7 +1482,7 @@
 		if(!fexists(json_file))
 			WRITE_FILE(json_file, "{}")
 		var/list/json = json_decode(file2text(json_file))
-		for(var/curse in CURSE_MASTER_LIST)
+		for(var/curse in list("brokedick"))
 			var/yes_cursed
 			for(var/X in json)
 				if(X == curse)

@@ -81,6 +81,8 @@ have ways of interacting with a specific atom and control it. They posses a blac
 
 /datum/ai_controller/Destroy(force, ...)
 	set_ai_status(AI_STATUS_OFF)
+	if(ai_movement)
+		ai_movement.stop_moving_towards(src)
 	UnpossessPawn(FALSE)
 	our_cells = null
 	return ..()
@@ -583,7 +585,7 @@ have ways of interacting with a specific atom and control it. They posses a blac
  */
 /datum/ai_controller/proc/set_blackboard_key(key, thing)
 	// Assume it is an error when trying to set a value overtop a list
-	if(islist(blackboard[key]))
+	if(islist(blackboard[key]) && !islist(thing))
 		CRASH("set_blackboard_key attempting to set a blackboard value to key [key] when it's a list!")
 
 	// Clear existing values

@@ -11,7 +11,6 @@
 	emote_hear = null
 	emote_see = null
 	speak_chance = 1
-	turns_per_move = 3
 	see_in_dark = 6
 	move_to_delay = 12
 	base_intents = list(/datum/intent/simple/elemental_unarmed)
@@ -50,14 +49,13 @@
 
 	ai_controller = /datum/ai_controller/warden
 
-
+	del_on_death = TRUE
 
 /mob/living/simple_animal/hostile/retaliate/elemental/warden/Initialize()
 	. = ..()
 	AddComponent(/datum/component/ai_aggro_system)
 
 /mob/living/simple_animal/hostile/retaliate/elemental/warden/death(gibbed)
-	..()
 	var/turf/deathspot = get_turf(src)
 	new /obj/item/natural/elementalshard(deathspot)
 	new /obj/item/natural/elementalshard(deathspot)
@@ -67,6 +65,5 @@
 	new /obj/item/natural/elementalmote(deathspot)
 	new /obj/item/natural/elementalmote(deathspot)
 	new /obj/item/natural/elementalmote(deathspot)
-	update_icon()
 	spill_embedded_objects()
-	qdel(src)
+	return ..()

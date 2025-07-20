@@ -8,7 +8,6 @@
 	gender = MALE
 	mob_biotypes = MOB_ORGANIC|MOB_HUMANOID
 	robust_searching = 1
-	turns_per_move = 2
 	move_to_delay = 3
 	base_constitution = 11
 	base_strength = 13
@@ -122,7 +121,7 @@
 
 /mob/living/simple_animal/hostile/deepone/elite/Initialize()
 	. = ..()
-	add_filter("elite_glow", 2, list("type" = "outline", "color" = "#3366FF", "size" = 1))
+	add_filter("elite_glow", 2, outline_filter(1, "#3366FF"))
 
 /mob/living/simple_animal/hostile/deepone/elite/boss
 	faction = list("deepone")

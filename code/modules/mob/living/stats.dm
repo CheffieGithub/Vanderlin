@@ -75,7 +75,7 @@
 		var/mob/living/carbon/human/H = src
 		if(H.dna?.species)
 			var/datum/species/species = H.dna.species
-			var/list/specstat_list = (gender == FEMALE) ? species.specstats_f : species.specstats
+			var/list/specstat_list = (gender == FEMALE) ? species.specstats_f : species.specstats_m
 			for(var/stat in specstat_list)
 				set_stat_modifier("innate_sex", stat, specstat_list[stat])
 
@@ -243,6 +243,13 @@
 		(STATKEY_SPD) = STASPD,
 		(STATKEY_LCK) = STALUC,
 	)
+
+/// Return mob's stat value by stat_key
+/mob/living/proc/get_stat(stat_key)
+	if(!stat_key)
+		return
+
+	return LAZYACCESS(get_all_stats(), stat_key)
 
 ///Returns: the difference in value between the opponents stat key and ours.
 ///EG: Our endurace - opp endurance.

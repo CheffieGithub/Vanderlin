@@ -21,7 +21,6 @@
 	gender = PLURAL
 	emote_hear = null
 	emote_see = null
-	turns_per_move = 6
 	see_in_dark = 9
 	move_to_delay = 2
 	//Unique intent to avoid wounds.
@@ -50,7 +49,7 @@
 	aggro_vision_range = 9
 	melee_damage_type = BRUTE
 	// Makes thrown objects phase through them
-	pass_flags = LETPASSTHROW
+	pass_flags_self = LETPASSTHROW
 	/*
 	* Extremely optional choice to make
 	* them immune to all brute damage but
@@ -105,10 +104,10 @@
 	return ..()
 
 // Causes thrown objects to fly through shades.
-/mob/living/simple_animal/hostile/retaliate/shade/CanPass(atom/movable/mover, turf/target)
+/mob/living/simple_animal/hostile/retaliate/shade/CanAllowThrough(atom/movable/mover, turf/target)
+	. = ..()
 	if(mover.throwing)
 		return TRUE
-	return ..()
 
 /mob/living/simple_animal/hostile/retaliate/shade/bullet_act(obj/projectile/P)
 	//This is not a perfect solution for making shades vulnerable to magic but its something.

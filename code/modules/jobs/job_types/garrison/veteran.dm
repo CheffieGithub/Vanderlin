@@ -9,13 +9,13 @@
 	department_flag = GARRISON
 	display_order = JDO_VET
 	job_flags = (JOB_ANNOUNCE_ARRIVAL | JOB_SHOW_IN_CREDITS | JOB_EQUIP_RANK | JOB_NEW_PLAYER_JOINABLE)
-	faction = FACTION_STATION
+	faction = FACTION_TOWN
 	total_positions = 1
 	spawn_positions = 1
 	//Should...probably actually be a veteran of at least a few weeks before trying to teach others
 	min_pq = 10
 
-	spells = list(/obj/effect/proc_holder/spell/self/convertrole/town_militia)
+	spells = list(/datum/action/cooldown/spell/undirected/list_target/convert_role/militia)
 	allowed_sexes = list(MALE, FEMALE) //same as town guard
 	allowed_ages = list(AGE_OLD, AGE_IMMORTAL)
 	allowed_races = RACES_PLAYER_NONDISCRIMINATED

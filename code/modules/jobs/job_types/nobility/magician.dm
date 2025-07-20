@@ -1,14 +1,14 @@
 /datum/job/magician
 	title = "Court Magician"
-	tutorial = "A seer of dreams, a reader of stars, and a master of the arcane. Along a band of unlikely hero's, you shaped the fate of these lands.\
+	tutorial = "A seer of dreams, a reader of stars, and a master of the arcane. Along a band of unlikely heroes, you shaped the fate of these lands.\
 	Now the days of adventure are gone, replaced by dusty tomes and whispered prophecies. The ruler's coin funds your studies,\
-	but debt's both magical and mortal are never so easily repaid. With age comes wisdom, but also the creeping dread that your greatest spell work\
+	but debts both magical and mortal are never so easily repaid. With age comes wisdom, but also the creeping dread that your greatest spell work\
 	may already be behind you."
 	flag = WIZARD
 	department_flag = NOBLEMEN
 	job_flags = (JOB_ANNOUNCE_ARRIVAL | JOB_SHOW_IN_CREDITS | JOB_EQUIP_RANK | JOB_NEW_PLAYER_JOINABLE)
 	display_order = JDO_MAGICIAN
-	faction = FACTION_STATION
+	faction = FACTION_TOWN
 	total_positions = 1
 	spawn_positions = 1
 	min_pq = 6
@@ -22,6 +22,15 @@
 	give_bank_account = 120
 	cmode_music = 'sound/music/cmode/nobility/CombatCourtMagician.ogg'
 	magic_user = TRUE
+
+	spells = list(
+		/datum/action/cooldown/spell/aoe/knock,
+		/datum/action/cooldown/spell/undirected/jaunt/ethereal_jaunt,
+		/datum/action/cooldown/spell/undirected/touch/prestidigitation,
+	)
+	spell_points = 17
+	attunements_max = 6
+	attunements_min = 4
 
 /datum/job/magician/New()
 	if(prob(5))
@@ -59,7 +68,7 @@
 		armor = /obj/item/clothing/shirt/robe/courtmage
 		H.change_stat(STATKEY_SPD, -1)
 		H.change_stat(STATKEY_INT, 1)
-		if(H.dna.species.id == "human")
+		if(H.dna.species.id == SPEC_ID_HUMEN)
 			belt = /obj/item/storage/belt/leather/plaquegold
 			cloak = null
 			head = /obj/item/clothing/head/wizhat
@@ -76,10 +85,3 @@
 	H.change_stat(STATKEY_INT, 5)
 	H.change_stat(STATKEY_CON, -2)
 	H.change_stat(STATKEY_SPD, -2)
-	H.mind?.adjust_spellpoints(17)
-	H.mind?.AddSpell(new /obj/effect/proc_holder/spell/aoe_turf/knock)
-	H.mind?.AddSpell(new /obj/effect/proc_holder/spell/targeted/ethereal_jaunt)
-	H.mind?.AddSpell(new /obj/effect/proc_holder/spell/self/learnspell)
-	H.mind?.AddSpell(new /obj/effect/proc_holder/spell/targeted/touch/prestidigitation)
-
-	H?.generate_random_attunements(rand(4,6))

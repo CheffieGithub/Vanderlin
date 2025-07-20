@@ -7,13 +7,12 @@
 	department_flag = GARRISON
 	job_flags = (JOB_ANNOUNCE_ARRIVAL | JOB_SHOW_IN_CREDITS | JOB_EQUIP_RANK | JOB_NEW_PLAYER_JOINABLE)
 	display_order = JDO_CITYWATCHMEN
-	faction = FACTION_STATION
+	faction = FACTION_TOWN
 	total_positions = 8
 	spawn_positions = 8
 	min_pq = 4
 	bypass_lastclass = TRUE
 
-	allowed_sexes = list(MALE, FEMALE)
 	allowed_ages = list(AGE_ADULT, AGE_MIDDLEAGED, AGE_IMMORTAL)
 	allowed_races = RACES_PLAYER_GUARD
 
@@ -31,6 +30,8 @@
 	shoes = /obj/item/clothing/shoes/boots
 	belt = /obj/item/storage/belt/leather
 	gloves = /obj/item/clothing/gloves/leather
+	if(H.dna && !(H.dna.species.id in RACES_PLAYER_NONDISCRIMINATED)) // to prevent examine stress
+		mask = /obj/item/clothing/face/shepherd
 
 /datum/outfit/job/guardsman/post_equip(mob/living/carbon/human/H)
 	. = ..()

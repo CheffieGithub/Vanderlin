@@ -12,7 +12,6 @@
 	footstep_type = FOOTSTEP_MOB_BAREFOOT
 	speak_chance = 1
 
-	turns_per_move = 5
 	move_to_delay = 8	// basically speed when player controlled. Lower is faster, a lot faster.
 	see_in_dark = 6
 	robust_searching = TRUE
@@ -203,6 +202,7 @@
 
 	face_atom(A)
 	playsound(src,'sound/misc/eat.ogg', rand(30,60), TRUE)
+	target = null
 	qdel(A)
 	food = min(food + 30, food_max)
 	return TRUE

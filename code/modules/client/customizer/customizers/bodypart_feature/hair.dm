@@ -179,7 +179,7 @@
 		/datum/sprite_accessory/hair/head/warrior,
 		/datum/sprite_accessory/hair/head/wildside,
 		/datum/sprite_accessory/hair/head/woodsman_elf,
-		/datum/sprite_accessory/hair/head/zybantu,
+		/datum/sprite_accessory/hair/head/zaladin,
 		/datum/sprite_accessory/hair/head/vagabond,
 		/datum/sprite_accessory/hair/head/steward,
 		/datum/sprite_accessory/hair/head/amazon,
@@ -301,6 +301,24 @@
 		/datum/sprite_accessory/hair/head/shorthair6,
 		/datum/sprite_accessory/hair/head/helmet,
 		)
+
+/datum/customizer/bodypart_feature/hair/head/humanoid/triton
+	customizer_choices = list(/datum/customizer_choice/bodypart_feature/hair/head/humanoid/triton)
+
+/datum/customizer_choice/bodypart_feature/hair/head/humanoid/triton
+	sprite_accessories = list(
+		/datum/sprite_accessory/hair/head/bald,
+		/datum/sprite_accessory/hair/head/triton/fin,
+		/datum/sprite_accessory/hair/head/triton/seaking,
+		/datum/sprite_accessory/hair/head/triton/siren,
+		/datum/sprite_accessory/hair/head/triton/jellyfish,
+		/datum/sprite_accessory/hair/head/triton/anemonger,
+		/datum/sprite_accessory/hair/head/triton/punkfish,
+		/datum/sprite_accessory/hair/head/triton/weed,
+		/datum/sprite_accessory/hair/head/triton/gorgon,
+		/datum/sprite_accessory/hair/head/triton/lion,
+		/datum/sprite_accessory/hair/head/triton/betta,
+	)
 
 // ===== FACIAL HAIR
 

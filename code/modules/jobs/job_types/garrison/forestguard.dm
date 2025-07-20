@@ -12,14 +12,13 @@
 	department_flag = GARRISON
 	job_flags = (JOB_ANNOUNCE_ARRIVAL | JOB_SHOW_IN_CREDITS | JOB_EQUIP_RANK | JOB_NEW_PLAYER_JOINABLE)
 	display_order = JDO_FORGUARD
-	faction = FACTION_STATION
+	faction = FACTION_TOWN
 	total_positions = 3
 	spawn_positions = 3
 	min_pq = 5
 	bypass_lastclass = TRUE
 	selection_color = "#0d6929"
 
-	allowed_sexes = list(MALE, FEMALE)
 	allowed_ages = list(AGE_MIDDLEAGED, AGE_OLD, AGE_IMMORTAL)
 	allowed_races = RACES_PLAYER_GUARD
 	give_bank_account = 30
@@ -161,6 +160,7 @@
 		H.change_stat(STATKEY_STR, 2)
 		H.change_stat(STATKEY_CON, 2)
 		H.change_stat(STATKEY_END, 3)
+		ADD_TRAIT(H, TRAIT_DUALWIELDER, TRAIT_GENERIC)
 		ADD_TRAIT(H, TRAIT_MEDIUMARMOR, TRAIT_GENERIC)
 		ADD_TRAIT(H, TRAIT_NOPAINSTUN, TRAIT_GENERIC)
 		ADD_TRAIT(H, TRAIT_FORAGER, TRAIT_GENERIC)

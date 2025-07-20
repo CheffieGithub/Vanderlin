@@ -1,5 +1,6 @@
 /datum/antagonist/zombie
 	name = "Zombie"	// Deadite plague of Zizo
+	roundend_category = "Deadites"
 	antagpanel_category = "Zombie"
 	antag_hud_type = ANTAG_HUD_HIDDEN
 	antag_hud_name = "zombie"
@@ -141,7 +142,7 @@
 		if(!was_i_undead)
 			zombie.mob_biotypes &= ~MOB_UNDEAD
 		zombie.faction -= FACTION_UNDEAD
-		zombie.faction += FACTION_STATION
+		zombie.faction += FACTION_TOWN
 		zombie.faction += FACTION_NEUTRAL
 		zombie.regenerate_organs()
 		if(has_turned)
@@ -200,7 +201,7 @@
 		zombie.charflaw.ephemeral = TRUE
 	zombie.mob_biotypes |= MOB_UNDEAD
 	zombie.faction += FACTION_UNDEAD
-	zombie.faction -= FACTION_STATION
+	zombie.faction -= FACTION_TOWN
 	zombie.faction -= FACTION_NEUTRAL
 	zombie.verbs |= /mob/living/carbon/human/proc/zombie_seek
 	for(var/obj/item/bodypart/zombie_part as anything in zombie.bodyparts)
@@ -258,7 +259,7 @@
 		qdel(src)
 		return
 
-	GLOB.vanderlin_round_stats[STATS_DEADITES_WOKEN_UP]++
+	record_round_statistic(STATS_DEADITES_WOKEN_UP)
 	zombie.blood_volume = BLOOD_VOLUME_MAXIMUM
 	zombie.setOxyLoss(0, updating_health = FALSE, forced = TRUE) //zombles dont breathe
 	zombie.setToxLoss(0, updating_health = FALSE, forced = TRUE) //zombles are immune to poison

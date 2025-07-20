@@ -1,5 +1,3 @@
-#define MAX_FARM_ANIMALS 20
-
 GLOBAL_VAR_INIT(farm_animals, FALSE)
 
 /mob/living/simple_animal
@@ -31,11 +29,6 @@ GLOBAL_VAR_INIT(farm_animals, FALSE)
 	var/list/emote_hear = list()
 	///Unlike speak_emote, the list of things in this variable only show by themselves with no spoken text. IE: Ian barks, Ian yaps
 	var/list/emote_see = list()
-
-	var/move_skip = FALSE
-	var/action_skip = FALSE
-
-	var/turns_per_move = 1
 
 	///Does the mob wander around when idle?
 	var/wander = 1
@@ -94,8 +87,6 @@ GLOBAL_VAR_INIT(farm_animals, FALSE)
 	///LETS SEE IF I CAN SET SPEEDS FOR SIMPLE MOBS WITHOUT DESTROYING EVERYTHING. Higher speed is slower, negative speed is faster.
 	var/speed = 1
 
-	///Hot simple_animal baby making vars.
-	var/list/childtype = null
 	var/next_scan_time = 0
 	///Sorry, no spider+corgi buttbabies.
 	var/animal_species
@@ -188,7 +179,7 @@ GLOBAL_VAR_INIT(farm_animals, FALSE)
 		return ..()
 	else
 		if(try_tame(O, user))
-			SEND_SIGNAL(src, COMSIG_PARENT_ATTACKBY, O, user, params) // for udder functionality
+			SEND_SIGNAL(src, COMSIG_ATOM_ATTACKBY, O, user, params) // for udder functionality
 			return TRUE
 	. = ..()
 
@@ -216,26 +207,28 @@ GLOBAL_VAR_INIT(farm_animals, FALSE)
 	tame = TRUE
 	if(user)
 		befriend(user)
+		record_round_statistic(STATS_ANIMALS_TAMED)
 		SEND_SIGNAL(user, COMSIG_ANIMAL_TAMED, src)
 	pet_passive = TRUE
 
 	if(ai_controller)
 		ai_controller.can_idle = FALSE
-		var/static/list/pet_commands = list(
-			/datum/pet_command/idle,
-			/datum/pet_command/free,
-			/datum/pet_command/good_boy,
-			/datum/pet_command/follow,
-			/datum/pet_command/attack,
-			/datum/pet_command/fetch,
-			/datum/pet_command/play_dead,
-			/datum/pet_command/protect_owner,
-			/datum/pet_command/aggressive,
-			/datum/pet_command/calm,
-		)
-		var/datum/component/obeys_commands/commands = GetComponent(/datum/component/obeys_commands)
-		if(!commands)
-			AddComponent(/datum/component/obeys_commands, pet_commands)
+
+		var/datum/ai_planning_subtree/pet_planning/subtree = locate() in ai_controller.planning_subtrees
+		if(subtree)
+			var/static/list/pet_commands = list(
+				/datum/pet_command/idle,
+				/datum/pet_command/free,
+				/datum/pet_command/good_boy,
+				/datum/pet_command/follow,
+				/datum/pet_command/attack,
+				/datum/pet_command/fetch,
+				/datum/pet_command/protect_owner,
+				/datum/pet_command/aggressive,
+				/datum/pet_command/calm,
+			)
+			if(!GetComponent(/datum/component/obeys_commands))
+				AddComponent(/datum/component/obeys_commands, pet_commands)
 
 	if(user)
 		owner = user
@@ -414,6 +407,7 @@ GLOBAL_VAR_INIT(farm_animals, FALSE)
 				if(rotstuff && istype(I,/obj/item/reagent_containers/food/snacks))
 					var/obj/item/reagent_containers/food/snacks/F = I
 					F.become_rotten()
+	SEND_SIGNAL(user, COMSIG_MOB_BUTCHERED, src)
 	gib()
 
 /mob/living/simple_animal/spawn_dust(just_ash = FALSE)
@@ -580,10 +574,10 @@ GLOBAL_VAR_INIT(farm_animals, FALSE)
 		var/atom/movable/screen/inventory/hand/H
 		H = hud_used.hand_slots["[hand_index]"]
 		if(H)
-			H.update_icon()
+			H.update_appearance()
 		H = hud_used.hand_slots["[oindex]"]
 		if(H)
-			H.update_icon()
+			H.update_appearance()
 	return TRUE
 
 /mob/living/simple_animal/put_in_hands(obj/item/I, del_on_fail = FALSE, merge_stacks = TRUE)
@@ -595,12 +589,10 @@ GLOBAL_VAR_INIT(farm_animals, FALSE)
 		var/obj/item/l_hand = get_item_for_held_index(1)
 		var/obj/item/r_hand = get_item_for_held_index(2)
 		if(r_hand)
-			r_hand.layer = ABOVE_HUD_LAYER
 			r_hand.plane = ABOVE_HUD_PLANE
 			r_hand.screen_loc = ui_hand_position(get_held_index_of_item(r_hand))
 			client.screen |= r_hand
 		if(l_hand)
-			l_hand.layer = ABOVE_HUD_LAYER
 			l_hand.plane = ABOVE_HUD_PLANE
 			l_hand.screen_loc = ui_hand_position(get_held_index_of_item(l_hand))
 			client.screen |= l_hand
@@ -632,7 +624,7 @@ GLOBAL_VAR_INIT(farm_animals, FALSE)
 			return
 	..()
 	M.adjust_experience(/datum/skill/misc/riding, M.STAINT, FALSE)
-	update_icon()
+	update_appearance()
 
 /mob/living/simple_animal/hostile/user_buckle_mob(mob/living/M, mob/user)
 	if(user != M)
@@ -663,7 +655,7 @@ GLOBAL_VAR_INIT(farm_animals, FALSE)
 		if(ssaddle)
 			playsound(src, 'sound/foley/saddlemount.ogg', 100, TRUE)
 	..()
-	update_icon()
+	update_appearance()
 
 /mob/living/simple_animal/hostile
 	var/do_footstep = FALSE
@@ -760,8 +752,8 @@ GLOBAL_VAR_INIT(farm_animals, FALSE)
 /mob/living/simple_animal/Life()
 	. = ..()
 	if(.)
+		food = max(food - 0.5, 0)
 		if(food > 0)
-			food--
 			pooprog++
 			if(pooprog >= 100)
 				pooprog = 0

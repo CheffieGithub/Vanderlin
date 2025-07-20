@@ -28,7 +28,6 @@
 	faction = list("abberant")
 	emote_hear = null
 	emote_see = null
-	turns_per_move = 6
 	speed = 5
 	see_in_dark = 9
 	move_to_delay = 12
@@ -62,9 +61,9 @@
 	dodgetime = 17
 	aggressive = 1
 
-
-
 	ai_controller = /datum/ai_controller/void_obelisk
+
+	del_on_death = TRUE
 
 	var/datum/action/cooldown/mob_cooldown/voidblast/beam
 
@@ -83,13 +82,10 @@
 	item_damage_type = "blunt"
 
 /mob/living/simple_animal/hostile/retaliate/voidstoneobelisk/death(gibbed)
-	..()
 	var/turf/deathspot = get_turf(src)
 	new /obj/item/natural/voidstone(deathspot)
 	new /obj/item/natural/artifact(deathspot)
-	update_icon()
-	sleep(1)
-	qdel(src)
+	return ..()
 
 /mob/living/simple_animal/hostile/retaliate/voidstoneobelisk/Destroy()
 	. = ..()

@@ -19,12 +19,12 @@
 
 /datum/component/udder/RegisterWithParent()
 	RegisterSignal(parent, COMSIG_PARENT_EXAMINE, PROC_REF(on_examine))
-	RegisterSignal(parent, COMSIG_PARENT_ATTACKBY, PROC_REF(on_attackby))
+	RegisterSignal(parent, COMSIG_ATOM_ATTACKBY, PROC_REF(on_attackby))
 
 /datum/component/udder/UnregisterFromParent()
 	QDEL_NULL(udder)
 	on_milk_callback = null
-	UnregisterSignal(parent, list(COMSIG_PARENT_EXAMINE, COMSIG_PARENT_ATTACKBY))
+	UnregisterSignal(parent, list(COMSIG_PARENT_EXAMINE, COMSIG_ATOM_ATTACKBY))
 
 ///signal called on parent being examined
 /datum/component/udder/proc/on_examine(datum/source, mob/user, list/examine_list)
@@ -39,9 +39,9 @@
 		if(0 to 10)
 			examine_list += span_notice("[parent]'s [udder.name] is dry.")
 		if(11 to 99)
-			examine_list += span_notice("[parent]'s [udder.name] can be milked if you have something to contain it.")
+			examine_list += span_notice("[parent]'s [udder.name] can be milked.")
 		if(100)
-			examine_list += span_notice("[parent]'s [udder.name] is round and full, and can be milked if you have something to contain it.")
+			examine_list += span_notice("[parent]'s [udder.name] is round and full.")
 
 ///signal called on parent being attacked with an item
 /datum/component/udder/proc/on_attackby(datum/source, obj/item/milking_tool, mob/user)
@@ -86,7 +86,7 @@
 	if(isnull(require_consume_type))
 		return
 	RegisterSignal(udder_mob, COMSIG_HOSTILE_ATTACKINGTARGET, PROC_REF(on_mob_consume))
-	RegisterSignal(udder_mob, COMSIG_PARENT_ATTACKBY, PROC_REF(on_mob_feed))
+	RegisterSignal(udder_mob, COMSIG_ATOM_ATTACKBY, PROC_REF(on_mob_feed))
 
 /obj/item/udder/proc/on_mob_consume(datum/source, atom/feed)
 	SIGNAL_HANDLER
@@ -110,12 +110,12 @@
 /obj/item/udder/Destroy()
 	. = ..()
 	STOP_PROCESSING(SSobj, src)
-	UnregisterSignal(udder_mob, list(COMSIG_HOSTILE_ATTACKINGTARGET, COMSIG_PARENT_ATTACKBY))
+	UnregisterSignal(udder_mob, list(COMSIG_HOSTILE_ATTACKINGTARGET, COMSIG_ATOM_ATTACKBY))
 	udder_mob = null
 	on_generate_callback = null
 
 /obj/item/udder/process(seconds_per_tick)
-	if(istype(udder_mob, /mob/living/simple_animal))
+	if(isanimal(udder_mob))
 		var/mob/living/simple_animal/simple_animal = udder_mob
 		if(simple_animal.food <= 0)
 			return

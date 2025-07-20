@@ -11,7 +11,6 @@
 	emote_hear = null
 	emote_see = null
 	speak_chance = 1
-	turns_per_move = 3
 	see_in_dark = 6
 	move_to_delay = 15
 	base_intents = list(/datum/intent/simple/elementalt2_unarmed)
@@ -49,21 +48,19 @@
 
 	ai_controller = /datum/ai_controller/behemoth
 
-
+	del_on_death = TRUE
 
 /mob/living/simple_animal/hostile/retaliate/elemental/behemoth/Initialize()
 	. = ..()
 	AddComponent(/datum/component/ai_aggro_system)
 
 /mob/living/simple_animal/hostile/retaliate/elemental/behemoth/death(gibbed)
-	..()
 	var/turf/deathspot = get_turf(src)
 	new /obj/item/natural/elementalfragment(deathspot)
 	new /obj/item/natural/elementalmote(deathspot)
 	new /obj/item/natural/elementalmote(deathspot)
-	update_icon()
 	spill_embedded_objects()
-	qdel(src)
+	return ..()
 
 /obj/effect/temp_visual/marker
 	icon = 'icons/effects/effects.dmi'

@@ -12,7 +12,6 @@
 	emote_hear = null
 	emote_see = null
 	speak_chance = 1
-	turns_per_move = 3
 	see_in_dark = 6
 	move_to_delay = 3
 	base_intents = list(/datum/intent/simple/bite)
@@ -52,7 +51,7 @@
 
 	ai_controller = /datum/ai_controller/sylph
 
-
+	del_on_death = TRUE
 
 /mob/living/simple_animal/hostile/retaliate/fae/sylph/Initialize()
 	. = ..()
@@ -66,7 +65,6 @@
 	speed = 6 //higher is slower
 
 /mob/living/simple_animal/hostile/retaliate/fae/sylph/death(gibbed)
-	..()
 	var/turf/deathspot = get_turf(src)
 	new /obj/item/natural/sylvanessence(deathspot)
 	new /obj/item/natural/fairydust(deathspot)
@@ -76,7 +74,5 @@
 	new /obj/item/natural/heartwoodcore(deathspot)
 	new /obj/item/natural/fairydust(deathspot)
 	new /obj/item/natural/fairydust(deathspot)
-
-	update_icon()
 	spill_embedded_objects()
-	qdel(src)
+	return ..()

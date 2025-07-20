@@ -14,7 +14,6 @@
 	emote_hear = null
 	emote_see = null
 	speak_chance = 1
-	turns_per_move = 3
 	see_in_dark = 6
 	move_to_delay = 10
 	base_intents = list(/datum/intent/simple/bite)
@@ -55,7 +54,7 @@
 
 	ai_controller = /datum/ai_controller/fiend
 
-
+	del_on_death = TRUE
 
 /mob/living/simple_animal/hostile/retaliate/infernal/fiend/Initialize()
 	. = ..()
@@ -63,7 +62,6 @@
 	AddComponent(/datum/component/ai_aggro_system)
 
 /mob/living/simple_animal/hostile/retaliate/infernal/fiend/death(gibbed)
-	..()
 	var/turf/deathspot = get_turf(src)
 	new /obj/item/natural/abyssalflame(deathspot)
 	new /obj/item/natural/moltencore(deathspot)
@@ -71,6 +69,5 @@
 	new /obj/item/natural/infernalash(deathspot)
 	new /obj/item/natural/infernalash(deathspot)
 	new /obj/item/natural/melded/t2(deathspot)
-	update_icon()
 	spill_embedded_objects()
-	qdel(src)
+	return ..()
