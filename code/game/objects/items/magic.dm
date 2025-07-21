@@ -60,7 +60,7 @@
 		if(to_scry.stat || is_blind(to_scry))
 			return
 		if(to_scry.STAPER >= 15)
-			var/name = to_scry.mind?.known_as(user.mind)
+			var/name = to_scry.mind?.known_as(user)
 			if(name)
 				to_chat(to_scry, span_warning("I can clearly see the face of [name] staring at me!."))
 				return
@@ -125,7 +125,7 @@
 		if(to_scry.stat || is_blind(to_scry))
 			return
 		if(to_scry.STAPER >= 15)
-			var/name = to_scry.mind?.known_as(user.mind)
+			var/name = to_scry.mind?.known_as(user)
 			if(name)
 				to_chat(to_scry, span_warning("I can clearly see the face of [name] staring at me!."))
 				return

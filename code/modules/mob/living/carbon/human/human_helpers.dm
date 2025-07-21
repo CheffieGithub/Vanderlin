@@ -33,26 +33,33 @@
 
 //repurposed proc. Now it combines get_id_name() and get_face_name() to determine a mob's name variable. Made into a separate proc as it'll be useful elsewhere
 /mob/living/carbon/human/get_visible_name()
-	var/face_name = get_face_name("")
-	var/id_name = get_id_name("")
-	if(name_override)
-		return name_override
-	if(face_name)
-		if(id_name && (id_name != face_name))
-			return "Unknown [(gender == FEMALE) ? "Woman" : "Man"]"
+	var/face_name = get_face_name()
+	if(face_name && face_name != "Unknown")
 		return face_name
-	if(id_name)
-		return id_name
-	return "Unknown"
+	return "Unknown [(gender == FEMALE) ? "Woman" : "Man"]"
+
+/// Get what the viewer knows this mob as
+/mob/living/carbon/human/get_known_name(mob/viewer)
+	if(!viewer)
+		return
+
+	if(isobserver(viewer) || viewer == src)
+		return real_name
+
+	var/datum/relationship/relation = viewer.mind?.get_relationship(src)
+	if(get_face_name() == "Unknown" || !relation?.name)
+		return "Unknown [(gender == FEMALE) ? "Woman" : "Man"]"
+
+	return relation.name
 
 //Returns "Unknown" if facially disfigured and real_name if not. Useful for setting name when Fluacided or when updating a human's name variable
-/mob/living/carbon/human/proc/get_face_name(if_no_face="Unknown")
-	if( wear_mask && (wear_mask.flags_inv&HIDEFACE) )	//Wearing a mask which hides our face, use id-name if possible
+/mob/living/carbon/human/proc/get_face_name(if_no_face = "Unknown")
+	if(wear_mask && (wear_mask.flags_inv & HIDEFACE)) //Wearing a mask which hides our face
 		return if_no_face
-	if( head && (head.flags_inv&HIDEFACE) )
-		return if_no_face		//Likewise for hats
+	if(head && (head.flags_inv & HIDEFACE))
+		return if_no_face //Likewise for hats
 	var/obj/item/bodypart/O = get_bodypart(BODY_ZONE_HEAD)
-	if( !O || (HAS_TRAIT(src, TRAIT_DISFIGURED)) || !real_name || O.skeletonized )	//disfigured. use id-name if possible
+	if(!O || (HAS_TRAIT(src, TRAIT_DISFIGURED)) || !real_name || O.skeletonized)
 		return if_no_face
 	return real_name
 

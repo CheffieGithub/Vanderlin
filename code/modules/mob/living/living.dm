@@ -1510,6 +1510,9 @@
 /mob/living/proc/get_visible_name()
 	return name
 
+/mob/living/proc/get_known_name()
+	return name
+
 /mob/living/float(on)
 	if(throwing)
 		return

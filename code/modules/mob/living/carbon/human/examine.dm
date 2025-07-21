@@ -29,16 +29,17 @@
 		user.add_stress(/datum/stressevent/saw_old_party)
 
 /mob/living/carbon/human/examine(mob/user)
-	//this is very slightly better than it was because you can use it more places. still can't do \his[src] though.
+	var/datum/relationship/user_relation = user.mind?.get_relationship(src)
 	var/ignore_pronouns
 	if(user != src)
-		ignore_pronouns = !user.mind?.do_i_know(null, real_name)
+		// User knows src and their pronouns
+		ignore_pronouns = !user_relation?.pronouns
+	//this is very slightly better than it was because you can use it more places. still can't do \his[src] though.
 	var/t_He = p_they(TRUE, ignore_pronouns = ignore_pronouns)
 	var/t_his = p_their(ignore_pronouns = ignore_pronouns)
-//	var/t_him = p_them()
 	var/t_has = p_have(ignore_pronouns = ignore_pronouns)
 	var/t_is = p_are(ignore_pronouns = ignore_pronouns)
-	var/obscure_name
+	var/obscure_name = FALSE
 	var/race_name = dna?.species.name
 	var/self_inspect = FALSE
 
@@ -51,11 +52,12 @@
 		m2 = "my"
 		m3 = "I have"
 
-	if(name == "Unknown" || name == "Unknown Man" || name == "Unknown Woman")
-		obscure_name = TRUE
+	if(!isobserver(user) && !user == src)
+		if(name == "Unknown" || name == "Unknown Man" || name == "Unknown Woman")
+			obscure_name = TRUE
 
-	if(isobserver(user))
-		obscure_name = FALSE
+		if(!user_relation?.name)
+			obscure_name = TRUE
 
 	/// header
 	. += span_info("ø ------------ ø")
@@ -66,9 +68,7 @@
 		. += statement_of_identity
 	else
 		on_examine_face(user)
-		var/used_name = name
-		if(isobserver(user))
-			used_name = real_name
+		var/used_name = get_known_name(user)
 		if(user == src)
 			self_inspect = TRUE
 		var/used_title = get_role_title()
