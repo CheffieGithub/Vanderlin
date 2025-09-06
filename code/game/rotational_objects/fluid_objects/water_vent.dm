@@ -88,7 +88,7 @@
 		if(!istype(pipe_turf, /turf/open/water) && !ispath(reagent, /datum/reagent/water))
 			var/datum/reagent/add_reagent = reagent
 			var/send_pressure = taking_pressure
-			if(istype(reagent, /datum/reagent/steam))
+			if(ispath(reagent, /datum/reagent/steam))
 				add_reagent = /datum/reagent/water
 				send_pressure *= 0.25
 				send_pressure = round(send_pressure, 1)
