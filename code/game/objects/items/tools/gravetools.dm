@@ -39,10 +39,6 @@
 	var/turf/target_turf = get_turf(A)
 	playsound(A,'sound/items/dig_shovel.ogg', 100, TRUE)
 	qdel(A)
-	for(var/dir in GLOB.cardinals)
-		var/turf/card = get_step(target_turf, dir)
-		if(card.snow)
-			card.snow.update_corners()
 	user.changeNext_move(CLICK_CD_MELEE)
 	return TRUE
 

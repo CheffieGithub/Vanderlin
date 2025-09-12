@@ -479,10 +479,9 @@
 	else if(turf_temp <= T0C)
 		breath_effect_prob = 15
 
-	var/turf/snow_turf = get_turf(src)
 	if(snow_shiver > world.time)
 		breath_effect_prob += 50
-	else if(snow_turf.snow)
+	else if(locate(/obj/structure/snow) in get_turf(src))
 		breath_effect_prob += 50
 
 	if(prob(breath_effect_prob))
@@ -490,8 +489,6 @@
 		if(is_mouth_covered())
 			return
 		emit_breath_particle(/particles/fog/breath)
-
-	return
 
 /mob/living/proc/emit_breath_particle(particle_type)
 	ASSERT(ispath(particle_type, /particles))

@@ -1,6 +1,3 @@
-/turf/open
-	var/explored_by_workers = FALSE
-
 /datum/idle_tendancies/dynamic/perform_idle(mob/camera/strategy_controller/master, mob/living/worker)
 	var/datum/worker_mind/mind = worker.controller_mind
 

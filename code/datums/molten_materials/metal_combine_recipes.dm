@@ -93,7 +93,7 @@ GLOBAL_LIST_INIT(molten_recipes, list())
 		var/count = materials_required[path]
 		html += "[count] parts Molten [initial(path.name)]<br>"
 	html += "<br>"
-	html += "Heated to: [temperature_required - 273.15] Celcius<br>"
+	html += "Heated to: [temperature_required - T0C] Celcius<br>"
 
 	html += {"
 		</div>

@@ -340,44 +340,44 @@
 
 /obj/structure/table/wood/fancy
 	name = "fancy table"
-	icon = MAP_SWITCH('icons/obj/smooth_structures/fancy_table.dmi', 'icons/obj/structures.dmi')
+	icon = MAP_SWITCH('icons/obj/smooth_structures/tables/fancy_table.dmi', 'icons/obj/structures.dmi')
 	icon_state = "fancy_table"
 	smoothing_flags = SMOOTH_BITMASK | SMOOTH_OBJ
 
 /obj/structure/table/wood/fancy/black
-	icon = MAP_SWITCH('icons/obj/smooth_structures/fancy_table_black.dmi', 'icons/obj/structures.dmi')
+	icon = MAP_SWITCH('icons/obj/smooth_structures/tables/fancy_table_black.dmi', 'icons/obj/structures.dmi')
 	icon_state = "fancy_table_black"
 
 /obj/structure/table/wood/fancy/blue
-	icon = MAP_SWITCH('icons/obj/smooth_structures/fancy_table_blue.dmi', 'icons/obj/structures.dmi')
+	icon = MAP_SWITCH('icons/obj/smooth_structures/tables/fancy_table_blue.dmi', 'icons/obj/structures.dmi')
 	icon_state = "fancy_table_blue"
 
 /obj/structure/table/wood/fancy/cyan
-	icon = MAP_SWITCH('icons/obj/smooth_structures/fancy_table_cyan.dmi', 'icons/obj/structures.dmi')
+	icon = MAP_SWITCH('icons/obj/smooth_structures/tables/fancy_table_cyan.dmi', 'icons/obj/structures.dmi')
 	icon_state = "fancy_table_cyan"
 
 /obj/structure/table/wood/fancy/green
-	icon = MAP_SWITCH('icons/obj/smooth_structures/fancy_table_green.dmi', 'icons/obj/structures.dmi')
+	icon = MAP_SWITCH('icons/obj/smooth_structures/tables/fancy_table_green.dmi', 'icons/obj/structures.dmi')
 	icon_state = "fancy_table_green"
 
 /obj/structure/table/wood/fancy/orange
-	icon = MAP_SWITCH('icons/obj/smooth_structures/fancy_table_orange.dmi', 'icons/obj/structures.dmi')
+	icon = MAP_SWITCH('icons/obj/smooth_structures/tables/fancy_table_orange.dmi', 'icons/obj/structures.dmi')
 	icon_state = "fancy_table_orange"
 
 /obj/structure/table/wood/fancy/purple
-	icon = MAP_SWITCH('icons/obj/smooth_structures/fancy_table_purple.dmi', 'icons/obj/structures.dmi')
+	icon = MAP_SWITCH('icons/obj/smooth_structures/tables/fancy_table_purple.dmi', 'icons/obj/structures.dmi')
 	icon_state = "fancy_table_purple"
 
 /obj/structure/table/wood/fancy/red
-	icon = MAP_SWITCH('icons/obj/smooth_structures/fancy_table_red.dmi', 'icons/obj/structures.dmi')
+	icon = MAP_SWITCH('icons/obj/smooth_structures/tables/fancy_table_red.dmi', 'icons/obj/structures.dmi')
 	icon_state = "fancy_table_red"
 
 /obj/structure/table/wood/fancy/royalblack
-	icon = MAP_SWITCH('icons/obj/smooth_structures/fancy_table_royalblack.dmi', 'icons/obj/structures.dmi')
+	icon = MAP_SWITCH('icons/obj/smooth_structures/tables/fancy_table_royalblack.dmi', 'icons/obj/structures.dmi')
 	icon_state = "fancy_table_royalblack"
 
 /obj/structure/table/wood/fancy/royalblue
-	icon = MAP_SWITCH('icons/obj/smooth_structures/fancy_table_royalblue.dmi', 'icons/obj/structures.dmi')
+	icon = MAP_SWITCH('icons/obj/smooth_structures/tables/fancy_table_royalblue.dmi', 'icons/obj/structures.dmi')
 	icon_state = "fancy_table_royalblue"
 
 /*	..................   More tables   ................... */

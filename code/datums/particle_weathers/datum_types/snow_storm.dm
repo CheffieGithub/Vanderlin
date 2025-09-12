@@ -63,13 +63,19 @@
 
 /datum/weather_effect/snow
 	name = "snow effect"
-	probability = 40
+	probability = 10
+
+/datum/weather_effect/snow/can_effect(turf/target_turf)
+	if(isopenspace(target_turf) || istype(target_turf, /turf/open/water)) // Ice perhaps
+		return FALSE
+	return TRUE
 
 /datum/weather_effect/snow/effect_affect(turf/target_turf)
-	if(!target_turf.snow)
+	var/obj/structure/snow/snow = locate() in target_turf
+	if(!snow)
 		new /obj/structure/snow(target_turf, 1)
 	else
-		target_turf.snow.weathered(src)
+		snow.weathered(src)
 
 //Makes you a lot little chilly
 /mob/living/var/snow_shiver
@@ -77,13 +83,6 @@
 /datum/particle_weather/snow_storm/weather_act(mob/living/L)
 	L.adjust_bodytemperature(-rand(5,15))
 	L.snow_shiver = world.time + 10 SECONDS
-
-
-/datum/weather_effect/snow_storm/effect_affect(turf/target_turf)
-	if(!target_turf.snow)
-		new /obj/structure/snow(target_turf, 1)
-	else
-		target_turf.snow.weathered(src)
 
 /particles/fog
 	icon = 'icons/effects/particles/smoke.dmi'
@@ -98,12 +97,13 @@
 	spin = 2
 	color = "#fcffff77"
 
-/turf
-	var/obj/structure/snow/snow
-
 /turf/proc/apply_weather_effect(datum/weather_effect/effect)
 	SIGNAL_HANDLER
+
 	if(!effect)
+		return
+
+	if(turf_flags & TURF_WEATHER_PROOF)
 		return
 
 	if(!(turf_flags & TURF_EFFECT_AFFECTABLE))
@@ -126,7 +126,6 @@
 	layer = TABLE_LAYER - 0.1
 	var/bleed_layer = 0
 	var/progression = 0
-	var/turf/snowed_turf
 	var/list/snows_connections = list(list("0", "0", "0", "0"), list("0", "0", "0", "0"), list("0", "0", "0", "0"))
 	var/list/diged = list("2" = 0, "1" = 0, "8" = 0, "4" = 0)
 
@@ -148,20 +147,6 @@
 /obj/structure/snow/Destroy(force)
 	update_visuals_effects(src, FALSE)
 
-	for(var/atom/movable/movable in get_turf(src))
-		if(movable.get_filter("mob_moving_effect_mask"))
-			animate(movable.get_filter("mob_moving_effect_mask"), y = -32, time = 0)
-			if(ismob(movable))
-				movable:update_vision_cone()
-			for(var/mob/living/carbon/human/human in view(movable, 7))
-				human.update_vision_cone()
-
-	STOP_PROCESSING(SSslowobj, src)
-	snowed_turf.snow = null
-	snowed_turf = null
-
-	. = ..()
-
 	for(var/obj/structure/snow/bordered_snow in orange(get_turf(src), 1))
 		if(!bordered_snow)
 			continue
@@ -170,6 +155,9 @@
 		bordered_snow.update_corners(ignored = src)
 		bordered_snow.update_appearance(UPDATE_OVERLAYS)
 
+	STOP_PROCESSING(SSslowobj, src)
+
+	return ..()
 
 /obj/structure/snow/process(delta_time)
 	if(!SSParticleWeather.runningWeather)
@@ -245,11 +233,6 @@
 	var/turf/turf = get_turf(src)
 	if(!turf)
 		return
-	if(turf != snowed_turf)
-		if(snowed_turf)
-			snowed_turf.snow = null
-		snowed_turf = turf
-		snowed_turf.snow = src
 
 	for(var/obj/structure/snow/bordered_snow in orange(src, 1))
 		if(!bordered_snow)
@@ -302,21 +285,21 @@
 /obj/structure/snow/proc/weathered(datum/weather_effect/effect)
 	if(progression < bleed_layer * 32)
 		progression++
-	else
-		if(bleed_layer >= 3)
-			for(var/direction in GLOB.alldirs)
-				var/turf/turf = get_step(loc, direction)
-				if(!turf.snow)
-					turf.apply_weather_effect(effect)
-					break
-
-				else if(turf.snow && turf.snow.bleed_layer != 3)
-					turf.snow.weathered(effect)
-					break
-		else
-			changing_layer(min(bleed_layer + 1, MAX_LAYER_SNOW_LEVELS))
-
+		return
+	if(bleed_layer < 3)
+		changing_layer(min(bleed_layer + 1, MAX_LAYER_SNOW_LEVELS))
 		progression = 0
+		return
+	for(var/direction in GLOB.alldirs)
+		var/turf/turf = get_step(loc, direction)
+		var/obj/structure/snow/snow = locate() in turf
+		if(!snow)
+			turf.apply_weather_effect(effect)
+			break
+
+		else if(snow && snow.bleed_layer != 3)
+			snow.weathered(effect)
+			break
 
 /obj/structure/snow/proc/changing_layer(new_layer)
 	if(isnull(new_layer) || new_layer == bleed_layer)

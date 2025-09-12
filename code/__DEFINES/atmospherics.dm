@@ -11,6 +11,6 @@
 #define CALCULATE_ADJACENT_TURFS(T) SSadjacent_air.queue[T] = 1
 
 /// 0degC
-#define T0C						273.15
+#define T0C 273.15
 /// 20degC
-#define T20C					293.15
+#define T20C 293.15

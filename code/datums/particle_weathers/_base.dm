@@ -360,8 +360,11 @@
 
 /datum/weather_effect
 	var/name = "effect"
+	/// Probability of the effect happening every weather SS fire
 	var/probability = 0
-	var/datum/particle_weather/initiator_ref
+
+/datum/weather_effect/proc/can_effect(turf/target_turf)
+	return TRUE
 
 /datum/weather_effect/proc/effect_affect(turf/target_turf)
-	return FALSE
+	return

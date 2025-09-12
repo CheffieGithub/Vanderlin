@@ -1,31 +1,30 @@
 /turf/open
 	plane = FLOOR_PLANE
+	appearance_flags = LONG_GLIDE | TILE_BOUND
 	hover_color = "#6b3f3f"
-	var/slowdown = 0 //negative for faster, positive for slower
-	var/postdig_icon_change = FALSE
-	var/postdig_icon
-	var/wet
-	var/footstep = null
-	var/barefootstep = null
-	var/clawfootstep = null
-	var/heavyfootstep = null
-	var/footstepstealth = FALSE
+	nomouseover = TRUE
+	turf_flags = TURF_EFFECT_AFFECTABLE
 	baseturfs = /turf/open/transparent/openspace
-
 	smoothing_groups = SMOOTH_GROUP_OPEN
+	/// Muliplicative modifier smaller is less slowdown
+	var/slowdown = 0
+	/// Regular footsteps with shoes
+	var/footstep = null
+	/// Footsteps barefoot
+	var/barefootstep = null
+	/// Clawed footsteps
+	var/clawfootstep = null
+	/// Heavy, louder footsteps
+	var/heavyfootstep = null
+	/// Sneaking footsteps
+	var/footstepstealth = FALSE
+	/// Explored by rts workers (shouldn't this be tracked another way)
+	var/explored_by_workers = FALSE
 
 	var/obj/effect/hotspot/active_hotspot
 
-	nomouseover = TRUE
-
-	appearance_flags = LONG_GLIDE | TILE_BOUND
 	/// Pollution of this turf
 	var/datum/pollution/pollution
-
-/turf/open/Initialize(mapload)
-	. = ..()
-	if(wet)
-		AddComponent(/datum/component/wet_floor, wet, INFINITY, 0, INFINITY, TRUE)
 
 /turf/proc/get_slowdown(mob/user)
 	return 0
