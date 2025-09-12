@@ -1,0 +1,6 @@
+output_name = "snow_3"
+template = "snow_32x32.toml"
+
+[cut_pos]
+x = 16
+y = 7
