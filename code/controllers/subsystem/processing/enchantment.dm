@@ -18,13 +18,13 @@ PROCESSING_SUBSYSTEM_DEF(enchantment)
 	return TRUE
 
 /datum/controller/subsystem/processing/enchantment/proc/has_any_enchantment(atom/item)
-	for(var/enchantment as anything in enchantments_to_list)
+	for(var/enchantment in enchantments_to_list)
 		if(has_enchantment(item, enchantment))
 			return TRUE
 	return FALSE
 
 /datum/controller/subsystem/processing/enchantment/proc/remove_enchantment(atom/item)
-	for(var/enchantment as anything in enchantments_to_list)
+	for(var/enchantment in enchantments_to_list)
 		if(has_enchantment(item, enchantment))
 			var/datum/enchantment/real = enchantments_to_list[enchantment]
 			real.remove_item(WEAKREF(item))

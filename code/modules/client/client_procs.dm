@@ -1388,7 +1388,7 @@ GLOBAL_LIST_EMPTY(respawncounts)
 
 /client/proc/preload_music()
 	if(SSsounds.initialized == TRUE)
-		for(var/sound_path as anything in SSsounds.all_music_sounds)
+		for(var/sound_path in SSsounds.all_music_sounds)
 			src << load_resource(sound_path, -1)
 
 #undef LIMITER_SIZE

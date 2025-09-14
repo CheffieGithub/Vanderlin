@@ -62,7 +62,7 @@
 	var/return_value = FALSE
 	var/modified_action_time = get_action_time(attacking_item, user)
 
-	for(var/requirement as anything in requirements)
+	for(var/requirement in requirements)
 		if(islist(requirement))
 			for(var/listed_item in requirement)
 				if(!istype(attacking_item, listed_item))

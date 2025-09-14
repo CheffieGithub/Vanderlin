@@ -1135,7 +1135,7 @@ GLOBAL_LIST_INIT(name_adjustments, list())
 						to_chat(user, span_warning("Your character will now vocalize with a [lowertext(voice_type)] affect."))
 				if("faith")
 					var/list/faiths_named = list()
-					for(var/path as anything in GLOB.preference_faiths)
+					for(var/path in GLOB.preference_faiths)
 						var/datum/faith/faith = GLOB.faithlist[path]
 						if(!faith.name)
 							continue
@@ -1149,7 +1149,7 @@ GLOBAL_LIST_INIT(name_adjustments, list())
 
 				if("patron")
 					var/list/patrons_named = list()
-					for(var/path as anything in GLOB.patrons_by_faith[selected_patron?.associated_faith || initial(default_patron.associated_faith)])
+					for(var/path in GLOB.patrons_by_faith[selected_patron?.associated_faith || initial(default_patron.associated_faith)])
 						var/datum/patron/patron = GLOB.preference_patrons[path]
 						if(!patron.name)
 							continue
@@ -1673,7 +1673,7 @@ GLOBAL_LIST_INIT(name_adjustments, list())
 		for(var/datum/role_ban_instance/ban as anything in bans.bans)
 			if(!ban.curses)
 				continue
-			for(var/curse_name as anything in ban.curses)
+			for(var/curse_name in ban.curses)
 				var/datum/curse/curse = GLOB.curse_names[curse_name]
 				character.add_curse(curse.type)
 

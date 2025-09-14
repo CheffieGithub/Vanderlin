@@ -192,7 +192,7 @@ GLOBAL_LIST_INIT(container_craft_to_singleton, init_container_crafts())
 		var/list/found_optional_reagents = list()
 
 		if(length(reagent_requirements))
-			for(var/reagent as anything in reagent_requirements)
+			for(var/reagent in reagent_requirements)
 				if(!crafter.reagents.has_reagent(reagent, reagent_requirements[reagent], check_subtypes = subtype_reagents_allowed))
 					return FALSE
 				passed_reagents |= reagent

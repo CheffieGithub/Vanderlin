@@ -33,7 +33,7 @@ SUBSYSTEM_DEF(housing)
 	if(fexists("data/property_owners.json"))
 		var/list/unlocated_properties = properties.Copy()
 		var/list/owners = json_decode(file2text("data/property_owners.json"))
-		for(var/owner as anything in owners)
+		for(var/owner in owners)
 			var/property_id = owners[owner]
 			var/obj/effect/landmark/house_spot/spot
 			for(var/obj/effect/landmark/house_spot/potential as anything in unlocated_properties)

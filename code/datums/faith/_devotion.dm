@@ -40,7 +40,7 @@
 		START_PROCESSING(SSprocessing, src)
 	holder_mob = holder
 	holder_mob.cleric = src
-	for(var/trait as anything in traits)
+	for(var/trait in traits)
 		ADD_TRAIT(holder_mob, trait, DEVOTION_TRAIT)
 	for(var/datum/action/miracle as anything in miracles_extra)
 		grant_miracle(miracle)
@@ -52,7 +52,7 @@
 		holder_mob.cleric = null
 		holder_mob.remove_spells(source = src)
 		holder_mob.verbs -= list(/mob/living/carbon/human/proc/devotionreport, /mob/living/carbon/human/proc/clericpray)
-		for(var/trait as anything in traits)
+		for(var/trait in traits)
 			REMOVE_TRAIT(holder_mob, trait, DEVOTION_TRAIT)
 	holder_mob = null
 

@@ -153,6 +153,20 @@ if $grep -i 'var/list/static/.*' $code_files; then
 	st=1
 fi;
 
+part "as anything on typeless loops"
+if $grep 'var/[^/]+ as anything' $code_files; then
+    echo
+    echo -e "${RED}ERROR: 'as anything' used in a typeless for loop. This doesn't do anything and should be removed.${NC}"
+    st=1
+fi;
+
+part "as anything on internal functions"
+if $grep 'var\/(turf|mob|obj|atom\/movable).+ as anything in o?(view|range|hearers)\(' $code_files; then
+    echo
+    echo -e "${RED}ERROR: 'as anything' typed for loop over an internal function. These functions have some internal optimization that relies on the loop not having 'as anything' in it.${NC}"
+    st=1
+fi;
+
 # Disabled because I can't be assed to care about this, but it might be a nice change in the future.
 # part "ensure proper lowertext usage"
 # # lowertext() is a BYOND-level proc, so it can be used in any sort of code... including the TGS DMAPI which we don't manage in this repository.

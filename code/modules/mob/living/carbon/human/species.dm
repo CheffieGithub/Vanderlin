@@ -426,7 +426,7 @@ GLOBAL_LIST_EMPTY(patreon_races)
 	return TRUE
 
 /proc/generate_selectable_species()
-	for(var/I as anything in subtypesof(/datum/species))
+	for(var/I in subtypesof(/datum/species))
 		var/datum/species/S = new I
 		if(!S.check_roundstart_eligible())
 			continue
@@ -688,7 +688,7 @@ GLOBAL_LIST_EMPTY(patreon_races)
 	/// Check if we have any customizer entries that don't match.
 	for(var/datum/customizer_entry/entry as anything in customizer_entries)
 		var/validated = FALSE
-		for(var/customizer_type as anything in customizers)
+		for(var/customizer_type in customizers)
 			if(customizer_type != entry.customizer_type)
 				continue
 			var/datum/customizer/customizer = CUSTOMIZER(customizer_type)
@@ -704,7 +704,7 @@ GLOBAL_LIST_EMPTY(patreon_races)
 			customizer_entries -= entry
 
 	/// Check if we have any missing customizer entries
-	for(var/customizer_type as anything in customizers)
+	for(var/customizer_type in customizers)
 		var/found = FALSE
 		for(var/datum/customizer_entry/entry as anything in customizer_entries)
 			if(entry.customizer_type != customizer_type)
@@ -755,18 +755,18 @@ GLOBAL_LIST_EMPTY(patreon_races)
 			else	//Entries in the list should only ever be items or null, so if it's not an item, we can assume it's an empty hand
 				C.put_in_hands(new mutanthands())
 
-	for(var/trait as anything in inherent_traits)
+	for(var/trait in inherent_traits)
 		ADD_TRAIT(C, trait, SPECIES_TRAIT)
 
 	if(LAZYLEN(inherent_traits_f) && C.gender == FEMALE)
-		for(var/trait as anything in inherent_traits_f)
+		for(var/trait in inherent_traits_f)
 			ADD_TRAIT(C, trait, SPECIES_TRAIT)
 
 	if(LAZYLEN(inherent_traits_m) && C.gender == MALE)
-		for(var/trait as anything in inherent_traits_m)
+		for(var/trait in inherent_traits_m)
 			ADD_TRAIT(C, trait, SPECIES_TRAIT)
 
-	for(var/skill as anything in inherent_skills)
+	for(var/skill in inherent_skills)
 		C.adjust_skillrank(skill, inherent_skills[skill], TRUE)
 
 	for(var/component in components_to_add)
@@ -807,7 +807,7 @@ GLOBAL_LIST_EMPTY(patreon_races)
 	for(var/X in inherent_traits)
 		REMOVE_TRAIT(C, X, SPECIES_TRAIT)
 
-	for(var/skill as anything in inherent_skills)
+	for(var/skill in inherent_skills)
 		C.adjust_skillrank(skill, -inherent_skills[skill], TRUE)
 
 	if(inherent_factions)

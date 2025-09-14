@@ -229,7 +229,7 @@ And it also helps for the character set panel
 	H.AddComponent(/datum/component/vampire_disguise)
 
 /datum/clan/proc/disable_covens(mob/living/carbon/human/vampire)
-	for(var/coven as anything in vampire.covens)
+	for(var/coven in vampire.covens)
 		var/datum/coven/real_coven = vampire.covens[coven]
 		if(real_coven?.coven_action?.active)
 			real_coven.current_power?.deactivate()
