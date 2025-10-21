@@ -73,6 +73,7 @@
 #include "focus_only_tests.dm"
 #include "map_landmarks.dm"
 #include "mapping.dm"
+#include "outfit_stats_change.dm"
 #include "projectiles.dm"
 #include "reagent_id_typos.dm"
 #include "reagent_names.dm"
