@@ -41,6 +41,12 @@
 		"Cancel" = "cancel",
 	)
 
+/datum/action/cooldown/spell/undirected/call_bird/inquisitor
+	destinations = list(
+		"Holy Bishop of the Inquisition" = "the Holy Bishop of the Inquisition",
+		"Cancel" = "cancel",
+	)
+
 /datum/action/cooldown/spell/undirected/call_bird/Destroy(force)
 	owned_bird?.source_spell = null
 	owned_bird = null
@@ -125,8 +131,8 @@
 		icon_state = "[icon_state]l"
 
 /obj/item/reagent_containers/food/snacks/messenger_bird/Destroy()
-    source_spell = null
-    return ..()
+	source_spell = null
+	return ..()
 
 /obj/item/reagent_containers/food/snacks/messenger_bird/attack_hand(mob/user)
 	if(isliving(user))
@@ -178,9 +184,9 @@
 
 						to_chat(user, span_notice("You tell the bird to go to [spell.destinations[dest]]"))
 						var/strip_info = STRIP_HTML_FULL(replacetext(P.info, "<br>", "\n"), MAX_MESSAGE_LEN)
+						log_game("LETTER SENT: from [key_name(user)] to [spell.destinations[dest]]:\n[strip_info]", LOG_GAME)
 						strip_info = replacetext(strip_info, "\n", "<br>")
 						message_admins("[noble_info] [ADMIN_BIRD_LETTER(user)] [ADMIN_FLW(user)] writes to [spell.destinations[dest]]: <br>[strip_info]")
-						user.log_message("Sent a message with a bird to [spell.destinations[dest]]: [strip_info]", LOG_GAME)
 						fly_away()
 						qdel(P)
 

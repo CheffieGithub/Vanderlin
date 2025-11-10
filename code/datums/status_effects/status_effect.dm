@@ -26,6 +26,7 @@
 	var/alert_type = /atom/movable/screen/alert/status_effect
 	/// The alert itself, if it exists
 	var/atom/movable/screen/alert/status_effect/linked_alert = null
+	/// Assoc list of statkey to value
 	var/list/effectedstats = list()
 
 /datum/status_effect/New(list/arguments)
@@ -60,7 +61,6 @@
 		LAZYREMOVE(owner.status_effects, src)
 		on_remove()
 		owner = null
-	effectedstats = list()
 	return ..()
 
 /datum/status_effect/process()
@@ -81,10 +81,13 @@
 
 	for(var/stat in effectedstats)
 		owner.set_stat_modifier("[id]", stat, effectedstats[stat])
+
 	return TRUE
 
-/// Called every tick.
-/datum/status_effect/proc/tick()
+/// Called before being fully removed (before on_remove)
+/// Returning FALSE will cancel removal
+/datum/status_effect/proc/before_remove()
+	return TRUE
 
 /// Called whenever the buff expires or is removed; do note that at the point this is called, it is out of the owner's status_effects but owner is not yet null
 /datum/status_effect/proc/on_remove()
@@ -94,16 +97,11 @@
 
 /// Called instead of on_remove when a status effect is replaced by itself or when a status effect with on_remove_on_mob_delete = FALSE has its mob deleted
 /datum/status_effect/proc/be_replaced()
-	owner.remove_stat_modifier("[id]")
-	owner.clear_alert(id)
-	LAZYREMOVE(owner.status_effects, src)
-	owner = null
 	qdel(src)
 
-/// Called before being fully removed (before on_remove)
-/// Returning FALSE will cancel removal
-/datum/status_effect/proc/before_remove()
-	return TRUE
+/// Called every tick.
+/datum/status_effect/proc/tick()
+	return
 
 /datum/status_effect/proc/refresh(mob/living/new_owner, duration_override, ...)
 	if(initial_duration == -1)
@@ -177,11 +175,13 @@
 				// Refresh the existing type, then early return
 				if(STATUS_EFFECT_REFRESH)
 					existing_effect.refresh(arglist(arguments))
+					SEND_SIGNAL(src, COMSIG_MOB_APPLIED_STATUS_EFFECT, existing_effect)
 					return
 
 	// Create the status effect with our mob + our arguments
 	var/datum/status_effect/new_instance = new new_effect(arguments)
 	if(!QDELETED(new_instance))
+		SEND_SIGNAL(src, COMSIG_MOB_APPLIED_STATUS_EFFECT, new_instance)
 		return new_instance
 
 /**

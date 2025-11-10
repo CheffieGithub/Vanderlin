@@ -6,13 +6,14 @@
 	department_flag = OUTSIDERS
 	job_flags = (JOB_EQUIP_RANK | JOB_NEW_PLAYER_JOINABLE | JOB_SHOW_IN_CREDITS)
 	display_order = JDO_BANDIT
-	faction = FACTION_TOWN
+	faction = FACTION_NEUTRAL
 	total_positions = 6
 	spawn_positions = 4
 	min_pq = 4
 	antag_job = TRUE
 
 	advclass_cat_rolls = list(CTAG_BANDIT = 20)
+	blacklisted_species = list(SPEC_ID_HALFLING)
 
 	is_foreigner = TRUE
 	job_reopens_slots_on_death = FALSE //no endless stream of bandits, unless the migration waves deem it so

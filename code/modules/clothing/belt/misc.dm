@@ -219,6 +219,7 @@
 	name = "cloth pouch"
 	desc = "Usually used for holding small amount of coins."
 	icon_state = "clothpouch"
+	salvage_result = /obj/item/natural/cloth
 	component_type = /datum/component/storage/concrete/grid/coin_pouch/cloth
 
 //Poison darts pouch
@@ -245,12 +246,12 @@
 	alternate_worn_layer = UNDER_CLOAK_LAYER
 	component_type = /datum/component/storage/concrete/grid/satchel
 
-
 /obj/item/storage/backpack/satchel/cloth
 	name = "cloth knapsack"
 	desc = "A rudimentary cloth sack strapped to the back for storing small amounts of items."
 	icon_state = "clothbackpack"
 	item_state = "clothbackpack"
+	salvage_result = /obj/item/natural/cloth
 	component_type = /datum/component/storage/concrete/grid/satchel/cloth
 
 /obj/item/storage/backpack/satchel/heartfelt
@@ -258,6 +259,12 @@
 		/obj/item/natural/feather,
 		/obj/item/paper/heartfelt,
 	)
+
+/obj/item/storage/backpack/satchel/otavan
+	name = "grenzelhoftian leather satchel"
+	desc = "A made to last leather bag from the Psydonian heart of Grenzelhoft. It's Grenzelhoft's finest."
+	icon_state = "osatchel"
+	item_state = "osatchel"
 
 /obj/item/storage/backpack/satchel/mule/PopulateContents()
 	for(var/i in 1 to 3)
@@ -457,6 +464,13 @@
 	. = ..()
 	for(var/i in 1 to max_storage)
 		var/obj/item/weapon/knife/throwingknife/psydon/A = new(loc)
+		if(!SEND_SIGNAL(src, COMSIG_TRY_STORAGE_INSERT, A, null, TRUE, TRUE))
+			qdel(A)
+
+/obj/item/storage/belt/leather/knifebelt/black/rous/Initialize()
+	. = ..()
+	for(var/i in 1 to max_storage)
+		var/obj/item/weapon/knife/throwingknife/rous/A = new(loc)
 		if(!SEND_SIGNAL(src, COMSIG_TRY_STORAGE_INSERT, A, null, TRUE, TRUE))
 			qdel(A)
 

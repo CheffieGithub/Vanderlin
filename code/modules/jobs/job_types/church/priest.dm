@@ -17,6 +17,7 @@
 	cmode_music = 'sound/music/cmode/church/CombatAstrata.ogg'
 
 	allowed_races = RACES_PLAYER_NONDISCRIMINATED
+	blacklisted_species = list(SPEC_ID_HALFLING)
 
 	outfit = /datum/outfit/priest
 	spells = list(
@@ -138,7 +139,9 @@
 			HL.job = "Ex-Consort"
 			consort_job?.remove_spells(HL)
 
+	var/new_title = (coronated.gender == MALE) ? SSmapping.config.monarch_title : SSmapping.config.monarch_title_f
 	coronated.mind.set_assigned_role(/datum/job/lord)
+	lord_job?.get_informed_title(coronated, TRUE, new_title)
 	coronated.job = "Monarch" //Monarch is used when checking if the ruler is alive, not "King" or "Queen". Can also pass it on and have the title change properly later.
 	lord_job?.add_spells(coronated)
 	SSticker.rulermob = coronated

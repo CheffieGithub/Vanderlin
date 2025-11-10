@@ -39,6 +39,7 @@
 	var/temporary_split_key
 
 	var/list/connected = list("2" = 0, "1" = 0, "8" = 0, "4" = 0)
+	flags_1 = CONDUCT_1
 
 /obj/effect/abstract/liquid_turf/proc/set_connection(dir)
 	connected["[dir]"] = 1
@@ -262,8 +263,7 @@
 
 /obj/effect/abstract/liquid_turf/proc/mob_fall(datum/source, mob/M)
 	SIGNAL_HANDLER
-	var/turf/T = source
-	if(liquid_group.group_overlay_state >= LIQUID_STATE_ANKLES && T.has_gravity(T))
+	if(liquid_group.group_overlay_state >= LIQUID_STATE_ANKLES)
 		if(iscarbon(M))
 			var/mob/living/carbon/C = M
 			if(C.wear_mask && C.wear_mask.flags_cover & MASKCOVERSMOUTH)

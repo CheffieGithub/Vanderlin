@@ -8,6 +8,7 @@
 	tutorial = "You were apart of an expedition sent by the Monarch to Kingsfield, you and those under your command have returned upon fullfiling your task."
 	outfit = /datum/outfit/serjeant_at_arms
 	allowed_races = RACES_PLAYER_NONDISCRIMINATED
+	blacklisted_species = list(SPEC_ID_HALFLING)
 	is_foreigner = FALSE
 
 	jobstats = list(
@@ -44,16 +45,16 @@
 
 /datum/job/migrant/serjeant_at_arms/after_spawn(mob/living/carbon/human/spawned, client/player_client)
 	. = ..()
-	spawned.verbs |= /mob/proc/haltyell
-
-/datum/job/migrant/serjeant_at_arms/adjust_values(mob/living/carbon/human/spawned)
-	. = ..()
 	if(spawned.age == AGE_OLD)
-		LAZYADDASSOC(jobstats, STATKEY_STR, 3)
-		LAZYADDASSOC(jobstats, STATKEY_INT, 2)
-		LAZYADDASSOC(jobstats, STATKEY_END, 2)
-		LAZYADDASSOC(jobstats, STATKEY_PER, 1)
-		LAZYADDASSOC(jobstats, STATKEY_SPD, 1)
+		var/list/old_stats = list(
+			STATKEY_STR = 3,
+			STATKEY_INT = 2,
+			STATKEY_END = 2,
+			STATKEY_PER = 1,
+			STATKEY_SPD = 1,
+		)
+		spawned.adjust_stat_modifier_list(STATMOD_JOB, old_stats)
+	spawned.verbs |= /mob/proc/haltyell
 
 /datum/outfit/serjeant_at_arms
 	name = "Serjeant-at-Arms"
@@ -83,6 +84,7 @@
 	tutorial = "You were apart of an expedition sent by the Monarch to Kingsfield, you and your serjeant-at-arms have returned upon fullfiling your task."
 	outfit = /datum/outfit/archer_bannerman
 	allowed_races = RACES_PLAYER_NONDISCRIMINATED
+	blacklisted_species = list(SPEC_ID_HALFLING)
 	is_foreigner = FALSE
 
 	jobstats = list(
@@ -147,6 +149,7 @@
 	tutorial = "You were apart of an expedition sent by the Monarch to Kingsfield, you and your serjeant-at-arms have returned upon fullfiling your task."
 	outfit = /datum/outfit/crossbow_bannerman
 	allowed_races = RACES_PLAYER_NONDISCRIMINATED
+	blacklisted_species = list(SPEC_ID_HALFLING)
 	is_foreigner = FALSE
 
 	jobstats = list(
@@ -211,6 +214,7 @@
 	tutorial = "You were apart of an expedition sent by the Monarch to Kingsfield, you and your serjeant-at-arms have returned upon fullfiling your task."
 	outfit = /datum/outfit/footman_bannerman
 	allowed_races = RACES_PLAYER_NONDISCRIMINATED
+	blacklisted_species = list(SPEC_ID_HALFLING)
 	is_foreigner = FALSE
 
 	jobstats = list(
@@ -266,6 +270,7 @@
 	tutorial = "You were apart of an expedition sent by the Monarch to Kingsfield, you and your serjeant-at-arms have returned upon fullfiling your task."
 	outfit = /datum/outfit/pikeman_bannerman
 	allowed_races = RACES_PLAYER_NONDISCRIMINATED
+	blacklisted_species = list(SPEC_ID_HALFLING)
 	is_foreigner = FALSE
 
 	jobstats = list(

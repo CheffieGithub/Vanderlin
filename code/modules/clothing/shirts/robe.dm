@@ -1,5 +1,5 @@
 /obj/item/clothing/shirt/robe
-	slot_flags = ITEM_SLOT_ARMOR
+	slot_flags = ITEM_SLOT_SHIRT|ITEM_SLOT_ARMOR
 	name = "robe"
 	desc = "A common robe, worn mostly by religious adepts."
 	body_parts_covered = CHEST|GROIN|ARMS|LEGS|VITALS
@@ -30,6 +30,12 @@
 /obj/item/clothing/shirt/robe/colored/black
 	color = CLOTHING_DARK_INK
 
+/obj/item/clothing/shirt/robe/colored/red//placeholder for malum & xylix acolyte robes
+	color = CLOTHING_WINESTAIN_RED
+
+/obj/item/clothing/shirt/robe/colored/purple
+	color = CLOTHING_PLUM_PURPLE
+
 //................ Temple Robes ............... //
 
 /obj/item/clothing/shirt/robe/pestra
@@ -52,6 +58,7 @@
 	name = "sun robe"
 	desc = "The cloth of a follower of Astrata."
 	icon_state = "astratarobe"
+
 	sleeved = null
 
 /obj/item/clothing/shirt/robe/noc
@@ -206,11 +213,11 @@
 	if(!hoodtoggled)
 		if(ishuman(src.loc))
 			var/mob/living/carbon/human/H = src.loc
-			if(slot_flags == ITEM_SLOT_ARMOR)
+			if(slot_flags & ITEM_SLOT_ARMOR)
 				if(H.wear_armor != src)
 					to_chat(H, span_warning("I should put that on first."))
 					return
-			if(slot_flags == ITEM_SLOT_CLOAK)
+			if(slot_flags & ITEM_SLOT_CLOAK)
 				if(H.cloak != src)
 					to_chat(H, span_warning("I should put that on first."))
 					return

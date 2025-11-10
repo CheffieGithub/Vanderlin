@@ -720,6 +720,7 @@ Traitors and the like can also be revived with the previous role mostly intact.
 		ADMIN_PUNISHMENT_MEATPIE,
 		ADMIN_PUNISHMENT_GODHAND,
 		ADMIN_PUNISHMENT_FORCECOLLAR,
+		ADMIN_PUNISHMENT_PSYDON,
 	)
 
 	var/punishment = input("Choose a punishment", "DIVINE SMITING") as null|anything in sortList(punishment_list)
@@ -740,6 +741,19 @@ Traitors and the like can also be revived with the previous role mostly intact.
 			target.adjustOrganLoss(ORGAN_SLOT_BRAIN, 199, 199)
 		if(ADMIN_PUNISHMENT_GIB)
 			target.gib(FALSE)
+		if(ADMIN_PUNISHMENT_PSYDON)
+			sleep(60)
+			target.psydo_nyte()
+			target.playsound_local(target, 'sound/misc/psydong.ogg', 100, FALSE)
+			sleep(20)
+			target.psydo_nyte()
+			target.playsound_local(target, 'sound/misc/psydong.ogg', 100, FALSE)
+			sleep(15)
+			target.psydo_nyte()
+			target.playsound_local(target, 'sound/misc/psydong.ogg', 100, FALSE)
+			sleep(10)
+			target.gib(FALSE)
+
 		if(ADMIN_PUNISHMENT_BSA)
 			bluespace_artillery(target)
 		if(ADMIN_PUNISHMENT_SUPPLYPOD_QUICK)
@@ -846,6 +860,43 @@ Traitors and the like can also be revived with the previous role mostly intact.
 			H.add_stress(/datum/stress_event/collarcurse)
 
 	punish_log(target, punishment)
+
+/client/proc/heart_attack(mob/living/carbon/target as mob)
+	set name = "Heart Attack"
+	set category = "Fun"
+	if(!check_rights(R_ADMIN) || !check_rights(R_FUN))
+		return
+
+	var/obj/item/organ/heart/heart = target.getorganslot(ORGAN_SLOT_HEART)
+	if(!heart)
+		to_chat(usr,span_warning("The target does not have a Heart!"))
+		return
+
+	var/custom_message
+	var/check = browser_alert(usr, "Do you want a custom message for the heart attack?", "Confirmation", DEFAULT_INPUT_CHOICES)
+	if(check == CHOICE_YES)
+		custom_message = browser_input_text(usr, "Write the Custom Message", "Custom Message")
+		if(!custom_message)
+			to_chat(usr, span_notice("You didn't write the custom message!"))
+			return
+
+	if(QDELETED(target))
+		return
+
+	target.visible_message(target, span_danger("[target] clutches at [target.p_their()] chest!"))
+	target.emote("breathgasp", forced = TRUE)
+	shake_camera(target, 1, 3)
+	target.blur_eyes(40)
+	var/stuffy = list("ZIZO GRABS MY WEARY HEART!","ARGH! MY HEART BEATS NO MORE!","NO... MY HEART HAS BEAT IT'S LAST!","MY HEART HAS GIVEN UP!","MY HEART BETRAYS ME!","THE METRONOME OF MY LIFE STILLS!")
+	if(custom_message)
+		to_chat(target, span_danger("[custom_message]"))
+	else
+		to_chat(target, span_danger("[pick(stuffy)]"))
+
+	punish_log(target, punishment = "Heart Attack")
+	spawn(3 SECONDS)
+		if(!QDELETED(target))
+			target.set_heartattack(TRUE)
 
 /client/proc/punish_log(whom, punishment)
 	var/msg = "[key_name_admin(usr)] punished [key_name_admin(whom)] with [punishment]."
@@ -986,7 +1037,6 @@ Traitors and the like can also be revived with the previous role mostly intact.
 
 	playsound(M, 'sound/vo/mobs/bird/birdfly.ogg', 100, FALSE, -1)
 	log_admin("Letter: [key_name(usr)] -> [key_name(M)] : [msg]")
-	msg = "<span class='adminnotice'><b> SubtleMessage: [key_name_admin(usr)] -> [key_name_admin(M)] :</b> [msg]</span>"
-	message_admins(msg)
-	admin_ticket_log(M, msg)
+	message_admins(span_adminnotice("Messenger Bird Letter: [key_name_admin(usr)] -> [key_name_admin(M)] : [msg]"))
+	log_game("LETTER RECEIVED: [key_name(usr)] -> [key_name(M)]: \n[msg]")
 	SSblackbox.record_feedback("tally", "admin_verb_send_messenger_bird", 1, "Messenger Bird Letter") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!

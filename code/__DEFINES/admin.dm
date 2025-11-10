@@ -91,6 +91,7 @@
 #define ADMIN_PUNISHMENT_LIGHTNING "Lightning bolt"
 #define ADMIN_PUNISHMENT_BRAINDAMAGE "Brain damage"
 #define ADMIN_PUNISHMENT_GIB "Gib"
+#define ADMIN_PUNISHMENT_PSYDON "Zesus Psyst"
 #define ADMIN_PUNISHMENT_BSA "Bluespace Artillery Device"
 #define ADMIN_PUNISHMENT_FIREBALL "Fireball"
 #define ADMIN_PUNISHMENT_ROD "Immovable Rod"
@@ -126,9 +127,6 @@
 #define MAX_KEYPRESS_AUTOKICK 50
 /// Max keys that can be held down at once by a client
 #define MAX_HELD_KEYS 15
-
-#define STICKYBAN_DB_CACHE_TIME 10 SECONDS
-#define STICKYBAN_ROGUE_CHECK_TIME 5
 
 
 /// Shown to vicitm of staff of change and related effects.

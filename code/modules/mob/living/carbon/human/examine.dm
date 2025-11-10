@@ -20,11 +20,22 @@
 			user.add_stress(/datum/stress_event/beautiful_self)
 		else
 			user.add_stress(/datum/stress_event/beautiful)
-	if(HAS_TRAIT(src, TRAIT_UGLY) && user != src)
+	if(HAS_TRAIT(src, TRAIT_UGLY) &&  user != src)
 		if(user == src)
 			user.add_stress(/datum/stress_event/ugly_self)
 		else
 			user.add_stress(/datum/stress_event/ugly)
+	if(HAS_TRAIT(src, TRAIT_FISHFACE))
+		if(HAS_TRAIT(user, TRAIT_FISHFACE))
+			if(user == src)
+				user.add_stress(/datum/stress_event/self_fishface)
+			else
+				user.add_stress(/datum/stress_event/fellow_fishface)
+		else
+			if(user.age == AGE_CHILD)
+				user.add_stress(/datum/stress_event/fish_monster)
+			else
+				user.add_stress(/datum/stress_event/fishface)
 	if(HAS_TRAIT(src, TRAIT_OLDPARTY) && HAS_TRAIT(user, TRAIT_OLDPARTY) && user != src)
 		user.add_stress(/datum/stress_event/saw_old_party)
 
@@ -74,20 +85,14 @@
 		if(user == src)
 			self_inspect = TRUE
 		var/used_title = get_role_title()
-		var/is_returning = FALSE
-		if(islatejoin)
-			is_returning = TRUE
 
 		// building the examine identity
 		statement_of_identity += "<EM>[used_name]</EM>"
 
 		var/appendage_to_name
-		if(is_returning && race_name && !HAS_TRAIT(src, TRAIT_FOREIGNER)) // latejoined? Foreigners can never be returning because they never lived here in the first place
-			appendage_to_name += " returning"
-
 		if(race_name) // race name
 			appendage_to_name += " [race_name]"
- // job name, don't show job of foreigners.
+// job name, don't show job of foreigners.
 
 		if(used_title && !HAS_TRAIT(src, TRAIT_FACELESS) && (!HAS_TRAIT(src, TRAIT_FOREIGNER) || HAS_TRAIT(src, TRAIT_RECRUITED) || HAS_TRAIT(src, TRAIT_RECOGNIZED)))
 			appendage_to_name += ", [used_title]"
@@ -137,7 +142,8 @@
 				. += span_love(span_bold("[self_inspect ? "I am" : "[t_He] is"] [is_male ? "handsome" : "beautiful"]!"))
 			if(HAS_TRAIT(src, TRAIT_UGLY))
 				. += span_necrosis(span_bold("[self_inspect ? "I am" : "[t_He] is"] hideous."))
-
+			if(HAS_TRAIT(src, TRAIT_FAT))
+				. += span_boldwarning(span_bold("[self_inspect ? "I am" : "[t_He] is"] very obese!"))
 		if(length(GLOB.tennite_schisms))
 			var/datum/tennite_schism/S = GLOB.tennite_schisms[1]
 			var/user_side = (WEAKREF(user) in S.supporters_astrata) ? "astrata" : (WEAKREF(user) in S.supporters_challenger) ? "challenger" : null
@@ -157,15 +163,30 @@
 		if(has_flaw(/datum/charflaw/addiction/junkie) && HAS_TRAIT(user, TRAIT_RECOGNIZE_ADDICTS))
 			. += span_userdanger("JUNKIE!")
 
+		if(HAS_TRAIT(src, TRAIT_FISHFACE) && HAS_TRAIT(user, TRAIT_FISHFACE))
+			if(user == src)
+				. += span_green("I don't look that bad, I just look different to other species.")
+			else
+				. += span_green("A fellow triton")
+
+		if(ishuman(user) && HAS_TRAIT(src, TRAIT_FISHFACE) && !HAS_TRAIT(user, TRAIT_FISHFACE))
+			var/mob/living/carbon/human/H = user
+			if(H.age == AGE_CHILD)
+				. += span_userdanger("IT'S A HORRIBLE MONSTER!!!")
+				user.emote("scream")
+			else
+				. += span_necrosis("That fish is ugly!")
+
 		if(real_name in GLOB.excommunicated_players)
 			. += span_userdanger("EXCOMMUNICATED!")
 
 		if(real_name in GLOB.heretical_players)
 			. += span_userdanger("HERETIC! SHAME!")
 
-		if(is_zizocultist(user.mind) || is_zizolackey(user.mind))
-			if(virginity)
-				. += span_userdanger("VIRGIN!")
+		if(user.mind)
+			if(is_zizocultist(user.mind) || is_zizolackey(user.mind))
+				if(virginity)
+					. += span_userdanger("VIRGIN!")
 
 		var/is_bandit = FALSE
 		if(mind?.special_role == "Bandit")
@@ -173,7 +194,7 @@
 			if((real_name in GLOB.outlawed_players) && HAS_TRAIT(user, TRAIT_KNOWBANDITS))
 				. += span_userdanger("BANDIT!")
 
-		if(mind && mind.special_role == "Vampire Lord")
+		if(mind && mind?.special_role == "Vampire Lord")
 			var/datum/component/vampire_disguise/disguise_comp = GetComponent(/datum/component/vampire_disguise)
 			if(!disguise_comp.disguised)
 				. += span_userdanger("A MONSTER!")
@@ -195,8 +216,33 @@
 			if((HAS_TRAIT(src, TRAIT_CABAL) && HAS_TRAIT(user, TRAIT_CABAL)) || (src.patron?.type == /datum/patron/inhumen/zizo && HAS_TRAIT(user, TRAIT_CABAL)))
 				. += span_purple("A fellow seeker of Her ascension.")
 
+			var/inquisition_text =get_inquisition_text(user)
+			if(inquisition_text)
+				. +=span_notice(inquisition_text)
+
 		if(HAS_TRAIT(src, TRAIT_LEPROSY))
 			. += span_necrosis("A LEPER...")
+
+		if(HAS_TRAIT(user, TRAIT_ROYALSERVANT))
+			if(length(culinary_preferences) && family_datum == SSfamilytree.ruling_family)
+				var/obj/item/reagent_containers/food/snacks/fav_food = src.culinary_preferences[CULINARY_FAVOURITE_FOOD]
+				var/datum/reagent/consumable/fav_drink = src.culinary_preferences[CULINARY_FAVOURITE_DRINK]
+				if(fav_food)
+					if(fav_drink)
+						. += span_notice("Their favourites are [fav_food.name] and [fav_drink.name].")
+					else
+						. += span_notice("Their favourite is [fav_food.name].")
+				else if(fav_drink)
+					. += span_notice("Their favourite is [fav_drink.name].")
+				var/obj/item/reagent_containers/food/snacks/hated_food = src.culinary_preferences[CULINARY_HATED_FOOD]
+				var/datum/reagent/consumable/hated_drink = src.culinary_preferences[CULINARY_HATED_DRINK]
+				if(hated_food)
+					if(hated_drink)
+						. += span_notice("They hate [hated_food.name] and [hated_drink.name].")
+					else
+						. += span_notice("They hate [hated_food.name].")
+				else if(hated_drink)
+					. += span_notice("They hate [hated_drink.name].")
 
 	if(HAS_TRAIT(src, TRAIT_MANIAC_AWOKEN))
 		. += span_userdanger("MANIAC!")
@@ -305,6 +351,10 @@
 
 	if(legcuffed)
 		. += "<A href='byond://?src=[REF(src)];item=[ITEM_SLOT_LEGCUFFED]'><span class='warning'>[m3] \a [legcuffed] around [m2] legs!</span></A>"
+
+	var/datum/status_effect/bugged/effect = has_status_effect(/datum/status_effect/bugged)
+	if(effect && HAS_TRAIT(user, TRAIT_INQUISITION))
+		. += "<A href='?src=[REF(src)];item=[effect.device]'><span class='warning'>[m3] \a [effect.device] implanted.</span></A>"
 
 	//Gets encapsulated with a warning span
 	var/list/msg = list()
@@ -435,7 +485,13 @@
 		msg += msg_list.Join(" ")
 
 	//Fire/water stacks
-	if(fire_stacks + divine_fire_stacks > 0)
+	if(on_fire)
+		var/fire_text = "[m1] on fire!"
+		if(user.has_flaw(/datum/charflaw/addiction/pyromaniac))
+			fire_text += span_boldred(" IT'S BEAUTIFUL!")
+			user.sate_addiction()
+		msg += fire_text
+	else if(fire_stacks + divine_fire_stacks > 0)
 		msg += "[m1] covered in something flammable."
 	else if(fire_stacks < 0 && !on_fire)
 		msg += "[m1] soaked."
@@ -662,3 +718,16 @@
 			dat += "[new_text]" //dat.Join("\n") doesn't work here, for some reason
 	if(dat.len)
 		return dat.Join("\n")
+
+/mob/living/proc/get_inquisition_text(mob/examiner)
+	var/inquisition_text
+	if(HAS_TRAIT(src, TRAIT_INQUISITION) && HAS_TRAIT(examiner, TRAIT_INQUISITION))
+		inquisition_text = "A Practical of our Psydonic Inquisitorial Sect."
+	if(HAS_TRAIT(src, TRAIT_PURITAN) && HAS_TRAIT(examiner, TRAIT_INQUISITION))
+		inquisition_text = "The Lorde-Inquisitor of our Psydonic Inquisitorial Sect."
+	if(HAS_TRAIT(src, TRAIT_INQUISITION) && HAS_TRAIT(examiner, TRAIT_PURITAN))
+		inquisition_text = "Subordinate to me in the Psydonic Inquisitorial Sect."
+	if(HAS_TRAIT(src, TRAIT_PURITAN) && HAS_TRAIT(examiner, TRAIT_PURITAN))
+		inquisition_text = "The Lorde-Inquisitor of the Sect sent here. That's me."
+
+	return inquisition_text

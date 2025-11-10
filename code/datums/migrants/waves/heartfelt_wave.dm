@@ -9,6 +9,7 @@
 	outfit = /datum/outfit/heartfelt_lord
 	allowed_sexes = list(MALE)
 	allowed_races = RACES_PLAYER_NONDISCRIMINATED
+	blacklisted_species = list(SPEC_ID_HALFLING)
 	is_recognized = TRUE
 
 	jobstats = list(
@@ -72,6 +73,7 @@
 	outfit = /datum/outfit/heartfelt_lady
 	allowed_sexes = list(FEMALE)
 	allowed_races = RACES_PLAYER_NONDISCRIMINATED
+	blacklisted_species = list(SPEC_ID_HALFLING)
 	is_recognized = TRUE
 
 	jobstats = list(
@@ -137,6 +139,7 @@
 	tutorial = "You are the Hand of Heartfelt, burdened by the perception of failure in protecting your Lord's domain. Despite doubts from others, your loyalty remains steadfast as you journey to Vanderlin, determined to fulfill your duties."
 	outfit = /datum/outfit/heartfelt_hand
 	allowed_races = RACES_PLAYER_NONDISCRIMINATED
+	blacklisted_species = list(SPEC_ID_HALFLING)
 	is_recognized = TRUE
 
 	jobstats = list(
@@ -190,6 +193,7 @@
 	tutorial = "You are a Knight of Heartfelt, once part of a brotherhood in service to your Lord. Now, alone and committed to safeguarding what remains of your court, you ride to Vanderlin, resolved to ensure their safe arrival."
 	outfit = /datum/outfit/heartfelt_knight
 	allowed_races = RACES_PLAYER_NONDISCRIMINATED
+	blacklisted_species = list(SPEC_ID_HALFLING)
 	is_recognized = TRUE
 
 	jobstats = list(
@@ -285,6 +289,7 @@
 	tutorial = "You are the Magos of Heartfelt, renowned for your arcane knowledge yet unable to foresee the tragedy that befell your home. Drawn by a guiding star to Vanderlin, you seek answers and perhaps a new purpose in the wake of destruction."
 	outfit = /datum/outfit/heartfelt_magos
 	allowed_races = RACES_PLAYER_NONDISCRIMINATED
+	blacklisted_species = list(SPEC_ID_HALFLING)
 	allowed_patrons = list(/datum/patron/divine/noc)
 	is_recognized = TRUE
 
@@ -322,14 +327,14 @@
 	cmode_music = 'sound/music/cmode/nobility/CombatCourtMagician.ogg'
 	voicepack_m = /datum/voicepack/male/wizard
 
-/datum/job/migrant/heartfelt_magos/adjust_values(mob/living/carbon/human/spawned)
-	. = ..()
-	if(spawned.age == AGE_OLD)
-		LAZYADDASSOC(jobstats, STATKEY_SPD, -1)
-		LAZYADDASSOC(jobstats, STATKEY_PER, 1)
-
 /datum/job/migrant/heartfelt_magos/after_spawn(mob/living/carbon/human/spawned, client/player_client)
 	. = ..()
+	if(spawned.age == AGE_OLD)
+		var/list/old_stats = list(
+			STATKEY_PER = 1,
+			STATKEY_SPD = -1,
+		)
+		spawned.adjust_stat_modifier_list(STATMOD_JOB, old_stats)
 	spawned.mana_pool?.set_intrinsic_recharge(MANA_ALL_LEYLINES)
 
 /datum/outfit/heartfelt_magos
@@ -386,16 +391,14 @@
 	. = ..()
 	spawned.virginity = TRUE
 
+	if(spawned.age == AGE_OLD)
+		spawned.adjust_skillrank(/datum/skill/magic/holy, 1)
+
 	var/holder = spawned.patron?.devotion_holder
 	if(holder)
 		var/datum/devotion/devotion = new holder()
 		devotion.make_priest()
 		devotion.grant_to(spawned)
-
-/datum/job/migrant/heartfelt_prior/adjust_values(mob/living/carbon/human/spawned)
-	. = ..()
-	if(spawned.age == AGE_OLD)
-		LAZYADDASSOC(skills, /datum/skill/magic/holy, 1)
 
 /datum/outfit/heartfelt_prior
 	neck = /obj/item/clothing/neck/psycross/silver
@@ -447,6 +450,7 @@
 		/datum/skill/labor/mining = 2,
 		/datum/skill/craft/smelting = 4,
 		/datum/skill/misc/reading = 2,
+		/datum/skill/craft/bombs= 4,
 	)
 
 	traits = list(TRAIT_SEEPRICES)

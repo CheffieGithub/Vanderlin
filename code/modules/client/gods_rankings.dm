@@ -51,15 +51,16 @@
 
 			for(var/datum/round_event_control/listed as anything in SSgamemode.control)
 				listed.occurrences = 0
+				listed.last_round_occurrences = 0
 
 			for(var/client/C in GLOB.clients)
 				if(!C?.mob)
 					continue
 				C.mob.playsound_local(C.mob, GLOB.patron_sound_themes[initialized_storyteller.name], initialized_storyteller.name == RAVOX ? 70 : 100)
 
-			to_chat(world, "<br>")
-			to_chat(world, "<span style='font-size: 180%; color: [initialized_storyteller.color_theme]'>[initialized_storyteller.name] is ascendant!</span>")
-			to_chat(world, "<br>")
+			bordered_message(world, list(
+				"<span style='font-size: 180%; color: [initialized_storyteller.color_theme]'>[initialized_storyteller.name] is ascendant!</span>",
+			))
 			break
 
 	if(modified)

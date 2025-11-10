@@ -100,6 +100,17 @@
 	supports_directions = TRUE
 	craftdiff = 0
 
+/datum/blueprint_recipe/carpentry/stool/bar
+	name = "barstool"
+	desc = "Stool with a cloth cushion."
+	result_type = /obj/structure/chair/stool/bar
+	required_materials = list(
+		/obj/item/grown/log/tree/small = 1,
+		/obj/item/natural/cloth = 1
+	)
+	supports_directions = TRUE
+	craftdiff = 2
+
 /datum/blueprint_recipe/carpentry/loom
 	name = "loom"
 	desc = "A weaving loom for creating textiles."
@@ -140,6 +151,16 @@
 		/obj/item/grown/log/tree/small = 2,
 		/obj/item/grown/log/tree/stake = 3
 	)
+	craftdiff = 1
+
+/datum/blueprint_recipe/carpentry/psydon_wooden_cross
+	name = "wooden psycross"
+	desc = "A wooden psycross dedicated to Psydon."
+	required_materials = list(
+		/obj/item/grown/log/tree/small = 1,
+		/obj/item/grown/log/tree/stake = 3
+	)
+	result_type = /obj/structure/fluff/psycross/psydon
 	craftdiff = 1
 
 /datum/blueprint_recipe/carpentry/wooden_stairs_down

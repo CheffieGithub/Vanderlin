@@ -155,6 +155,7 @@
 	damage_overlay_type = ""
 	changesource_flags = WABBAJACK
 	var/raceicon = "goblin"
+	exotic_bloodtype = /datum/blood_type/human/corrupted/goblin
 
 /datum/species/goblin/regenerate_icons(mob/living/carbon/human/H)
 	H.icon_state = ""
@@ -258,6 +259,9 @@
 		QDEL_NULL(src.charflaw)
 	update_body()
 	faction = list(FACTION_ORCS)
+	var/turf/turf = get_turf(src)
+	if(SSterrain_generation.get_island_at_location(turf))
+		faction |= "islander"
 	name = "goblin"
 	real_name = "goblin"
 	ADD_TRAIT(src, TRAIT_NOMOOD, TRAIT_GENERIC)

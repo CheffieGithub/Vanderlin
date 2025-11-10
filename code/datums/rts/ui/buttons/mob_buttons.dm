@@ -9,6 +9,7 @@
 	// Close the current mob UI
 	if(controller.displayed_mob_ui)
 		controller.displayed_mob_ui.remove_ui(controller.client)
+		controller.close_inventory_ui()
 
 	// Reopen the base UI
 	if(controller.displayed_base_ui)
@@ -28,6 +29,14 @@
 	highlight_color = "#4CAF50"
 	var/patrol_mode = FALSE
 	var/atom/movable/screen/controller_ui/controller_ui/parent_ui
+
+/atom/movable/screen/controller_ui/controller_button/patrol/Initialize(mapload, datum/hud/hud_owner, /atom/movable/screen/controller_ui/controller_ui/parent_ui)
+	src.parent_ui = parent_ui
+	return ..()
+
+/atom/movable/screen/controller_ui/controller_button/patrol/Destroy(force)
+	parent_ui = null
+	return ..()
 
 /atom/movable/screen/controller_ui/controller_button/patrol/Click(location, control, params)
 	. = ..()

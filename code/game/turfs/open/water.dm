@@ -53,6 +53,10 @@
 
 	var/cleanliness_factor = 1 //related to hygiene for washing
 
+	/// Fishing element for this specific water tile
+	var/datum/fish_source/fishing_datum = /datum/fish_source/ocean
+	flags_1 = CONDUCT_1
+
 /turf/open/water/proc/set_watervolume(volume)
 	water_volume = volume
 	if(src in children)
@@ -206,6 +210,10 @@
 
 /turf/open/water/Initialize()
 	. = ..()
+
+	if(!isnull(fishing_datum))
+		add_lazy_fishing(fishing_datum)
+
 	if(mapped)
 		if(prob(0.1))
 			new /obj/item/bottlemessage/ancient(src)
@@ -275,6 +283,10 @@
 	if(water_overlay)
 		var/image/overlay = image(icon, water_overlay, add, ABOVE_MOB_LAYER + 0.01, pixel_x = offset ? x : 0, pixel_y = offset ? y : 0 )
 		overlay.color = water_reagent.color
+		if("[dir]" in water_overlay.neighborlay_list)
+			water_overlay.cut_overlay(water_overlay.neighborlay_list["[dir]"])
+			qdel(water_overlay.neighborlay_list["[dir]"])
+			LAZYREMOVE(water_overlay.neighborlay_list, "[dir]")
 		LAZYADDASSOC(water_overlay.neighborlay_list, "[dir]", overlay)
 		water_overlay.add_overlay(overlay)
 
@@ -331,8 +343,11 @@
 		return
 	if(istype(AM, /obj/item/reagent_containers/food/snacks/fish))
 		var/obj/item/reagent_containers/food/snacks/fish/F = AM
-		SEND_GLOBAL_SIGNAL(COMSIG_GLOBAL_FISH_RELEASED, F.type, F.rarity_rank)
-		F.visible_message("<span class='warning'>[F] dives into \the [src] and disappears!</span>")
+		SEND_GLOBAL_SIGNAL(COMSIG_GLOBAL_FISH_RELEASED, F)
+		if(!F.status != FISH_DEAD)
+			F.visible_message("<span class='warning'>[F] dives into \the [src] and disappears!</span>")
+		else
+			F.visible_message("<span class='warning'>[F] slowly sinks motionlessly into \the [src] and disappears...</span>")
 		qdel(F)
 	if(isliving(AM) && !AM.throwing)
 		var/mob/living/L = AM
@@ -412,15 +427,16 @@
 				adjust_originate_watervolume(-2)
 			playsound(user, pick(wash), 100, FALSE)
 
-			//handle hygiene
-			if(isliving(user))
-				var/mob/living/hygiene_target = user
-				var/list/equipped_items = hygiene_target.get_equipped_items()
-				if(length(equipped_items) > 0)
-					to_chat(user, span_notice("I could probably clean myself faster if I weren't wearing clothes..."))
-					hygiene_target.adjust_hygiene(HYGIENE_GAIN_CLOTHED * cleanliness_factor)
-				else
-					hygiene_target.adjust_hygiene(HYGIENE_GAIN_UNCLOTHED * cleanliness_factor)
+			L.ExtinguishMob()
+			//handle hygiene and clean off alcohol
+			var/list/equipped_items = L.get_equipped_items()
+			if(length(equipped_items) > 0)
+				to_chat(user, span_notice("I could probably clean myself faster if I weren't wearing clothes..."))
+				L.adjust_hygiene(HYGIENE_GAIN_CLOTHED * cleanliness_factor)
+				L.adjust_fire_stacks(-4)
+			else
+				L.adjust_hygiene(HYGIENE_GAIN_UNCLOTHED * cleanliness_factor)
+				L.adjust_fire_stacks(-2)
 		return SECONDARY_ATTACK_CANCEL_ATTACK_CHAIN
 
 /turf/open/water/attackby_secondary(obj/item/item2wash, mob/user, params)
@@ -678,7 +694,6 @@
 /turf/open/water/river
 	name = "water"
 	desc = "Crystal clear water! Flowing swiflty along the river."
-	icon = 'icons/turf/newwater.dmi'
 	icon_state = MAP_SWITCH("rocky", "rivermove-dir")
 	water_level = 3
 	slowdown = 20
@@ -723,7 +738,7 @@
 		for(var/obj/structure/S in src)
 			if(S.obj_flags & BLOCK_Z_OUT_DOWN)
 				return
-		if((A.loc == src) && A.has_gravity())
+		if((A.loc == src))
 			if(!istype(get_step(src, dir), /turf/open/water))
 				var/list/viable_cardinals = list()
 				var/inverse = REVERSE_DIR(dir)
@@ -758,3 +773,43 @@
 /turf/open/water/acid/mapped
 	desc = "You know how this got here. You think."
 	notake = TRUE
+
+/turf/open/water/ocean
+	name = "salt water"
+	desc = "The waves lap at the coast, hungry to swallow the land. Doesn't look too deep."
+	icon_state = "water"
+	icon = 'icons/turf/floors.dmi'
+	neighborlay_self = null
+	water_level = 2
+	slowdown = 2
+	swim_skill = TRUE
+	wash_in = TRUE
+	water_reagent = /datum/reagent/water/salty
+	fishing_datum = /datum/fish_source/ocean
+
+/turf/open/water/ocean/deep
+	name = "salt water"
+	desc = "Deceptively deep, be careful not to find yourself this far out."
+	icon_state = "ash"
+	icon = 'icons/turf/floors.dmi'
+	water_level = 3
+	slowdown = 4
+	swim_skill = TRUE
+	wash_in = TRUE
+	fishing_datum = /datum/fish_source/ocean/deep
+
+/datum/reagent/water/salty
+	taste_description = "salt"
+	color = "#3e7459"
+
+/datum/reagent/water/salty/reaction_mob(mob/living/L, method=TOUCH, reac_volume)
+	if(method == INGEST) // Make sure you DRANK the salty water before losing hydration
+		..()
+
+/datum/reagent/water/salty/on_mob_life(mob/living/carbon/M)
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		H.adjust_hydration(-hydration)  //saltwater dehydrates more than it hydrates
+		M.adjustToxLoss(0.25) // Slightly toxic
+		M.add_nausea(2)
+	..()

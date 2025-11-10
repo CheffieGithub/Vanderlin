@@ -1,6 +1,6 @@
 /datum/triumph_buy/pick_any_class
 	name = "No Advanced Class Restrictions"
-	desc = "Get a single run of any advanced class from any job! You must join as any job that has advanced classes to begin with. WARNING: PREPARE FOR UNFORESEEN CONSEQUENCES."
+	desc = "Get a single run of any advanced class from any job! You must join as any job that has advanced classes to begin with. WARNING: THIS CAN EASILY BREAK AND ADMINS ARE NOT OBLIGED TO FIX YOUR CHARACTER."
 	triumph_buy_id = TRIUMPH_BUY_ANY_CLASS
 	triumph_cost = 20
 	category = TRIUMPH_CAT_CHARACTER
@@ -37,13 +37,30 @@
 	. = ..()
 	var/list/possible_classes = list()
 	for(var/datum/job/advclass/CHECKS in SSrole_class_handler.sorted_class_categories[CTAG_ALLCLASS])
-		if(!length(category_tags))
+		if(!length(CHECKS.category_tags))
 			continue
 		if(CTAG_WRETCH in CHECKS.category_tags)
 			continue
+		if(CTAG_INQUISITION in CHECKS.category_tags)
+			continue
+		if(CTAG_PURITAN in CHECKS.category_tags)
+			continue
 		possible_classes += CHECKS
 
-	var/datum/job/advclass/class = browser_input_list(spawned, "What is my class?", "Adventure", possible_classes)
-	if(!class)
+	var/list/class_titles = list()
+	for(var/datum/job/advclass/C in possible_classes)
+		class_titles += C.title
+
+	var/chosen_title = browser_input_list(spawned, "What is my class?", "Adventure", class_titles)
+
+	var/datum/job/advclass/class
+	if(chosen_title)
+		for(var/datum/job/advclass/C in possible_classes)
+			if(C.title == chosen_title)
+				class = C
+				break
+	else
 		class = pick(possible_classes)
+
 	SSjob.EquipRank(spawned, class, player_client)
+	SSrole_class_handler.special_session_queue[spawned.ckey].Remove(TRIUMPH_BUY_ANY_CLASS)

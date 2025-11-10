@@ -1,7 +1,6 @@
 /area/rogue
 	name = "roguetown"
 	icon_state = "rogue"
-	has_gravity = STANDARD_GRAVITY
 	dynamic_lighting = DYNAMIC_LIGHTING_FORCED
 
 /area/rogue/indoors
@@ -1018,3 +1017,60 @@
 /area/rogue/delver
 	delver_restrictions = TRUE
 	converted_type = /area/rogue/delver
+
+/area/rogue/ship/topdeck
+	name = "upperdeck"
+	icon_state = "roofs"
+	droning_index = DRONING_BOAT
+	background_track = 'sound/music/area/topdeckdrone.ogg'
+	background_track_dusk = null
+	background_track_night = null
+	first_time_text = "The Voyager"
+	outdoors = TRUE
+
+/area/rogue/ship/middeck
+	name = "middeck"
+	icon_state = "indoors"
+	droning_index = DRONING_BOAT
+	background_track = 'sound/music/area/topdeckdrone.ogg'
+	background_track_dusk = null
+	background_track_night = null
+	first_time_text = "Waist Deck"
+
+/area/rogue/ship/nobledeck
+	name = "nobledeck"
+	icon_state = "manor"
+	droning_index = DRONING_BOAT
+	background_track = 'sound/music/area/nobledeckdrone.ogg'
+	background_track_dusk = null
+	background_track_night = null
+
+/area/rogue/ship/shipbrig
+	name = "shipbrig"
+	icon_state = "cell"
+	droning_index = DRONING_BOAT
+	background_track = 'sound/music/area/shipbrig.ogg'
+	background_track_dusk = null
+	background_track_night = null
+	first_time_text = "The Brig"
+
+
+/area/rogue/indoors/inq
+	name = "The Inquisition"
+	icon_state = "chapel"
+	first_time_text = "THE ORATORIUM"
+
+/area/rogue/indoors/inq/office
+	name = "The Inquisitor's Office"
+	icon_state = "chapel"
+
+/area/rogue/indoors/inq/basement
+	name = "The Inquisition's Basement"
+	icon_state = "chapel"
+
+/area/rogue/indoors/inq/import
+	name = "foreign imports"
+	icon_state = "warehouse"
+
+/area/rogue/indoors/inq/import/can_craft_here()
+	return FALSE

@@ -36,6 +36,10 @@ GLOBAL_LIST_INIT(loadout_items, subtypesof(/datum/loadout_item))
 	name = "Keffiyeh"
 	item_path = /obj/item/clothing/neck/keffiyeh
 
+/datum/loadout_item/turban
+	name = "Turban"
+	item_path = /obj/item/clothing/head/turban
+
 /datum/loadout_item/rosa_flower_crown
 	name = "Rosa Flower Crown"
 	item_path = /obj/item/clothing/head/flowercrown/rosa
@@ -101,6 +105,18 @@ GLOBAL_LIST_INIT(loadout_items, subtypesof(/datum/loadout_item))
 /datum/loadout_item/volfmantle
 	name = "Volf Mantle"
 	item_path = /obj/item/clothing/cloak/volfmantle
+
+/datum/loadout_item/sash
+	name = "Cloth Sash"
+	item_path = /obj/item/clothing/shirt/undershirt/sash/colored/random
+
+/datum/loadout_item/poncho
+	name = "Cloth Poncho"
+	item_path = /obj/item/clothing/cloak/poncho
+
+/datum/loadout_item/vest
+	name = "Cloth Vest"
+	item_path = /obj/item/clothing/shirt/clothvest/colored/random
 
 //SHOES
 
@@ -206,17 +222,17 @@ GLOBAL_LIST_INIT(loadout_items, subtypesof(/datum/loadout_item))
 	item_path = /obj/item/clothing/neck/bellcollar
 
 /datum/loadout_item/chaperon
-    name = "Chaperon (Normal)"
-    item_path = /obj/item/clothing/head/chaperon
+	name = "Chaperon (Normal)"
+	item_path = /obj/item/clothing/head/chaperon
 
 /datum/loadout_item/jesterhat
-    name = "Jester's Hat"
-    item_path = /obj/item/clothing/head/jester
+	name = "Jester's Hat"
+	item_path = /obj/item/clothing/head/jester
 
 /datum/loadout_item/jestertunick
-    name = "Jester's Tunick"
-    item_path = /obj/item/clothing/shirt/jester
+	name = "Jester's Tunick"
+	item_path = /obj/item/clothing/shirt/jester
 
 /datum/loadout_item/jestershoes
-    name = "Jester's Shoes"
-    item_path = /obj/item/clothing/shoes/jester
+	name = "Jester's Shoes"
+	item_path = /obj/item/clothing/shoes/jester

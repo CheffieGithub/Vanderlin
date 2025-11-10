@@ -49,7 +49,7 @@
 /obj/item/reagent_containers/food/snacks/rotten/Initialize()
 	var/mutable_appearance/rotflies = mutable_appearance('icons/roguetown/mob/rotten.dmi', "rotten")
 	add_overlay(rotflies)
-	rot_away_timer = QDEL_IN_STOPPABLE(src, 10 MINUTES)
+	rot_away_timer = QDEL_IN_STOPPABLE(src, 15 MINUTES)
 	. = ..()
 
 /obj/item/reagent_containers/food/snacks/rotten/meat
@@ -185,6 +185,72 @@
 	drop_sound = 'sound/foley/dropsound/armor_drop.ogg'
 	melting_material = /datum/material/tin
 	melt_amount = 20
+
+/obj/item/reagent_containers/glass/bowl/jade
+	name = "joapstone bowl"
+	desc = "A bowl carved out of joapstone."
+	icon_state = "bowl_jade"
+	fill_icon_state = "bowl"
+	drop_sound = 'sound/foley/dropsound/armor_drop.ogg'
+	sellprice = 55
+
+/obj/item/reagent_containers/glass/bowl/onyxa
+	name = "onyxa bowl"
+	desc = "A bowl carved out of onyxa."
+	icon_state = "bowl_onyxa"
+	fill_icon_state = "bowl"
+	drop_sound = 'sound/foley/dropsound/armor_drop.ogg'
+	sellprice = 35
+
+/obj/item/reagent_containers/glass/bowl/rose
+	name = "rosellusk bowl"
+	desc = "A bowl carved out of rosellusk."
+	icon_state = "bowl_rose"
+	fill_icon_state = "bowl"
+	drop_sound = 'sound/foley/dropsound/armor_drop.ogg'
+	sellprice = 20
+
+/obj/item/reagent_containers/glass/bowl/amber
+	name = "petriamber bowl"
+	desc = "A bowl carved out of petriamber."
+	icon_state = "bowl_amber"
+	fill_icon_state = "bowl"
+	drop_sound = 'sound/foley/dropsound/armor_drop.ogg'
+	sellprice = 55
+
+/obj/item/reagent_containers/glass/bowl/turq
+	name = "ceruleabaster bowl"
+	desc = "A bowl carved out of ceruleabaster."
+	icon_state = "bowl_turq"
+	fill_icon_state = "bowl"
+	drop_sound = 'sound/foley/dropsound/armor_drop.ogg'
+	sellprice = 80
+
+/obj/item/reagent_containers/glass/bowl/shell
+	name = "shell bowl"
+	desc = "A bowl carved out of shell."
+	icon_state = "bowl_shell"
+	fill_icon_state = "bowl"
+	drop_sound = 'sound/foley/dropsound/armor_drop.ogg'
+	sellprice = 15
+
+
+/obj/item/reagent_containers/glass/bowl/coral
+	name = "aoetal bowl"
+	desc = "A bowl carved out of aoetal."
+	icon_state = "bowl_coral"
+	fill_icon_state = "bowl"
+	drop_sound = 'sound/foley/dropsound/armor_drop.ogg'
+	sellprice = 65
+
+/obj/item/reagent_containers/glass/bowl/opal
+	name = "opaloise bowl"
+	desc = "A bowl carved out of opaloise."
+	icon_state = "bowl_opal"
+	fill_icon_state = "bowl"
+	drop_sound = 'sound/foley/dropsound/armor_drop.ogg'
+	sellprice = 85
+
 
 /obj/item/reagent_containers/glass/bowl/clay
 	desc = "Made from fired clay."

@@ -7,6 +7,8 @@
 	var/title_override = null
 	/// The title of this job given to female mobs. Fluff, not as important as [var/title].
 	var/f_title = null
+	/// Used if the job gets switched later to something else.
+	var/datum/job/parent_job
 	/// When joining the round, this text will be shown to the player.
 	var/tutorial = null
 
@@ -26,6 +28,12 @@
 
 	/// How many players currently have this job
 	var/current_positions = 0
+
+	///How many slots were open in this round. Used to prevent slots locking with decreasing amount of alive players
+	var/total_positions_so_far = 0
+
+	///If the roles will scale depending on the amount of players, example : adventurer, only for jobs that are not in the FACTION_TOWN
+	var/scales = FALSE
 
 	/// Whether this job clears a slot when you get a rename prompt.
 	var/antag_job = FALSE
@@ -76,6 +84,8 @@
 	var/list/allowed_sexes = list(MALE, FEMALE)
 	/// Species allowed to be this job
 	var/list/allowed_races = RACES_PLAYER_ALL
+	/// Species blacklisted from this job
+	var/list/blacklisted_species = list()
 	/// Ages allowed to be this job
 	var/list/allowed_ages = ALL_AGES_LIST
 
@@ -85,15 +95,13 @@
 	/// Default patron in case the patron is not allowed
 	var/datum/patron/default_patron
 
-	/// Stats given to the job in the form of list(STA_X = value)
-	var/list/jobstats
-	/// Female stats only used if a value is given
-	var/list/jobstats_f
-
 	/// Voicepack to grant to males
 	var/datum/voicepack/voicepack_m
 	/// Voicepack to grant to females
 	var/datum/voicepack/voicepack_f
+
+	/// Stats given to the job in the form of list(STA_X = value)
+	var/list/jobstats
 
 	/// Skill levels granted at roundstart.
 	/// Possibly modified by species.
@@ -182,6 +190,11 @@
 		/datum/job/pilgrim,
 	)
 
+	///list of job packs we select from during job setup
+	var/list/job_packs
+	var/pack_title = "JOB PACKS"
+	var/pack_message = "Choose a job pack"
+
 /datum/job/New()
 	. = ..()
 	if(give_bank_account)
@@ -209,6 +222,9 @@
 		for(var/X in GLOB.youngfolk_positions)
 			peopleiknow += X
 			peopleknowme += X
+		for(var/X in GLOB.inquisition_positions)
+			peopleiknow += X
+			peopleknowme += X
 
 /datum/job/proc/special_job_check(mob/dead/new_player/player)
 	return TRUE
@@ -229,8 +245,6 @@
 
 	if(!ishuman(spawned))
 		return
-
-	adjust_values(spawned)
 
 	if(magic_user)
 		spawned.mana_pool.set_intrinsic_recharge(MANA_ALL_LEYLINES)
@@ -259,9 +273,8 @@
 	spawned.adjust_spell_points(spell_points)
 	spawned.generate_random_attunements(rand(attunements_min, attunements_max))
 
-	var/list/used_stats = ((spawned.gender == FEMALE) && jobstats_f) ? jobstats_f : jobstats
-	spawned.remove_stat_modifier("job_stats") // Reset so no inf stat
-	spawned.adjust_stat_modifier_list("job_stats", used_stats)
+	spawned.remove_stat_modifier(STATMOD_JOB) // Reset so no inf stat
+	spawned.adjust_stat_modifier_list(STATMOD_JOB, jobstats)
 
 	for(var/datum/skill/skill as anything in skills)
 		var/amount_or_list = skills[skill]
@@ -278,6 +291,15 @@
 		for(var/datum/mind/MF in get_minds(X))
 			spawned.mind.i_know_person(MF)
 
+	// Ready up bonus
+	if(!spawned.islatejoin)
+		spawned.adjust_triumphs(1)
+		spawned.apply_status_effect(/datum/status_effect/buff/foodbuff)
+		spawned.hydration = 800 // Set higher hydration
+		spawned.nutrition = 800
+		to_chat(spawned, span_notice("Rising early, you made sure to eat a hearty meal before starting your dae. A true TRIUMPH!"))
+
+
 	var/used_title = get_informed_title(spawned)
 	if(spawned.islatejoin && (job_flags & JOB_ANNOUNCE_ARRIVAL)) //to be moved somewhere more appropriate
 		scom_announce("[spawned.real_name] the [used_title] arrives from [SSmapping.config.immigrant_origin].")
@@ -290,21 +312,24 @@
 		if(noble_income)
 			SStreasury.noble_incomes[spawned] = noble_income
 
-	if(job_flags & JOB_SHOW_IN_CREDITS)
-		SScrediticons.processing += spawned
-
 	if(cmode_music)
 		DIRECT_OUTPUT(spawned, load_resource(cmode_music, -1)) //preload their combat mode music
 		spawned.cmode_music = cmode_music
 
-	if(!(type in actors_list_blacklist)) //don't show these.
+	var/type_check
+	if(parent_job)
+		type_check = parent_job.type
+		used_title = parent_job.get_informed_title(spawned)
+	else
+		type_check = type
+	if(!(type_check in actors_list_blacklist)) //don't show these.
 		GLOB.actors_list[spawned.mobid] = "[spawned.real_name] as [used_title]<BR>"
 
 	if(forced_flaw)
 		spawned.set_flaw(forced_flaw)
 
 	if(spawned.charflaw)
-		spawned.charflaw.after_spawn(spawned)
+		spawned.charflaw.after_spawn(spawned, player_client)
 
 	if(antag_role && spawned.mind)
 		spawned.mind.add_antag_datum(antag_role)
@@ -327,10 +352,21 @@
 	if(length(advclass_cat_rolls))
 		spawned.hugboxify_for_class_selection()
 
-/// Called by [after_spawn] and run before anything else.
-/// Change your stat values and such here, not in outfits.
-/datum/job/proc/adjust_values(mob/living/carbon/human/spawned)
-	return
+	if(spawned.culinary_preferences[CULINARY_RANDOM_PREFERENCES])
+		var/obj/item/food_instance = spawned.culinary_preferences[CULINARY_FAVOURITE_FOOD]
+		var/datum/reagent/consumable/drink_instance = spawned.culinary_preferences[CULINARY_FAVOURITE_DRINK]
+		var/obj/item/hated_food_instance = spawned.culinary_preferences[CULINARY_HATED_FOOD]
+		var/datum/reagent/consumable/hated_drink_instance = spawned.culinary_preferences[CULINARY_HATED_DRINK]
+
+		bordered_message(spawned, list(
+			"Your favourite food is <span style='color: green;'>[capitalize(initial(food_instance.name))]</span>",
+			"Your favourite drink is <span style='color: green;'>[capitalize(initial(drink_instance.name))]</span>",
+			"Your most hated food is <span style='color: red;'>[capitalize(initial(hated_food_instance.name))]</span>",
+			"Your most hated drink is <span style='color: red;'>[capitalize(initial(hated_drink_instance.name))]</span>",
+		))
+
+	if(job_flags & JOB_SHOW_IN_CREDITS)
+		START_PROCESSING(SScrediticons, player_client)
 
 /datum/job/proc/adjust_patron(mob/living/carbon/human/spawned)
 	if(!length(allowed_patrons))
@@ -374,6 +410,43 @@
 
 /mob/living/carbon/human/on_job_equipping(datum/job/equipping)
 	dress_up_as_job(equipping)
+	pick_job_packs(equipping)
+
+/mob/living/carbon/human/proc/pick_job_packs(datum/job/equipping)
+	if(!length(equipping.job_packs))
+		return
+
+	var/for_length = 1
+	if(islist(equipping.job_packs[1]))
+		for_length = length(equipping.job_packs)
+
+	var/list/previous_picked_types = list()
+
+	for(var/i = 1 to for_length)
+		var/list/job_packs = equipping.job_packs
+		if(islist(equipping.job_packs[i]))
+			job_packs = equipping.job_packs[i]
+
+		var/list/reals = list()
+		for(var/pack as anything in job_packs)
+			var/datum/job_pack/real_pack = GLOB.job_pack_singletons[pack]
+			if(!real_pack.can_pick_pack(src, previous_picked_types))
+				continue
+			reals |= real_pack
+		if(!length(reals))
+			return
+
+		var/datum/job_pack/picked_pack
+		if(!client)
+			picked_pack = GLOB.job_pack_singletons[pick(reals)]
+		else
+			picked_pack = browser_input_list(src, equipping.pack_title, equipping.pack_message, reals, timeout = 20 SECONDS)
+			if(QDELETED(src))
+				return
+
+		previous_picked_types |= picked_pack.type
+
+		picked_pack.pick_pack(src)
 
 /mob/living/proc/dress_up_as_job(datum/job/equipping, visual_only = FALSE)
 	return
@@ -487,6 +560,9 @@
 	equipped_human.remove_spells(source = src)
 
 /datum/job/proc/get_informed_title(mob/mob)
+	if(mob.admin_title)
+		return mob.admin_title
+
 	if(title_override)
 		return title_override
 
@@ -494,3 +570,9 @@
 		return f_title
 
 	return title
+
+/datum/job/proc/set_spawn_and_total_positions(count)
+	return spawn_positions
+
+/datum/job/proc/get_total_positions(latejoin)
+	return latejoin ? total_positions : spawn_positions
