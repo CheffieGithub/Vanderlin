@@ -1860,7 +1860,8 @@ GLOBAL_LIST_INIT(name_adjustments, list())
 		character.accent = selected_accent
 		change_accent = FALSE
 
-	/* :V */
+	if(length(body_markings))
+		character.apply_markings_to_body_parts(body_markings)
 
 	if(icon_updates)
 		character.update_body()

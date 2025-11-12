@@ -737,6 +737,12 @@
 			if(organ_appearance)
 				. += organ_appearance
 
+	// Markings overlays
+	if(!skeletonized)
+		var/list/marking_overlays = get_markings_overlays()
+		if(marking_overlays)
+			. += marking_overlays
+
 	// Feature overlays
 	if(!skeletonized && draw_bodypart_features)
 		for(var/datum/bodypart_feature/feature as anything in bodypart_features)
@@ -753,6 +759,44 @@
 			limb.color = "#[draw_color]"
 			if(aux_zone && !hideaux)
 				aux.color = "#[draw_color]"
+
+/obj/item/bodypart/proc/adjust_marking_overlays(list/appearance_list)
+	return
+
+/obj/item/bodypart/proc/get_specific_markings_overlays(list/specific_markings, aux = FALSE, mob/living/carbon/human/human_owner, override_color)
+	var/list/appearance_list = list()
+	var/specific_layer = aux_layer ? aux_layer : BODYPARTS_LAYER
+	var/specific_render_zone = aux ? aux_zone : body_zone
+	for(var/key in specific_markings)
+		var/color = specific_markings[key]
+		var/datum/body_marking/BM = GLOB.body_markings[key]
+
+		var/render_limb_string = specific_render_zone
+		if(BM.gendered && (!BM.gender_only_chest || specific_render_zone == BODY_ZONE_CHEST))
+			var/gendaar = (human_owner.gender == FEMALE) ? "f" : "m"
+			render_limb_string = "[render_limb_string]_[gendaar]"
+
+		var/mutable_appearance/accessory_overlay = mutable_appearance(BM.icon, "[BM.icon_state]_[render_limb_string]", -specific_layer)
+		if(override_color)
+			accessory_overlay.color = "#[override_color]"
+		else
+			accessory_overlay.color = "#[color]"
+		appearance_list += accessory_overlay
+
+	return appearance_list
+
+/obj/item/bodypart/proc/get_markings_overlays(override_color)
+	if((!markings && !aux_markings) || !owner || !ishuman(owner))
+		return
+	var/mob/living/carbon/human/human_owner = owner
+	var/list/appearance_list = list()
+	if(markings)
+		appearance_list += get_specific_markings_overlays(markings, FALSE, human_owner, override_color)
+	if(aux_markings)
+		appearance_list += get_specific_markings_overlays(aux_markings, TRUE, human_owner, override_color)
+	adjust_marking_overlays(appearance_list)
+
+	return appearance_list
 
 ///since organs aren't actually stored in the bodypart themselves while attached to a person, we have to query the owner for what we should have
 /obj/item/bodypart/proc/get_organs()
@@ -773,6 +817,7 @@
 /obj/item/bodypart/deconstruct(disassembled = TRUE)
 	drop_organs()
 	return ..()
+
 /obj/item/bodypart/chest
 	name = "chest"
 	desc = ""

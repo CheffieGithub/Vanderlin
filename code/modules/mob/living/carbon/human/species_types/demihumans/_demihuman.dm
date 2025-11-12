@@ -104,12 +104,15 @@
 		ORGAN_SLOT_LIVER = /obj/item/organ/liver,
 		ORGAN_SLOT_STOMACH = /obj/item/organ/stomach,
 		ORGAN_SLOT_APPENDIX = /obj/item/organ/appendix,
+		ORGAN_SLOT_GUTS = /obj/item/organ/guts,
 		ORGAN_SLOT_TAIL = /obj/item/organ/tail,
 	)
+
 	bodypart_features = list(
 		/datum/bodypart_feature/hair/head,
 		/datum/bodypart_feature/hair/facial,
 	)
+
 	customizers = list(
 		/datum/customizer/organ/eyes/humanoid,
 		/datum/customizer/bodypart_feature/hair/head/humanoid,
@@ -133,6 +136,17 @@
 		/datum/descriptor_choice/prominent_two_wild,
 		/datum/descriptor_choice/prominent_three_wild,
 		/datum/descriptor_choice/prominent_four_wild,
+	)
+
+	body_marking_sets = list(
+		/datum/body_marking_set/none,
+		/datum/body_marking_set/hollow/animal,
+		/datum/body_marking_set/hollow/snake,
+	)
+
+	body_markings = list(
+		/datum/body_marking/hollow/animal,
+		/datum/body_marking/hollow/snake,
 	)
 
 /datum/species/demihuman/get_hairc_list()

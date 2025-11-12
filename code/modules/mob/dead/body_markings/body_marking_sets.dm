@@ -57,3 +57,15 @@
 	body_marking_list = list(
 		/datum/body_marking/tiger/dark
 	)
+
+/datum/body_marking_set/hollow/animal
+	name = "Hollow-Kin Animal"
+	body_marking_list = list(
+		/datum/body_marking/hollow/animal,
+	)
+
+/datum/body_marking_set/hollow/snake
+	name = "Hollow-Kin Snake"
+	body_marking_list = list(
+		/datum/body_marking/hollow/snake,
+	)
