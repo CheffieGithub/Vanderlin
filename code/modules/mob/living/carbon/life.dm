@@ -477,8 +477,27 @@
 	if(temp < 0 )
 		snow_shiver = world.time + 3 SECONDS + abs(temp)
 
-//Start of a breath chain, calls breathe()
+/// Start of a breath chain, calls breathe()
 /mob/living/carbon/handle_breathing(times_fired)
+	var/next_breath = 4
+	var/obj/item/organ/lungs/L = getorganslot(ORGAN_SLOT_LUNGS)
+	var/obj/item/organ/heart/H = getorganslot(ORGAN_SLOT_HEART)
+
+	if(L && L.damage > L.high_threshold)
+		next_breath--
+
+	if(H && H.damage > H.high_threshold)
+		next_breath--
+
+	if((times_fired % next_breath) == 0)
+		breathe() //Breathe per 4 ticks if healthy, down to 2 if our lungs or heart are damaged, unless suffocating
+
+/mob/living/carbon/proc/breathe()
+	if(SEND_SIGNAL(src, COMSIG_CARBON_ATTEMPT_BREATHE) & COMSIG_CARBON_BLOCK_BREATH)
+		return
+
+	SEND_SIGNAL(src, COMSIG_CARBON_PRE_BREATHE)
+
 	var/breath_effect_prob = 0
 	var/turf/turf = get_turf(src)
 	var/turf_temp = turf ? turf.return_temperature() : BODYTEMP_NORMAL
@@ -500,20 +519,17 @@
 		breath_effect_prob += min(cold_severity * 15, 40)
 
 	// Environmental modifiers
-	var/turf/snow_turf = get_turf(src)
-	if(snow_shiver > world.time || snow_turf?.snow)
+	if(snow_shiver > world.time || locate(/obj/structure/snow) in turf)
 		breath_effect_prob = min(breath_effect_prob + 30, 100)
 
 	// Heavy breathing from exertion or cold body
 	if(bodytemperature < BODYTEMP_COLD_DAMAGE_LIMIT - 3)
 		breath_effect_prob = min(breath_effect_prob + 50, 100)
-		if(prob(15) && !is_mouth_covered())
+		if(!is_mouth_covered() && prob(15))
 			visible_message(span_notice("[src]'s breath comes out in heavy puffs of vapor."))
 
-	if(prob(breath_effect_prob) && !is_mouth_covered())
+	if(!is_mouth_covered() && prob(breath_effect_prob))
 		emit_breath_particle(/particles/fog/breath)
-
-	return
 
 /mob/living/proc/emit_breath_particle(particle_type)
 	ASSERT(ispath(particle_type, /particles))
@@ -562,6 +578,13 @@
 	else
 		for(var/obj/item/organ/O as anything in internal_organs)
 			O.on_death() //Needed so organs decay while inside the body.
+
+/mob/living/carbon/handle_diseases()
+	for(var/datum/disease/disease as anything in diseases)
+		if(QDELETED(disease)) //Got cured/deleted while the loop was still going.
+			continue
+		if(stat != DEAD || disease.process_dead)
+			disease.stage_act()
 
 /mob/living/carbon/handle_embedded_objects()
 	for(var/obj/item/bodypart/bodypart as anything in bodyparts)
