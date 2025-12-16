@@ -29,7 +29,7 @@
 		return FALSE
 	disease.try_infect(src)
 
-/mob/living/carrbon/proc/contract_contact_disease(datum/disease/disease, target_zone)
+/mob/living/carbon/contract_contact_disease(datum/disease/disease, target_zone)
 	if(!can_contract_disease(disease))
 		return FALSE
 
@@ -168,8 +168,9 @@
 	return TRUE
 
 /mob/living/proc/get_disease(datum/disease/disease)
-	if(!istype(disease))
+	if(!ispath(disease))
 		return
+
 	var/datum/disease/infection = new disease
 
 	force_contract_disease(infection, TRUE)

@@ -34,13 +34,13 @@
 		handle_roguebreath()
 		update_stress()
 		handle_nausea()
+
 		if((blood_volume > BLOOD_VOLUME_SURVIVE) || HAS_TRAIT(src, TRAIT_BLOODLOSS_IMMUNE))
 			if(!heart_attacking)
-				if(oxyloss)
+				if(oxyloss && !losebreath)
 					adjustOxyLoss(-1.6)
-			else
-				if(getOxyLoss() < 20)
-					heart_attacking = FALSE
+			else if(getOxyLoss() < 20)
+				heart_attacking = FALSE
 
 		handle_sleep()
 		handle_brain_damage()
@@ -497,6 +497,14 @@
 		return
 
 	SEND_SIGNAL(src, COMSIG_CARBON_PRE_BREATHE)
+
+	if(losebreath >= 1) //You've missed a breath, take oxy damage
+		losebreath--
+		if(prob(10))
+			emote("gasp")
+		adjustOxyLoss(2)
+
+	// Temperature stuff below
 
 	var/breath_effect_prob = 0
 	var/turf/turf = get_turf(src)

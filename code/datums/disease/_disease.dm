@@ -33,7 +33,7 @@
 	var/spread_flags = DISEASE_SPREAD_AIRBORNE | DISEASE_SPREAD_CONTACT_FLUIDS | DISEASE_SPREAD_CONTACT_SKIN
 
 	/// Typecache of viable mob types
-	var/list/viable_mobtypes = list()
+	var/list/viable_mobtypes = list(/mob/living/carbon/human)
 	/// List of cures if the disease has the CURABLE flag, these are reagent ids
 	var/list/reagent_cures = list()
 	/// If the disease requires all reagent cures
@@ -199,7 +199,7 @@
 			recovery_prob *= DISEASE_PEAKED_RECOVERY_MULTIPLIER
 
 		if(slowdown != 1) //using spaceacillin can help get them over the finish line to kill a disease with decreasing effect over time
-			recovery_prob += clamp((((1 - slowdown)*(DISEASE_SLOWDOWN_RECOVERY_BONUS * 2)) * ((DISEASE_SLOWDOWN_RECOVERY_BONUS_DURATION - chemical_offsets) / DISEASE_SLOWDOWN_RECOVERY_BONUS_DURATION)), 0, DISEASE_SLOWDOWN_RECOVERY_BONUS)
+			recovery_prob += clamp((((1 - slowdown) * (DISEASE_SLOWDOWN_RECOVERY_BONUS * 2)) * ((DISEASE_SLOWDOWN_RECOVERY_BONUS_DURATION - chemical_offsets) / DISEASE_SLOWDOWN_RECOVERY_BONUS_DURATION)), 0, DISEASE_SLOWDOWN_RECOVERY_BONUS)
 			chemical_offsets = min(chemical_offsets + 1, DISEASE_SLOWDOWN_RECOVERY_BONUS_DURATION)
 
 		if(!HAS_TRAIT(affected_mob, TRAIT_NOHUNGER))
@@ -210,16 +210,16 @@
 					recovery_prob += round((DISEASE_SATIETY_RECOVERY_MULTIPLIER * (affected_mob.satiety/MAX_SATIETY)), 0.1)
 
 		switch(affected_mob.stress)
-			if(STRESS_VGOOD to INFINITY)
+			if(-INFINITY to STRESS_VGOOD)
 				recovery_prob += 0.4
-			if(STRESS_GOOD to STRESS_VGOOD)
+			if(STRESS_VGOOD to STRESS_GOOD)
 				recovery_prob += 0.2
-			if(STRESS_NEUTRAL)
-				recovery_prob += 0
 			if(STRESS_BAD to STRESS_VBAD)
 				recovery_prob += -0.2
 			if(STRESS_VBAD to INFINITY)
 				recovery_prob += -0.4
+			else
+				recovery_prob += 0
 
 		if((HAS_TRAIT(affected_mob, TRAIT_NOHUNGER) || !(affected_mob.satiety < 0 || affected_mob.nutrition < NUTRITION_LEVEL_STARVING)) && HAS_TRAIT(affected_mob, TRAIT_KNOCKEDOUT)) //resting starved won't help, but resting helps
 			var/turf/rest_turf = get_turf(affected_mob)

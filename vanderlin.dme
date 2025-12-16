@@ -1014,6 +1014,7 @@
 #include "code\datums\disease\_disease_mob_procs.dm"
 #include "code\datums\debug\path_debug.dm"
 #include "code\datums\disease\_disease.dm"
+#include "code\datums\disease\diseases\lycanthropy.dm"
 #include "code\datums\dungeon_generator\dungeon_decent.dm"
 #include "code\datums\dungeon_generator\dungeon_direction_helpers.dm"
 #include "code\datums\dungeon_generator\dungeon_entry_exit.dm"
