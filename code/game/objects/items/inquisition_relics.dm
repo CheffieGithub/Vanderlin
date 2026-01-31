@@ -1170,6 +1170,8 @@
 	if(fixated)
 		fixated.clear_alert("blackmirror", TRUE)
 		fixated.playsound_local(src, 'sound/items/blackeye.ogg', 40, FALSE)
+	else if(effect)
+		QDEL_NULL(effect)
 	effect = null
 	fixation = null
 	usesleft--
@@ -1192,6 +1194,9 @@
 /obj/item/inqarticles/bmirror/attack_self(mob/user, params)
 	. = ..()
 	if(!user.mind)
+		return
+
+	if(usesleft <= 0)
 		return
 
 	if(!opened)
@@ -1345,26 +1350,13 @@
 		to_chat(user, span_warning("I cannot close the mirror while it's active."))
 		return
 
-	var/mob/living/fixated = fixation?.resolve()
 	if(opened)
-		if(fixated)
-			fixated.clear_alert("blackmirror", TRUE)
-			fixated.playsound_local(src, 'sound/items/blackeye.ogg', 40, FALSE)
-		else if(effect)
-			QDEL_NULL(effect)
 		playsound(src, 'sound/items/blackmirror_shut.ogg', 100, FALSE)
-		opened = FALSE
-		update_appearance(UPDATE_ICON_STATE)
 		return
 
 	playsound(src, 'sound/items/blackmirror_open.ogg', 100, FALSE)
 
-	if(fixated)
-		fixated.playsound_local(src, 'sound/items/blackeye_warn.ogg', 100, FALSE)
-		effect = fixated.throw_alert("blackmirror", /atom/movable/screen/alert/blackmirror, override = TRUE)
-		effect.source = src
-
-	opened = TRUE
+	opened = !opened
 	update_appearance(UPDATE_ICON_STATE)
 
 /obj/item/inqarticles/bmirror/update_icon_state()
