@@ -1485,27 +1485,6 @@
 
 	src << browse(html, "window=recipe_debug;size=1200x800")
 
-/client/Topic(href, href_list)
-	. = ..()
-
-	if(!check_rights(R_DEBUG, FALSE))
-		return
-
-	if(href_list["action"])
-		switch(href_list["action"])
-			if("rebuild_cache")
-				debug_rebuild_cache()
-			if("cache_stats")
-				debug_show_cache_stats()
-			if("test_system")
-				debug_test_system()
-			if("export_cache")
-				debug_export_cache()
-			if("show_tree")
-				debug_show_recipe_tree(href_list["item"])
-			if("browse_items")
-				debug_browse_items()
-
 /client/proc/debug_rebuild_cache()
 	to_chat(mob, "Rebuilding recipe cache...")
 	var/datum/recipe_tree_interface/tree = new()

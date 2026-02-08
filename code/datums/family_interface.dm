@@ -1016,35 +1016,6 @@
 	html += "</div>"
 	return html
 
-/client/Topic(href, list/href_list)
-	. = ..()
-
-	if(!check_rights(R_DEBUG, FALSE))
-		return
-
-	switch(href_list["action"])
-		if("view_royal")
-			if(SSfamilytree?.ruling_family)
-				var/datum/family_tree_interface/interface = new(SSfamilytree.ruling_family, usr)
-				interface.show_interface()
-			else
-				to_chat(usr, "No royal family found!")
-		if("view_tree")
-			var/datum/heritage/H = locate(href_list["family"])
-			if(H)
-				var/datum/family_tree_interface/interface = new(H, usr)
-				interface.show_interface()
-			else
-				to_chat(usr, "Could not locate family!")
-		if("generate_test")
-			var/datum/heritage/test_family = generate_test_family_new()
-			var/datum/family_tree_interface/interface = new(test_family, usr)
-			interface.show_interface()
-		if("generate_large")
-			var/datum/heritage/large_family = generate_large_dynasty()
-			var/datum/family_tree_interface/interface = new(large_family, usr)
-			interface.show_interface()
-
 /proc/generate_test_family_new()
 	// Create founder
 	var/mob/living/carbon/human/species/kobold/founder = new()

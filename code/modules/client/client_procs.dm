@@ -50,7 +50,64 @@ GLOBAL_LIST_EMPTY(respawncounts)
 		return
 #endif
 
-	// ANSWER SCHIZOHELP
+	// asset_cache
+	var/asset_cache_job
+	if(href_list["asset_cache_confirm_arrival"])
+		asset_cache_job = round(text2num(href_list["asset_cache_confirm_arrival"]))
+		//because we skip the limiter, we have to make sure this is a valid arrival and not somebody tricking us
+		//	into letting append to a list without limit.
+		if (asset_cache_job > 0 && asset_cache_job <= last_asset_job && !(asset_cache_job in completed_asset_jobs))
+			completed_asset_jobs += asset_cache_job
+			return
+
+	var/atom/ref = locate(href_list["src"])
+	if(!holder && (href_list["window_id"] != "statbrowser") && !istype(ref, /datum/native_say))
+		var/mtl = CONFIG_GET(number/minute_topic_limit)
+		if (mtl)
+			var/minute = round(world.time, 1 MINUTES)
+			if (!topiclimiter)
+				topiclimiter = new(LIMITER_SIZE)
+			if (minute != topiclimiter[CURRENT_MINUTE])
+				topiclimiter[CURRENT_MINUTE] = minute
+				topiclimiter[MINUTE_COUNT] = 0
+			topiclimiter[MINUTE_COUNT] += 1
+			if (topiclimiter[MINUTE_COUNT] > mtl)
+				var/msg = "Your previous action was ignored because you've done too many in a minute."
+				if (minute != topiclimiter[ADMINSWARNED_AT]) //only one admin message per-minute. (if they spam the admins can just boot/ban them)
+					topiclimiter[ADMINSWARNED_AT] = minute
+					msg += " Administrators have been informed."
+					log_game("[key_name(src)] Has hit the per-minute topic limit of [mtl] topic calls in a given game minute")
+					message_admins("[ADMIN_LOOKUPFLW(usr)] [ADMIN_KICK(usr)] Has hit the per-minute topic limit of [mtl] topic calls in a given game minute")
+				to_chat(src, span_danger("[msg]"))
+				return
+
+		var/stl = CONFIG_GET(number/second_topic_limit)
+		if (stl)
+			var/second = round(world.time, 1 SECONDS)
+			if (!topiclimiter)
+				topiclimiter = new(LIMITER_SIZE)
+			if (second != topiclimiter[CURRENT_SECOND])
+				topiclimiter[CURRENT_SECOND] = second
+				topiclimiter[SECOND_COUNT] = 0
+			topiclimiter[SECOND_COUNT] += 1
+			if (topiclimiter[SECOND_COUNT] > stl)
+				to_chat(src, span_danger("Your previous action was ignored because you've done too many in a second"))
+				return
+
+	// Tgui Topic middleware
+	if(tgui_Topic(href_list))
+		return
+
+	//Logs all hrefs, except chat pings
+	if(!(href_list["_src_"] == "chat" && href_list["proc"] == "ping" && LAZYLEN(href_list) == 2))
+		log_href("[src] (usr:[usr]\[[COORD(usr)]\]) : [hsrc ? "[hsrc] " : ""][href]")
+
+	//byond bug ID:2256651
+	if (asset_cache_job && (asset_cache_job in completed_asset_jobs))
+		to_chat(src, "<span class='danger'>An error has been detected in how my client is receiving resources. Attempting to correct.... (If you keep seeing these messages you might want to close byond and reconnect)</span>")
+		src << browse("...", "window=asset_cache_browser")
+
+		// ANSWER SCHIZOHELP
 	if(href_list["schizohelp"])
 		var/datum/schizohelp/schizo = locate(href_list["schizohelp"])
 		var/again = (href_list["ask_again"]) ? TRUE : FALSE
@@ -153,63 +210,6 @@ GLOBAL_LIST_EMPTY(respawncounts)
 			return
 		show_book_content(title)
 
-	// asset_cache
-	var/asset_cache_job
-	if(href_list["asset_cache_confirm_arrival"])
-		asset_cache_job = round(text2num(href_list["asset_cache_confirm_arrival"]))
-		//because we skip the limiter, we have to make sure this is a valid arrival and not somebody tricking us
-		//	into letting append to a list without limit.
-		if (asset_cache_job > 0 && asset_cache_job <= last_asset_job && !(asset_cache_job in completed_asset_jobs))
-			completed_asset_jobs += asset_cache_job
-			return
-
-	var/atom/ref = locate(href_list["src"])
-	if(!holder && (href_list["window_id"] != "statbrowser") && !istype(ref, /datum/native_say))
-		var/mtl = CONFIG_GET(number/minute_topic_limit)
-		if (mtl)
-			var/minute = round(world.time, 1 MINUTES)
-			if (!topiclimiter)
-				topiclimiter = new(LIMITER_SIZE)
-			if (minute != topiclimiter[CURRENT_MINUTE])
-				topiclimiter[CURRENT_MINUTE] = minute
-				topiclimiter[MINUTE_COUNT] = 0
-			topiclimiter[MINUTE_COUNT] += 1
-			if (topiclimiter[MINUTE_COUNT] > mtl)
-				var/msg = "Your previous action was ignored because you've done too many in a minute."
-				if (minute != topiclimiter[ADMINSWARNED_AT]) //only one admin message per-minute. (if they spam the admins can just boot/ban them)
-					topiclimiter[ADMINSWARNED_AT] = minute
-					msg += " Administrators have been informed."
-					log_game("[key_name(src)] Has hit the per-minute topic limit of [mtl] topic calls in a given game minute")
-					message_admins("[ADMIN_LOOKUPFLW(usr)] [ADMIN_KICK(usr)] Has hit the per-minute topic limit of [mtl] topic calls in a given game minute")
-				to_chat(src, span_danger("[msg]"))
-				return
-
-		var/stl = CONFIG_GET(number/second_topic_limit)
-		if (stl)
-			var/second = round(world.time, 1 SECONDS)
-			if (!topiclimiter)
-				topiclimiter = new(LIMITER_SIZE)
-			if (second != topiclimiter[CURRENT_SECOND])
-				topiclimiter[CURRENT_SECOND] = second
-				topiclimiter[SECOND_COUNT] = 0
-			topiclimiter[SECOND_COUNT] += 1
-			if (topiclimiter[SECOND_COUNT] > stl)
-				to_chat(src, span_danger("Your previous action was ignored because you've done too many in a second"))
-				return
-
-	// Tgui Topic middleware
-	if(tgui_Topic(href_list))
-		return
-
-	//Logs all hrefs, except chat pings
-	if(!(href_list["_src_"] == "chat" && href_list["proc"] == "ping" && LAZYLEN(href_list) == 2))
-		log_href("[src] (usr:[usr]\[[COORD(usr)]\]) : [hsrc ? "[hsrc] " : ""][href]")
-
-	//byond bug ID:2256651
-	if (asset_cache_job && (asset_cache_job in completed_asset_jobs))
-		to_chat(src, "<span class='danger'>An error has been detected in how my client is receiving resources. Attempting to correct.... (If you keep seeing these messages you might want to close byond and reconnect)</span>")
-		src << browse("...", "window=asset_cache_browser")
-
 	// Keypress passthrough
 	if(href_list["__keydown"])
 		var/keycode = browser_keycode_to_byond(href_list["__keydown"])
@@ -254,6 +254,53 @@ GLOBAL_LIST_EMPTY(respawncounts)
 		var/tab = href_list["chronicletab"] || "The Realm"
 		show_chronicle(tab)
 		return
+
+	if(href_list["quirk_add"])
+		var/quirk_ref = locate(href_list["quirk_add"])
+		if(quirk_ref && ispath(quirk_ref, /datum/quirk))
+			prefs.add_quirk(quirk_ref)
+			prefs.open_quirk_menu(usr)
+		return TRUE
+
+	if(href_list["quirk_remove"])
+		var/quirk_ref = locate(href_list["quirk_remove"])
+		if(quirk_ref)
+			prefs.remove_quirk(quirk_ref)
+			prefs.open_quirk_menu(usr)
+		return TRUE
+
+	if(href_list["quirk_customize"])
+		var/quirk_ref = locate(href_list["quirk_customize"])
+		var/value_ref = href_list["value"] // Can be a reference or plain text now
+
+		if(quirk_ref)
+			// Try to locate the value (for dropdown options)
+			var/actual_value = locate(value_ref)
+			if(!actual_value)
+				// If locate fails, it's plain text (for text inputs)
+				actual_value = value_ref
+
+			prefs.set_quirk_customization(quirk_ref, actual_value)
+			prefs.open_quirk_menu(usr)
+		return TRUE
+
+	if(href_list["quirk_text_update"])
+		var/quirk_ref = locate(href_list["quirk_text_update"])
+		var/text_value = href_list["text"]
+
+		if(quirk_ref)
+			prefs.set_quirk_customization(quirk_ref, text_value)
+		return TRUE
+
+	if(href_list["quirk_clear"])
+		prefs.clear_quirks()
+		prefs.open_quirk_menu(usr)
+		return TRUE
+
+	if(href_list["quirk_close"])
+		var/mob/user = usr
+		user << browse(null, "window=quirk_menu")
+		return TRUE
 
 	switch(href_list["_src_"])
 		if("holder")
