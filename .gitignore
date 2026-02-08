@@ -1,8 +1,5 @@
 ###Files and folders specified here will never be tracked.
 
-# Local overrides--you can use this to change the config for your dev environment (like setting up SQL) without worrying about committing it
-/config/dev_overrides.txt
-
 #Ignore everything in datafolder and subdirectories
 /data/**/*
 /tmp/**/*
@@ -57,15 +54,15 @@ __pycache__/
 
 # Distribution / packaging
 .Python
-env/
-build/
+
+/build/
 develop-eggs/
 dist/
 downloads/
 eggs/
 .eggs/
-lib/
-lib64/
+/lib/
+/lib64/
 parts/
 sdist/
 var/
@@ -201,7 +198,6 @@ Temporary Items
 !/.vscode/extensions.json
 tools/MapAtmosFixer/MapAtmosFixer/obj/*
 tools/MapAtmosFixer/MapAtmosFixer/bin/*
-**/.vs/
 
 #GitHub Atom
 .atom-build.json
@@ -217,7 +213,16 @@ tools/MapAtmosFixer/MapAtmosFixer/bin/*
 #dmdoc default folder
 /dmdoc
 
-# Ignore custom music and title screens (amend as appropriate)
+# ezdb
+/db/
+
+*.test.dme
+
+# Ignore everything in the config folder, but NOT the example or music jukeboxes.
+# Also ignore custom music and title screens (amend as appropriate)
+/config/*
+!/config/example/
+
 /config/jukebox_music/sounds/*
 !/config/jukebox_music/sounds/exclude
 /config/title_music/sounds/*
@@ -225,17 +230,3 @@ tools/MapAtmosFixer/MapAtmosFixer/bin/*
 !/config/title_music/sounds/title1.ogg
 /config/title_screens/images/*
 !/config/title_screens/images/exclude
-/data/triumphs.sav
-config/admins.txt
-cfg/admin.txt
-config/admins.txt
-
-# Ignore compile options to default to testing environment
-#/code/_compile_options.dm
-
-/prof.dll
-
-# OpenDream-compiled DME
-/stonekeep.json
-code/_compile_options.dm
-*.m.dme

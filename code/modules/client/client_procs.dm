@@ -197,6 +197,10 @@ GLOBAL_LIST_EMPTY(respawncounts)
 				to_chat(src, span_danger("Your previous action was ignored because you've done too many in a second"))
 				return
 
+	// Tgui Topic middleware
+	if(tgui_Topic(href_list))
+		return
+
 	//Logs all hrefs, except chat pings
 	if(!(href_list["_src_"] == "chat" && href_list["proc"] == "ping" && LAZYLEN(href_list) == 2))
 		log_href("[src] (usr:[usr]\[[COORD(usr)]\]) : [hsrc ? "[hsrc] " : ""][href]")

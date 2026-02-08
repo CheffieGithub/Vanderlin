@@ -125,7 +125,7 @@ jobs:
         run: |
           source $HOME/BYOND/byond/bin/byondsetup
           python3 tools/ci/compile_all_maps.py
-          DreamMaker -DCIBUILDING -DCITESTING -DALL_MAPS vanderlin.dme
+          tools/build/build.sh -DCIBUILDING -DCITESTING -DALL_MAPS
       - name: Check client Compatibility
         uses: tgstation/byond-client-compatibility-check@v3
         with:
@@ -189,7 +189,7 @@ jobs:
       - name: Compile and run tests
         run: |
           source $HOME/BYOND/byond/bin/byondsetup
-          DreamMaker -DCIBUILDING vanderlin.dme
+          tools/build/build.sh -DCIBUILDING
           bash tools/ci/run_server.sh ${{ matrix.map }}
       - name: Check client Compatibility
         uses: tgstation/byond-client-compatibility-check@v3
