@@ -1,4 +1,3 @@
-
 /datum/clan_leader/eoran
 	lord_spells = list(
 		/datum/action/cooldown/spell/enslave_mortal,
@@ -38,7 +37,7 @@
 		TRAIT_LIMBATTACHMENT,
 		)
 
-	clane_covens = list(
+	clan_covens = list(
 		/datum/coven/auspex,
 		/datum/coven/presence,
 		/datum/coven/bloodheal,
@@ -54,10 +53,3 @@
 
 /datum/clan/eoran/apply_clan_components(mob/living/carbon/human/H)
 	H.AddComponent(/datum/component/vampire_disguise)
-
-
-
-
-
-
-
