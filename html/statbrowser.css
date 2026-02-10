@@ -12,7 +12,7 @@ body {
 body {
   font-family: Pterra;
 	line-height: 100%;
-	font-size: 16px;
+	font-size: 14px;
 	margin: 0 !important;
 	padding: 0 !important;
 	overflow: hidden;
@@ -77,7 +77,7 @@ img {
 
 .button {
   font-family: Blackmoor LET;
-  font-size: 18px;
+  font-size: 1.3em;
   display: inline-table;
   cursor: pointer;
   user-select: none;
@@ -217,18 +217,18 @@ img {
  * MARK: Dark theme colors
  */
 :root {
-  --color-base: #151515;
-  --scrollbar-base: #151515;
-  --scrollbar-thumb: #363636;
+  --color-base: #1c1313;
+  --scrollbar-base: #101010;
+  --scrollbar-thumb: #252525;
 }
 
 body{
-  background-color: #151515;
-  color: #b2c4dd;
+  background-color: #1c1313;
+  color: #897472;
 }
 
 a {
-  color: #6699ff;
+  color: #eac0b9;
 }
 
 a:hover,
@@ -238,7 +238,7 @@ a:hover,
 }
 
 #menu {
-  background-color: #151515;
+  background-color: #1c1313;
 }
 
 #menu.tabs-classic .button.active {
@@ -246,7 +246,7 @@ a:hover,
 }
 
 .button {
-  color: rgba(255, 255, 255, 0.5);
+  color: #eac0b9;
 }
 
 .button:hover {
@@ -254,18 +254,18 @@ a:hover,
 }
 
 .button.active {
-  background-color: #313131;
-  color: #d4dfec;
-  border-bottom-color: #d4dfec;
+  background-color: #252525;
+  color: #eac0b9;
+  border-bottom-color: #ae3636;
 }
 
 #under-menu,
 #under-content {
-  background-color: #202020;
+  background-color: #101010;
 }
 
 .grid-item {
-  color: #b2c4dd;
+  color: #eac0b9;
 }
 
 .grid-item:hover .grid-item-text {
