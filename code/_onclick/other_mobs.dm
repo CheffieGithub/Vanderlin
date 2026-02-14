@@ -491,47 +491,54 @@
 		thief.adjust_experience(/datum/skill/misc/stealing, exp_to_gain, FALSE)
 		changeNext_move(mmb_intent.clickcd)
 
-/mob/living/proc/jump_action(atom/A)
-	if(istype(get_turf(src), /turf/open/water))
-		to_chat(src, span_warning("I can't jump while floating."))
-		return
+/mob/living/proc/can_jump(atom/target)
+	if(!isatom(target))
+		return FALSE
 
-	if(A == src || A == loc)
-		return
+	if(target == src || target == loc)
+		return FALSE
 
 	if(usable_legs < 2)
-		return
+		return FALSE
 
-	if(pulledby && pulledby != src)
-		to_chat(src, span_warning("I'm being grabbed."))
-		resist_grab()
-		return
+	if(body_position != STANDING_UP)
+		to_chat(src, span_warning("I should stand up first."))
+		return FALSE
+
+	if(incapacitated())
+		to_chat(src, span_warning("I can't jump like this."))
+		return FALSE
 
 	if(IsOffBalanced())
 		to_chat(src, span_warning("I haven't regained my balance yet."))
-		return
+		return FALSE
 
-	if(lying_angle)
-		to_chat(src, span_warning("I should stand up first."))
-		return
+	var/flying = movement_type & (FLYING | FLOATING)
+	if(flying || istype(get_turf(src), /turf/open/water))
+		to_chat(src, span_warning("I can't jump while floating."))
+		return FALSE
 
-	if(!isatom(A))
-		return
-
-	if(A.z != z)
+	if(target.z != z)
 		if(!HAS_TRAIT(src, TRAIT_ZJUMP))
 			to_chat(src, span_warning("That's too high for me..."))
-			return
+			return FALSE
+
+	return TRUE
+
+/mob/living/proc/jump_action(atom/target, force_leap = FALSE)
+	if(!can_jump(target))
+		return FALSE
 
 	changeNext_move(mmb_intent?.clickcd ? mmb_intent.clickcd : CLICK_CD_MELEE)
 
-	face_atom(A)
+	face_atom(target)
 
 	var/jadded
 	var/jrange
 	var/jextra = FALSE
 
-	if(m_intent == MOVE_INTENT_RUN)
+	var/should_leap = (force_leap || (m_intent == MOVE_INTENT_RUN))
+	if(should_leap)
 		emote("leap", forced = TRUE)
 		OffBalance(30)
 		jadded = 45
@@ -550,7 +557,8 @@
 			jadded += 50
 			jrange = 1
 
-	jump_action_resolve(A, jadded, jrange, jextra)
+	jump_action_resolve(target, jadded, jrange, jextra)
+
 	return TRUE
 
 #define FLIP_DIRECTION_CLOCKWISE 1
@@ -566,37 +574,39 @@
 		if((dir & SOUTH) || (dir & WEST))
 			flip_direction = FLIP_DIRECTION_ANTICLOCKWISE
 
-	if(adjust_stamina(min(jadded,100)))
-		if(do_a_flip)
-			var/flip_angle = flip_direction ? 120 : -120
-			animate(src, pixel_z = pixel_z + 6, transform = turn(transform, flip_angle), time = 1)
-			animate(transform = turn(transform, flip_angle), time=1)
-			animate(pixel_z = prev_pixel_z, transform = turn(transform, flip_angle), time=1)
-			animate(transform = prev_transform, time = 0)
-		else
-			animate(src, pixel_z = pixel_z + 6, time = 1)
-			animate(pixel_z = prev_pixel_z, transform = turn(transform, pick(-12, 0, 12)), time=2)
-			animate(transform = prev_transform, time = 0)
-
-		if(jextra)
-			throw_at(A, jrange, 1, src, spin = FALSE)
-			while(src.throwing)
-				sleep(1)
-			throw_at(get_step(src, src.dir), 1, 1, src, spin = FALSE)
-		else
-			throw_at(A, jrange, 1, src, spin = FALSE)
-			while(src.throwing)
-				sleep(1)
-		if(isopenturf(src.loc))
-			var/turf/open/T = src.loc
-			if(T.landsound)
-				playsound(T, T.landsound, 100, FALSE)
-			T.Entered(src)
-	else
+	if(!adjust_stamina(min(jadded, 100)))
 		animate(src, pixel_z = pixel_z + 6, time = 1)
 		animate(pixel_z = prev_pixel_z, transform = turn(transform, pick(-12, 0, 12)), time=2)
 		animate(transform = prev_transform, time = 0)
 		throw_at(A, 1, 1, src, spin = FALSE)
+		return
+
+	if(do_a_flip)
+		var/flip_angle = flip_direction ? 120 : -120
+		animate(src, pixel_z = pixel_z + 6, transform = turn(transform, flip_angle), time = 1)
+		animate(transform = turn(transform, flip_angle), time=1)
+		animate(pixel_z = prev_pixel_z, transform = turn(transform, flip_angle), time=1)
+		animate(transform = prev_transform, time = 0)
+	else
+		animate(src, pixel_z = pixel_z + 6, time = 1)
+		animate(pixel_z = prev_pixel_z, transform = turn(transform, pick(-12, 0, 12)), time=2)
+		animate(transform = prev_transform, time = 0)
+
+	if(jextra)
+		throw_at(A, jrange, 1, src, spin = FALSE)
+		while(src.throwing)
+			sleep(1)
+		throw_at(get_step(src, src.dir), 1, 1, src, spin = FALSE)
+	else
+		throw_at(A, jrange, 1, src, spin = FALSE)
+		while(src.throwing)
+			sleep(1)
+
+	if(isopenturf(loc))
+		var/turf/open/T = loc
+		if(T.landsound)
+			playsound(T, T.landsound, 100, FALSE)
+		T.Entered(src)
 
 #undef FLIP_DIRECTION_CLOCKWISE
 #undef FLIP_DIRECTION_ANTICLOCKWISE

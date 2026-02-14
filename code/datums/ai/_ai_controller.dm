@@ -4,7 +4,7 @@ have ways of interacting with a specific atom and control it. They posses a blac
 */
 /datum/ai_controller
 	///The atom this controller is controlling
-	var/atom/pawn
+	var/atom/movable/pawn
 	/**
 	 * This is a list of variables the AI uses and can be mutated by actions.
 	 *
@@ -68,7 +68,8 @@ have ways of interacting with a specific atom and control it. They posses a blac
 	var/interesting_dist = AI_DEFAULT_INTERESTING_DIST
 	///
 	var/movement_displacement_time = 0
-
+	/// If we can jump we can path over dangerous turfs
+	var/can_jump = FALSE
 
 /datum/ai_controller/New(atom/new_pawn)
 	change_ai_movement_type(ai_movement)
@@ -298,19 +299,65 @@ have ways of interacting with a specific atom and control it. They posses a blac
 /datum/ai_controller/proc/can_move()
 	if(QDELETED(pawn))
 		return
+
 	var/mob/living/living_pawn = pawn
 	if(HAS_TRAIT(living_pawn, TRAIT_INCAPACITATED))
 		return FALSE
+
 	if(ai_traits & STOP_MOVING_WHEN_PULLED && living_pawn.pulledby)
 		return FALSE
+
 	if(!isturf(living_pawn.loc)) //No moving if not on a turf
 		return FALSE
+
 	if(HAS_TRAIT(living_pawn, TRAIT_IMMOBILIZED))
 		return FALSE
+
 	if(living_pawn.pulledby?.grab_state > GRAB_PASSIVE)
 		return FALSE
 
 	return TRUE
+
+/**
+ * Called instead of Move when moving along generated paths.
+ *
+ * Allows actions like jumping.
+ *
+ * Returns number of tiles moved for cutting the path, if 0 we repath.
+ */
+/datum/ai_controller/proc/path_move(turf/destination)
+	if(!can_jump || !isliving(pawn))
+		pawn.Move(destination)
+		return 1
+
+	var/mob/living/living_pawn = pawn
+
+	if(living_pawn.z < destination.z)
+		if(living_pawn.can_jump(destination) && HAS_TRAIT(src, TRAIT_ZJUMP))
+			return living_pawn.jump_action(destination)
+		return 0
+
+	if(!destination.can_traverse_safely(pawn))
+		if(!living_pawn.can_jump(destination))
+			return 0
+
+		if(length(movement_path) < 2)
+			return 0
+
+		var/turf/next_turf = movement_path[2]
+
+		var/force_leap = FALSE
+		if(!next_turf.can_traverse_safely(pawn))
+			if(length(movement_path) < 3)
+				return 0
+			next_turf = movement_path[3]
+			force_leap = TRUE
+
+		living_pawn.jump_action(next_turf, force_leap)
+		return force_leap ? 3 : 2
+
+	pawn.Move(destination)
+	return 1
 
 /**
  * Gets the AI status we expect the AI controller to be on at this current moment.
@@ -318,7 +365,6 @@ have ways of interacting with a specific atom and control it. They posses a blac
  * Returns AI_STATUS_ON otherwise.
  */
 /datum/ai_controller/proc/get_expected_ai_status()
-
 	if (!ismob(pawn))
 		return AI_STATUS_ON
 

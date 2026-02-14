@@ -56,7 +56,7 @@ Actual Adjacent procs :
 /proc/HeapPathWeightCompare(list/a, list/b)
 	return b[TOTAL_COST_F] - a[TOTAL_COST_F]
 
-/proc/get_path_to(atom/movable/requester, end, dist, maxnodes, maxnodedepth = 30, mintargetdist, adjacent = /turf/proc/reachableTurftest, id = null, turf/exclude = null, simulated_only = TRUE, check_z_levels = TRUE)
+/proc/get_path_to(atom/movable/requester, end, dist, maxnodes, maxnodedepth = 30, mintargetdist, adjacent = TYPE_PROC_REF(/turf, reachableTurftest), id = null, turf/exclude = null, simulated_only = TRUE, check_z_levels = TRUE)
 	var/l = SSpathfinder.mobs.getfree(requester)
 	while (!l)
 		stoplag(3)
@@ -69,7 +69,7 @@ Actual Adjacent procs :
 		path = list()
 	return path
 
-/proc/AStar(atom/movable/requester, _end, dist, maxnodes, maxnodedepth = 30, mintargetdist, adjacent = /turf/proc/reachableTurftest, id = null, turf/exclude = null, simulated_only = TRUE, check_z_levels = TRUE)
+/proc/AStar(atom/movable/requester, _end, dist, maxnodes, maxnodedepth = 30, mintargetdist, adjacent = TYPE_PROC_REF(/turf, reachableTurftest), id = null, turf/exclude = null, simulated_only = TRUE, check_z_levels = TRUE)
 	var/turf/end = get_turf(_end)
 	var/turf/start = get_turf(requester)
 	if (!start || !end)
@@ -179,25 +179,63 @@ Actual Adjacent procs :
 	closed = null
 	return path
 
-/turf/proc/reachableTurftest(atom/movable/requester, turf/T, ID, simulated_only = TRUE, check_z_levels = TRUE)
-	if(!T || T.density)
-		return FALSE
-	if(!T.can_traverse_safely(requester))  // dangerous turf! lava or openspace (or others in the future)
+/// returns TRUE if there exists a way for caller to (safely) move from src to T. non-z-aware
+/turf/proc/reachableTurftest(atom/movable/requester, turf/target, ID, dangerous_turf_recurse = 0)
+	if(!target || target.density)
 		return FALSE
 
-	var/z_distance = abs(T.z - z)
+	if(!target.can_traverse_safely(requester))  // dangerous turf! lava or openspace (or others in the future)
+		if(!astype(requester, /mob).ai_controller?.can_jump)
+			return FALSE
+
+		var/turf/landing_zone = get_step_away(target, src)
+		var/safe_jump = (dangerous_turf_recurse < 2)
+		if(safe_jump && target.reachableTurftest(requester, landing_zone, ID, dangerous_turf_recurse + 1))
+			return TRUE
+
+		return FALSE
+
+	return !LinkBlockedWithAccess(target, requester, ID)
+
+/**
+ * Test if we use this turf as part of a 3d path
+ *
+ * Arguments
+ * * requester - movable that wants to move (with ai controller)
+ * * target - target turf
+ * * ID - access the movable has
+ * * dangerous_turf_recurse - some mobs can jump, if they can we can cross 2 tiles max of dangerous turfs
+ */
+/turf/proc/reachableTurftest3d(atom/movable/requester, turf/target, ID, dangerous_turf_recurse = 0)
+	if(!target || target.density)
+		return FALSE
+
+	if(!target.can_traverse_safely(requester))  // dangerous turf! lava or openspace (or others in the future)
+		if(!astype(requester, /mob)?.ai_controller?.can_jump)
+			return FALSE
+
+		var/turf/landing_zone = get_step_away(target, src)
+		var/safe_jump = (dangerous_turf_recurse < 2)
+		if(safe_jump && target.reachableTurftest3d(requester, landing_zone, ID, dangerous_turf_recurse + 1))
+			return TRUE
+
+		return FALSE
+
+	var/z_distance = abs(target.z - z)
 	if(!z_distance)  // standard check for same-z pathing
-		return !LinkBlockedWithAccess(T, requester, ID)
+		return !LinkBlockedWithAccess(target, requester, ID)
 
 	if(z_distance != 1)  // no single movement lets you move more than one z-level at a time (currently; update if this changes)
 		return FALSE
 
+	if(HAS_TRAIT(requester, TRAIT_ZJUMP)) // where we're going, we don't need stairs!
+		return TRUE
+
 	var/obj/structure/stairs/source_stairs = locate(/obj/structure/stairs) in src
-	if(T.z < z)  // going down
-		if(source_stairs?.get_target_loc(REVERSE_DIR(source_stairs.dir)) == T)
+	if(source_stairs)
+		if(target.z < z && source_stairs.get_target_loc(REVERSE_DIR(source_stairs.dir)) == target)
 			return TRUE
-	else  // heading DOWN stairs was handled earlier, so now handle going UP stairs
-		if(source_stairs?.get_target_loc(source_stairs.dir) == T)
+		else if(source_stairs.get_target_loc(source_stairs.dir) == target)
 			return TRUE
 
 	return FALSE
@@ -215,7 +253,7 @@ Actual Adjacent procs :
 	var/dz = abs(z - T.z) * 5  // Weight z-level differences higher
 	return (dx + dy + dz)
 
-/turf/proc/LinkBlockedWithAccess(turf/T, requester, ID)
+/turf/proc/LinkBlockedWithAccess(turf/T, atom/movable/requester, ID)
 	var/adir = get_dir(src, T)
 	var/rdir = ((adir & MASK_ODD)<<1)|((adir & MASK_EVEN)>>1)
 	for(var/obj/O in T)
