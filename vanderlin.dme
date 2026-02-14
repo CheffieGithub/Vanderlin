@@ -704,6 +704,7 @@
 #include "code\datums\ai\controllers\human_bum.dm"
 #include "code\datums\ai\controllers\human_npc.dm"
 #include "code\datums\ai\controllers\imp.dm"
+#include "code\datums\ai\controllers\jumping.dm"
 #include "code\datums\ai\controllers\kraken.dm"
 #include "code\datums\ai\controllers\lamia.dm"
 #include "code\datums\ai\controllers\lycan.dm"
