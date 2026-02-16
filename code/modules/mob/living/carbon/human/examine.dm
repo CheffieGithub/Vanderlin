@@ -311,86 +311,84 @@
 
 	var/obscured = check_obscured_slots()
 
+	// Shirt
 	if(wear_shirt && !(obscured & ITEM_SLOT_SHIRT))
-		. += "[m3] [wear_shirt.get_examine_string(user)]."
+		. += "[m3] [wear_shirt.get_chat_tooltip(user)]."
 
-	//uniform
+	// Pants
 	if(wear_pants && !(obscured & ITEM_SLOT_PANTS))
-		//accessory
-		var/accessory_msg
-		if(istype(wear_pants, /obj/item/clothing/pants))
-			var/obj/item/clothing/pants/U = wear_pants
-			if(U.attached_accessory)
-				accessory_msg += " with [icon2html(U.attached_accessory, user)] \a [U.attached_accessory]"
+		. += "[m3] [wear_pants.get_chat_tooltip(user)]."
 
-		. += "[m3] [wear_pants.get_examine_string(user)][accessory_msg]."
-
-	//head
+	// Head
 	if(head && !(obscured & ITEM_SLOT_HEAD))
-		. += "[m3] [head.get_examine_string(user)] on [m2] head."
-	//suit/armorF
+		. += "[m3] [head.get_chat_tooltip(user)] on [m2] head."
+
+	// Armor
 	if(wear_armor && !(obscured & ITEM_SLOT_ARMOR))
-		. += "[m3] [wear_armor.get_examine_string(user)]."
+		. += "[m3] [wear_armor.get_chat_tooltip(user)]."
 
+	// Cloak
 	if(cloak && !(obscured & ITEM_SLOT_CLOAK))
-		. += "[m3] [cloak.get_examine_string(user)] on [m2] shoulders."
+		. += "[m3] [cloak.get_chat_tooltip(user)] on [m2] shoulders."
 
+	// Back
 	if(backr && !(obscured & ITEM_SLOT_BACK_R))
-		. += "[m3] [backr.get_examine_string(user)] on [m2] back."
+		. += "[m3] [backr.get_chat_tooltip(user)] on [m2] back."
 
 	if(backl && !(obscured & ITEM_SLOT_BACK_L))
-		. += "[m3] [backl.get_examine_string(user)] on [m2] back."
+		. += "[m3] [backl.get_chat_tooltip(user)] on [m2] back."
 
-	//Hands
+	// In-hands
 	for(var/obj/item/I in held_items)
 		if(!(I.item_flags & ABSTRACT))
-			. += "[m1] holding [I.get_examine_string(user)] in [m2] [get_held_index_name(get_held_index_of_item(I))]."
+			. += "[m1] holding [I.get_chat_tooltip(user)] in [m2] [get_held_index_name(get_held_index_of_item(I))]."
 
 	//gloves
 	if(gloves && !(obscured & ITEM_SLOT_GLOVES))
-		. += "[m3] [gloves.get_examine_string(user)] on [m2] hands."
+		. += "[m3] [gloves.get_chat_tooltip(user)] on [m2] hands."
 	else if(GET_ATOM_BLOOD_DNA_LENGTH(src))
 		if(num_hands)
 			. += span_warning("[m3] [num_hands > 1 ? "" : "a"] blood-stained hand[num_hands > 1 ? "s" : ""]!")
 
 	//belt
 	if(belt && !(obscured & ITEM_SLOT_BELT))
-		. += "[m3] [belt.get_examine_string(user)] about [m2] waist."
+		. += "[m3] [belt.get_chat_tooltip(user)] about [m2] waist."
 
 	if(beltr && !(obscured & ITEM_SLOT_BELT_R))
-		. += "[m3] [beltr.get_examine_string(user)] on [m2] belt."
+		. += "[m3] [beltr.get_chat_tooltip(user)] on [m2] belt."
 
 	if(beltl && !(obscured & ITEM_SLOT_BELT_L))
-		. += "[m3] [beltl.get_examine_string(user)] on [m2] belt."
+		. += "[m3] [beltl.get_chat_tooltip(user)] on [m2] belt."
 
-	//shoes
+	// Shoes
 	if(shoes && !(obscured & ITEM_SLOT_SHOES))
-		. += "[m3] [shoes.get_examine_string(user)] on [m2] feet."
+		. += "[m3] [shoes.get_chat_tooltip(user)] on [m2] feet."
 
-	//mask
+	// Mask
 	if(wear_mask && !(obscured & ITEM_SLOT_MASK))
-		. += "[m3] [wear_mask.get_examine_string(user)] on [m2] face."
+		. += "[m3] [wear_mask.get_chat_tooltip(user)] on [m2] face."
 
+	// Mouth
 	if(mouth && !(obscured & ITEM_SLOT_MOUTH))
-		. += "[m3] [mouth.get_examine_string(user)] in [m2] mouth."
+		. += "[m3] [mouth.get_chat_tooltip(user)] in [m2] mouth."
 
+	// Neck
 	if(wear_neck && !(obscured & ITEM_SLOT_NECK))
-		. += "[m3] [wear_neck.get_examine_string(user)] around [m2] neck."
+		. += "[m3] [wear_neck.get_chat_tooltip(user)] around [m2] neck."
 
-	if(get_eye_color() == BLOODCULT_EYE)
-		. += span_warning("<B>[capitalize(m2)] eyes are glowing an unnatural red!</B>")
-
-	//ID
+	// Ring
 	if(wear_ring && !(obscured & ITEM_SLOT_RING))
-		. += "[m3] [wear_ring.get_examine_string(user)]."
+		. += "[m3] [wear_ring.get_chat_tooltip(user)]."
 
+	// Wrists
 	if(wear_wrists && !(obscured & ITEM_SLOT_WRISTS))
-		. += "[m3] [wear_wrists.get_examine_string(user)]."
+		. += "[m3] [wear_wrists.get_chat_tooltip(user)]."
 
-	//handcuffed?
+	// Handcuffed?
 	if(handcuffed)
 		. += "<A href='byond://?src=[REF(src)];item=[ITEM_SLOT_HANDCUFFED]'><span class='warning'>[m1] tied up with \a [handcuffed]!</span></A>"
 
+	// Legcuffed?
 	if(legcuffed)
 		. += "<A href='byond://?src=[REF(src)];item=[ITEM_SLOT_LEGCUFFED]'><span class='warning'>[m3] \a [legcuffed] around [m2] legs!</span></A>"
 

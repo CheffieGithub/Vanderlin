@@ -22,13 +22,10 @@
 				if(80 to 99)
 					. += "<span class='warning'>It's a little damaged.</span>"
 
-//	if(has_inspect_verb || (obj_integrity < max_integrity))
-//		. += "<span class='notice'><a href='byond://?src=[REF(src)];inspect=1'>Inspect</a></span>"
-
 	if(price_text)
 		. += price_text
 
-// Only show if it's actually useable as bait, so that it doesn't show up on every single item of the game.
+	// Only show if it's actually useable as bait, so that it doesn't show up on every single item of the game.
 	if(isbait)
 		var/baitquality = ""
 		switch(baitpenalty)
@@ -45,3 +42,32 @@
 
 	if(item_weight || get_stored_weight())
 		. += "It weighs around [round(item_weight + get_stored_weight(), 0.1)]KG."
+
+/**
+ * Creates a tooltip for chat that gives combat information about this item.
+ */
+/obj/item/proc/get_chat_tooltip(mob/viewer, show_crits)
+	return get_examine_string(viewer)
+
+/obj/item/clothing/get_chat_tooltip(mob/viewer, show_crits)
+	var/examine_text = ..()
+
+	if(!armor)
+		return examine_text
+
+	var/list/strings = list("PROECTION VALUES:")
+	for(var/string in ARMOR_LIST_DAMAGE())
+		var/rating = armor.getRating(string)
+		if(rating > 0)
+			continue
+		strings += "[armor_to_protection_name(string)]: [armor_to_protection_class(rating)]"
+
+	if(length(strings) == 1)
+		return examine_text
+
+	if(show_crits && !prevent_crits)
+		strings += "CRIT SUSCEPTIBLE!"
+
+	//This makes it appear darker than the rest of examine text.
+	examine_text = "<font color='#808080'>[examine_text]</font>"
+	return span_tooltip(strings.Join("\n"), examine_text)
