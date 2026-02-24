@@ -49,7 +49,6 @@
 
 	if(!flower_item || !flowers)
 		to_chat(owner, span_warning("I need a flower as a catalyst!"))
-		reset_spell_cooldown()
 		return . | SPELL_CANCEL_CAST
 
 	if(isliving(owner))

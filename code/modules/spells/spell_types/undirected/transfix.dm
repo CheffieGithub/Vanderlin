@@ -31,12 +31,10 @@
 		return
 
 	if(!message)
-		reset_spell_cooldown()
 		return . | SPELL_CANCEL_CAST
 
 	if(length(message) < 10)
 		to_chat(owner, span_userdanger("This not enough to ensnare their mind!"))
-		reset_spell_cooldown()
 		return . | SPELL_CANCEL_CAST
 
 /datum/action/cooldown/spell/undirected/transfix/proc/get_targets()

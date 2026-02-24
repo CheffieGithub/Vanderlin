@@ -30,7 +30,6 @@
 
 	if(cast_on.age != AGE_CHILD)
 		to_chat(owner, span_warning("You can only adopt children!"))
-		reset_spell_cooldown()
 		return . | SPELL_CANCEL_CAST
 
 	if(cast_on.family_datum && length(cast_on.family_member_datum?.parents))

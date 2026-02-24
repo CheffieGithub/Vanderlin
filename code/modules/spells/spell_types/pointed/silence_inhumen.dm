@@ -25,7 +25,6 @@
 
 	if(cast_on.dna?.species.id in RACES_PLAYER_NONHERETICAL)
 		to_chat(owner, span_warning("[cast_on] is not a profane inhumen!"))
-		reset_spell_cooldown()
 		return . | SPELL_CANCEL_CAST
 
 /datum/action/cooldown/spell/silence_inhumen/cast(mob/living/carbon/human/cast_on)

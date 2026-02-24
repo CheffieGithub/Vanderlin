@@ -37,7 +37,6 @@
 			return . | SPELL_CANCEL_CAST
 
 	if(!message)
-		reset_spell_cooldown()
 		return . | SPELL_CANCEL_CAST
 
 	invocation = message

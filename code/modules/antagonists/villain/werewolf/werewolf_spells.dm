@@ -22,7 +22,6 @@
 		return . | SPELL_CANCEL_CAST
 
 	if(!message)
-		reset_spell_cooldown()
 		return . | SPELL_CANCEL_CAST
 
 /datum/action/cooldown/spell/undirected/howl/cast(atom/cast_on)

@@ -42,7 +42,6 @@
 
 	if(cast_on.stat == DEAD)
 		to_chat(owner, span_warning("This one has fallen to the underworld..."))
-		reset_spell_cooldown()
 		return . | SPELL_CANCEL_CAST
 
 /datum/action/cooldown/spell/avert/cast(mob/living/cast_on)

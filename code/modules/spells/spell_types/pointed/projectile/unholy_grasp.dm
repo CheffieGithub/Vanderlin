@@ -32,7 +32,6 @@
 		qdel(held_item)
 	else
 		to_chat(owner, "I'm missing viscera to cast this..")
-		reset_spell_cooldown()
 		return . | SPELL_CANCEL_CAST
 
 /obj/projectile/magic/unholy_grasp

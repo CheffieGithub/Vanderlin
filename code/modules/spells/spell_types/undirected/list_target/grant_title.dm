@@ -36,8 +36,6 @@
 		if(answer == CHOICE_CONFIRM)
 			owner.say("I HEREBY STRIP YOU, [uppertext(cast_on.name)], OF THE TITLE OF [uppertext(prev_title)]!")
 			GLOB.lord_titles -= cast_on.real_name
-		else
-			reset_spell_cooldown()
 		return . | SPELL_CANCEL_CAST
 
 	title = browser_input_text(owner, "What title do you wish to grant?", "[name]", max_length = 42)
@@ -45,7 +43,6 @@
 		return . | SPELL_CANCEL_CAST
 
 	if(!title)
-		reset_spell_cooldown()
 		return . | SPELL_CANCEL_CAST
 
 /datum/action/cooldown/spell/undirected/list_target/grant_title/cast(mob/living/carbon/human/cast_on)

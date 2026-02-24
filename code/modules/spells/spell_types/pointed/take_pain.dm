@@ -30,7 +30,6 @@
 
 	if(cast_on.stat == DEAD)
 		to_chat(owner, span_warning("[cast_on] is beyond help."))
-		reset_spell_cooldown()
 		return . | SPELL_CANCEL_CAST
 
 /datum/action/cooldown/spell/transfer_pain/cast(mob/living/carbon/human/cast_on)

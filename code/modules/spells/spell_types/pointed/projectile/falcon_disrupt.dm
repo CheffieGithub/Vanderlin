@@ -26,7 +26,8 @@
 			if(get_dist(owner, I) > 1)
 				to_chat(owner, span_warning("The falcon reacts, but you are too far away from [I.name]."))
 				reset_spell_cooldown()
-				return . | SPELL_CANCEL_CAST
+				return
+
 			send_item = I
 
 	if(!send_item)
@@ -34,21 +35,25 @@
 
 	if(!length(owner.mind?.known_people))
 		to_chat(owner, span_warning("The falcon is confused... You know no one to send this item to."))
-		return FALSE
+		return
+
 	var/recipient = browser_input_text(owner, "Whose name shall the falcon seek?", "THE WINGS")
 	if(!recipient)
-		return FALSE
+		return
+
 	var/mob/target
 	if(!owner.mind?.do_i_know(name = recipient))
 		to_chat(owner, span_warning("The falcon is confused... You know no one by that name."))
-		return FALSE
+		return
+
 	for(var/client/C in GLOB.clients)
 		if(C.mob?.real_name == recipient)
 			target = C.mob
 			break
+
 	if(!target)
 		to_chat(owner, span_warning("The falcon cannot find [recipient]."))
-		return FALSE
+		return
 
 	var/turf/T = get_turf(target)
 	send_item.forceMove(owner.loc)

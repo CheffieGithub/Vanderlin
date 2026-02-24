@@ -47,7 +47,7 @@
 		return
 	var/mob/living/simple_animal/hostile/retaliate/SP = cast_on
 	if(!SP.dendor_taming_chance || !SP.ai_controller || (SP.mob_biotypes & MOB_UNDEAD))
-		reset_spell_cooldown()
+
 		return . | SPELL_CANCEL_CAST
 
 /datum/action/cooldown/spell/beast_tame/cast(mob/living/simple_animal/hostile/retaliate/cast_on)

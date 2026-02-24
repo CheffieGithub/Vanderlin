@@ -62,12 +62,10 @@
 
 	if(cast_on.stat == DEAD)
 		to_chat(owner, span_warning("[cast_on] is dead and cannot be enslaved."))
-		reset_spell_cooldown()
 		return . | SPELL_CANCEL_CAST
 
 	if(cast_on.clan)
 		to_chat(owner, span_warning("[cast_on] already belongs to another."))
-		reset_spell_cooldown()
 		return . | SPELL_CANCEL_CAST
 
 /datum/action/cooldown/spell/enslave_mortal/cast(mob/living/carbon/human/cast_on)

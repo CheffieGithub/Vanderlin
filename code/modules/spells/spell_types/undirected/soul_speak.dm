@@ -40,7 +40,6 @@
 		return . | SPELL_CANCEL_CAST
 
 	if(!selected)
-		reset_spell_cooldown()
 		return . | SPELL_CANCEL_CAST
 
 	soul = WEAKREF(selected)

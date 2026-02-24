@@ -26,7 +26,6 @@
 		return . | SPELL_CANCEL_CAST
 
 	if(!message)
-		reset_spell_cooldown()
 		return . | SPELL_CANCEL_CAST
 
 /datum/action/cooldown/spell/undirected/list_target/encode_thoughts/cast(mob/living/cast_on)

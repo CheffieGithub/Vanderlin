@@ -33,8 +33,6 @@
 		if(answer == CHOICE_CONFIRM)
 			owner.say("I HEREBY STRIP YOU, [uppertext(cast_on.name)], OF NOBILITY!")
 			REMOVE_TRAIT(cast_on, TRAIT_NOBLE_POWER, TRAIT_GENERIC)
-		else
-			reset_spell_cooldown()
 		return . | SPELL_CANCEL_CAST
 
 /datum/action/cooldown/spell/undirected/list_target/grant_nobility/cast(mob/living/carbon/human/cast_on)
