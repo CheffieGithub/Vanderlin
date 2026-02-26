@@ -46,7 +46,7 @@
 /datum/supply_pack/jewelry/nosesilver
 	name = "Nose Ring Silver"
 	cost = 50
-	contains = /obj/item/clothing/face/facemask/goldnosechain
+	contains = /obj/item/clothing/face/facemask/silvernosechain
 
 /datum/supply_pack/jewelry/nosegold
 	name = "Nose Ring Gold"

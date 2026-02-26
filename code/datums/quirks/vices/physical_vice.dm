@@ -200,8 +200,9 @@
 /datum/quirk/vice/crippled_leg/on_spawn()
 	if(!ishuman(owner))
 		return
+
 	if(!customization_value)
-		customization_value = BODY_ZONE_L_ARM
+		customization_value = BODY_ZONE_L_LEG
 
 	addtimer(CALLBACK(src, PROC_REF(remove_limb)), 0.5 SECONDS)
 
