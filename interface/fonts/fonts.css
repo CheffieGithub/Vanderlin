@@ -1,16 +1,23 @@
-@font-face {
-  font-family: 'Pterra';
-  src: url('Pterra.ttf') format('truetype');
-}
-
+/* Primary */
 @font-face {
   font-family: 'Blackmoor LET';
   src: url('BlackmoorLET.ttf') format('truetype');
 }
 
 @font-face {
+  font-family: 'Pterra';
+  src: url('Pterra.ttf') format('truetype');
+}
+
+/* Maptext */
+@font-face {
   font-family: 'Pixelify Sans';
   src: url('PixelifySans.tff') format('truetype');
+}
+
+@font-face {
+  font-family: 'Pixtura12';
+  src: url('Pixtura12.ttf') format('truetype');
 }
 
 @font-face {
@@ -18,8 +25,7 @@
   src: url('Vaticanus.ttf') format('truetype');
 }
 
-
-
+/* Languages */
 @font-face {
   font-family: 'Arabolical';
   src: url('Arabolical.ttf') format('truetype');
@@ -38,11 +44,6 @@
 @font-face {
   font-family: 'Dauphin';
   src: url('Dauphin.ttf') format('truetype');
-}
-
-@font-face {
-  font-family: 'FriskyVampire';
-  src: url('FriskyVampire.ttf') format('truetype');
 }
 
 @font-face {

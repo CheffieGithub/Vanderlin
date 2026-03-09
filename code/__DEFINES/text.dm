@@ -13,6 +13,9 @@
 /// Pixel maptext
 #define MAPTEXT_VATICANUS(text) {"<span style='font-family: "Vaticanus"; font-size: 8pt;'>[##text]</span>"}
 
+/// Pixel maptext
+#define MAPTEXT_PIXTURA(text) {"<span style='font-family: "Pixtura12"; font-size: 12pt;'>[##text]</span>"}
+
 /// Macro from Lummox used to get height from a MeasureText proc
 #define WXH_TO_HEIGHT(measurement, return_var) \
 	do { \

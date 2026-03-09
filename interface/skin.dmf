@@ -65,12 +65,12 @@ window "mapwindow"
 		size = 640x480
 		anchor1 = 0,0
 		anchor2 = 100,100
-		font-family = "Pterra"
-		font-size = 8pt
+		font-family = "Pixtura12"
+		font-size = 9pt
 		is-default = true
 		right-click = true
 		saved-params = "zoom;letterbox;zoom-mode"
-		style = ".center { text-align: center; } .maptext { font-family: 'Pterra'; font-size: 8pt; -dm-text-outline: 1px black; color: white; line-height: 1.0; } .small { font-size: 6pt; } .big { font-size: 8pt; } .reallybig { font-size: 8pt; } .extremelybig { font-size: 8pt; } .greentext { color: #00FF00; font-size: 6pt; } .redtext { color: #FF0000; font-size: 6pt; } .yell { font-weight: bold; } .italics { font-size: 6pt }"
+		style = ".center { text-align: center; } .maptext { font-family: 'Pixtura12'; font-size: 9pt; line-height: 1.0; -dm-text-outline: 1px black; color: white; } .small { font-size: 6pt; } .big { font-size: 8pt; } .reallybig { font-size: 8pt; } .extremelybig { font-size: 8pt; } .greentext { color: #00FF00; } .redtext { color: #FF0000; } .yell { font-weight: bold; } .italics { font-family: 'Pixel Takhisis'; font-size: 12pt; line-height: 0.75; }"
 
 window "info_and_buttons"
 	elem "info_and_buttons"
