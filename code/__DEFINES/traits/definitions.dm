@@ -181,8 +181,6 @@ Remember to update _globalvars/traits.dm if you're adding/removing/renaming trai
 #define TRAIT_XRAY_VISION "xray_vision"
 /// Can see mobs through opaque atoms
 #define TRAIT_THERMAL_VISION "thermal_vision"
-/// Unused
-#define TRAIT_SURGEON "surgeon"
 /// Immediately upgrade grabs when in combat mode
 #define TRAIT_STRONG_GRABBER "strong_grabber"
 /// Used for the choking status effect
@@ -436,6 +434,13 @@ Remember to update _globalvars/traits.dm if you're adding/removing/renaming trai
 #define TRAIT_NO_EXPERIENCE	"unlearning"
 /// This mob should never close UI even if it doesn't have a client
 #define TRAIT_PRESERVE_UI_WITHOUT_CLIENT "preserve_ui_without_client"
+/// Allows a mob to perform any operation on themselves (with a penalty), where normally only specific operations allow self-surgery.
+#define TRAIT_SELF_SURGERY "self_surgery"
+/// This mob's surgical operations ignore ALL speed modifiers (even positive ones!) besides tool quality.
+/// The mob can also no longer fail their operations, unless the operation says otherwise
+#define TRAIT_IGNORE_SURGERY_MODIFIERS "ignore_surgery_modifiers"
+/// Trait applied to mobs or bodyparts which allows for them to be operated on
+#define TRAIT_READY_TO_OPERATE "ready_to_operate"
 
 /// applied to orphans
 #define TRAIT_ORPHAN "Orphan"
@@ -525,6 +530,8 @@ Remember to update _globalvars/traits.dm if you're adding/removing/renaming trai
 #define TRAIT_NEEDS_TWO_HANDS "needstwohands"
 /// This item can't be pickpocketed
 #define TRAIT_HARD_TO_STEAL "hard_to_steal"
+/// Applied to an organ that has been operated on - some organs can't be operated on multiple times
+#define TRAIT_ORGAN_OPERATED_ON "organ_operated_on"
 
 // ************* turf traits
 /// Turf trait for when a turf is transparent
