@@ -22,7 +22,7 @@
  * The parent container must have position: relative and an explicit height.
  */
 
-import { useLocalState } from '../../backend';
+import { useState } from 'react';
 import { Box, Button, Stack } from 'tgui-core/components';
 
 export const PP = {
@@ -125,8 +125,8 @@ function caretStyle(
 }
 
 export const TutorialOverlay = (props: TutorialOverlayProps) => {
-  const { steps, stateKey, onClose } = props;
-  const [step, setStep] = useLocalState(stateKey, 0);
+  const { steps, onClose } = props;
+  const [step, setStep] = useState(0);
 
   const s = Math.min(step, steps.length - 1);
   const current = steps[s];

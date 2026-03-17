@@ -1,7 +1,8 @@
-import { useBackend, useLocalState } from '../backend';
+import { useBackend } from '../backend';
 import { Box, Button, Input, Stack, Tooltip } from 'tgui-core/components';
+import { useState } from 'React';
 import { Window } from '../layouts';
-import { TutorialOverlay, TutorialStep, PP } from '../interfaces/_common/TutorialOverlay';
+import { TutorialOverlay, type TutorialStep, PP } from '../interfaces/_common/TutorialOverlay';
 
 interface AttributeModifier {
   id: string;
@@ -216,8 +217,8 @@ const CloserInspection = (props: { data: AttributeData; act: any }) => {
 const AttributeStack = (props: { data: AttributeData; act: any }) => {
   const { data, act } = props;
   const { show_bad_skills, skills_by_category = [], stats = [] } = data;
-  const [search, setSearch] = useLocalState('skill_search', '');
-  const [showTutorial, setShowTutorial] = useLocalState('show_attribute_tutorial', false);
+  const [search, setSearch] = useState("");
+  const [showTutorial, setShowTutorial] = useState(false);
 
   const isSearching = search.trim().length > 0;
 
@@ -324,8 +325,11 @@ const AttributeStack = (props: { data: AttributeData; act: any }) => {
               </Stack.Item>
             </Stack>
             <Box px={1} pb={1}>
-              <Input fluid placeholder="Search skills..." value={search}
-                onInput={(e) => handleSearch(e.target.value)} />
+              <Input
+                fluid
+                placeholder={"Search skills..."}
+                value={search}
+                onChange={handleSearch} />
             </Box>
           </Box>
           <Box width="100%" height="85.5%" className="PreferencesMenu__papersplease__left"
@@ -388,8 +392,8 @@ const AttributeStack = (props: { data: AttributeData; act: any }) => {
   );
 };
 
-export const AttributeMenu = (props, context) => {
-  const { act, data } = useBackend<AttributeData>(context);
+export const AttributeMenu = (props) => {
+  const { act, data } = useBackend<AttributeData>();
   const { parent, closely_inspected_attribute } = data;
 
   return (
@@ -398,7 +402,12 @@ export const AttributeMenu = (props, context) => {
       width={800}
       height={450}>
       <Window.Content>
-        <Box style={{ position: 'relative', width: '100%', height: '418px' }}>
+        <Box
+          style={{
+            position: 'relative',
+            width: '100%',
+            height: '418px',
+          }}>
           {closely_inspected_attribute?.name
             ? <CloserInspection data={data} act={act} />
             : <AttributeStack data={data} act={act} />}
