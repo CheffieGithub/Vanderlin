@@ -98,31 +98,6 @@
 	secondary_filter_type = filter(type="alpha", render_source = FOG_RENDER_TARGET, flags = MASK_INVERSE)
 	#endif
 
-	var/old_plane
-
-/datum/particle_weather/fog/start()
-	. = ..()
-	for(var/area/area as anything in GLOB.areas)
-		if(area.outdoors)
-			if(!old_plane)
-				old_plane = area.plane
-			area.icon = 'icons/effects/weather_overlay.dmi'
-			area.icon_state = "weather_overlay"
-			area.plane = WEATHER_OVERLAY_PLANE
-			area.blend_mode = BLEND_OVERLAY
-			area.invisibility = INVISIBILITY_LIGHTING
-
-/datum/particle_weather/fog/end()
-	. = ..()
-	for(var/area/area as anything in GLOB.areas)
-		if(area.outdoors)
-			area.icon = initial(area.icon)
-			area.icon_state = ""
-			area.plane = old_plane
-			area.blend_mode = initial(area.blend_mode)
-			area.invisibility = initial(area.invisibility)
-	old_plane = null
-
 /datum/particle_weather/fog/swamp
 	name = "Swamp Fog"
 	particleEffectType = /particles/weather/fog/swamp
