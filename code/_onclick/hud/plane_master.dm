@@ -15,6 +15,7 @@
 //Why do plane masters need a backdrop sometimes? Read https://secure.byond.com/forum/?post=2141928
 //Trust me, you need one. Period. If you don't think you do, you're doing something extremely wrong.
 /atom/movable/screen/plane_master/proc/backdrop(mob/mymob)
+	return
 
 ///Things rendered on "openspace"; holes in multi-z
 /atom/movable/screen/plane_master/openspace_backdrop
@@ -31,7 +32,6 @@
 
 /atom/movable/screen/plane_master/openspace/Initialize(mapload, datum/hud/hud_owner)
 	. = ..()
-	add_filter("multiz_lighting_mask", 1, alpha_mask_filter(render_source = LIGHTING_RENDER_TARGET, flags = MASK_INVERSE))
 	add_filter("openspace_blur", 1, gauss_blur_filter(1))
 
 /atom/movable/screen/plane_master/floor
@@ -142,17 +142,6 @@
 	. = ..()
 	add_filter("em_block_masking", 1, color_matrix_filter(GLOB.em_mask_matrix))
 
-///Contains space parallax
-/atom/movable/screen/plane_master/parallax
-	name = "parallax plane master"
-	plane = SPACE_PLANE_PARALLAX
-	blend_mode = BLEND_MULTIPLY
-	mouse_opacity = MOUSE_OPACITY_TRANSPARENT
-
-/atom/movable/screen/plane_master/parallax_white
-	name = "parallax whitifier plane master"
-	plane = SPACE_PLANE
-
 /atom/movable/screen/plane_master/camera_static
 	name = "camera static plane master"
 	plane = CAMERA_STATIC_PLANE
@@ -215,7 +204,6 @@
 
 /atom/movable/screen/plane_master/weather_effect/Initialize()
 	. = ..()
-	//add_filter("weather_effect", 1, alpha_mask_filter(render_source = WEATHER_RENDER_TARGET))
 	SSoutdoor_effects.weather_planes_need_vis |= src
 
 /atom/movable/screen/plane_master/weather_effect/Destroy()

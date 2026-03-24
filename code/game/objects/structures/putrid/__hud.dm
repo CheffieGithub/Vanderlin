@@ -225,16 +225,6 @@
 		action.default_button_position = action_spot
 		index++
 
-
-/datum/hud/putrid/plane_masters_update()
-	. = ..()
-	for(var/item in plane_masters)
-		var/atom/movable/screen/plane_master/weather_effect/sun = plane_masters[item]
-		if(!istype(sun))
-			continue
-		sun?.screen_loc = "CENTER,CENTER"
-
-
 /datum/hud/putrid/proc/setup_mob()
 	var/atom/movable/screen/putrid/bar/resource_bar/bar = locate(/atom/movable/screen/putrid/bar/resource_bar) in static_inventory
 	bar?.setup_mob()
