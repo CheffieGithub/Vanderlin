@@ -37,6 +37,7 @@
 	if(cached_island_id)
 		SSisland_mobs.remove_mob(src)
 
+	chem_effects = null
 	surgeries = null
 	if(LAZYLEN(status_effects))
 		for(var/datum/status_effect/S as anything in status_effects)
