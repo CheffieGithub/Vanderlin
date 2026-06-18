@@ -19,26 +19,32 @@ SUBSYSTEM_DEF(ParticleWeather)
 
 /datum/controller/subsystem/ParticleWeather/fire()
 	// process active weather
-	if(runningWeather)
-		if(runningWeather.running)
-			runningWeather.tick()
-			for(var/mob/act_on as anything in GLOB.mob_living_list) //yikes. this should probably be a client scan not all mobs. it already checks for minds
-				runningWeather.try_weather_act(act_on)
-			for(var/obj/act_on as anything in GLOB.weather_act_upon_list)
-				runningWeather.weather_obj_act(act_on)
+	if(!runningWeather?.running)
+		return
 
-			if(weather_special_effect)
-				if(!length(turfs_to_process))
-					if(!weathered_turfs)
-						return
-					turfs_to_process = weathered_turfs.Copy()
-				for(var/turf/turf in turfs_to_process)
-					if(QDELETED(weather_special_effect))
-						break
-					turfs_to_process -= turf
-					if(prob(weather_special_effect.probability))
-						turf.apply_weather_effect(weather_special_effect)
-					CHECK_TICK_LOW
+	runningWeather.tick()
+
+	for(var/client/client as anything in GLOB.clients)
+		runningWeather.try_weather_act(client.mob)
+
+	for(var/obj/act_on as anything in GLOB.weather_act_upon_list)
+		runningWeather.weather_obj_act(act_on)
+
+	if(!weather_special_effect)
+		return
+
+	if(!length(turfs_to_process))
+		if(!weathered_turfs)
+			return
+		turfs_to_process = weathered_turfs.Copy()
+
+	for(var/turf/turf as anything in turfs_to_process)
+		if(QDELETED(weather_special_effect))
+			break
+		turfs_to_process -= turf
+		if(prob(weather_special_effect.probability))
+			turf.apply_weather_effect(weather_special_effect)
+		CHECK_TICK_LOW
 
 //This has been mangled - currently only supports 1 weather effect serverwide so I can finish this
 /datum/controller/subsystem/ParticleWeather/Initialize(start_timeofday)
