@@ -1455,6 +1455,7 @@ GLOBAL_LIST_INIT(name_adjustments, list())
 					random_species()
 				if("all")
 					apply_character_randomization_prefs()
+			update_menu_data(user)
 			return
 
 		if("loadout_store")
@@ -1498,6 +1499,7 @@ GLOBAL_LIST_INIT(name_adjustments, list())
 			if(isnewplayer(user))
 				var/mob/dead/new_player/player = user
 				player.cache_multi_ready_characters()
+			update_menu_data(user)
 			return
 
 		if("changeslot")
@@ -1519,6 +1521,8 @@ GLOBAL_LIST_INIT(name_adjustments, list())
 				if(!load_character(choice))
 					randomise_appearance_prefs()
 					save_character()
+
+			update_menu_data(user)
 			return
 
 		if("randomiseappearanceprefs")
@@ -1528,6 +1532,8 @@ GLOBAL_LIST_INIT(name_adjustments, list())
 			reset_all_customizer_accessory_colors()
 			randomize_all_customizer_accessories()
 			reset_jobs(user)
+
+			update_menu_data(user)
 			return
 
 		if("ooc_preview")
@@ -1545,6 +1551,8 @@ GLOBAL_LIST_INIT(name_adjustments, list())
 			var/datum/browser/popup = new(user, "[read_preference(/datum/preference/text/real_name)]", "<center>[read_preference(/datum/preference/text/real_name)]</center>", width = 480, height = 700)
 			popup.set_content(dat.Join())
 			popup.open(use_onclose = FALSE)
+			update_menu_data(user)
+			return
 
 		if("input")
 
