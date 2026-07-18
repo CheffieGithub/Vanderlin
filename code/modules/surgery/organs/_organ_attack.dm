@@ -8,7 +8,7 @@
 /obj/item/organ/get_mechanics_examine(mob/user)
 	. = ..()
 
-	if(owner && CHECK_BITFIELD(organ_flags, ORGAN_CUT_AWAY))
+	if(owner && CHECK_BITFIELDS_ANY(organ_flags, ORGAN_CUT_AWAY))
 		for(var/atom/thing as anything in attaching_items)
 			. += "Use [initial(thing.name)] to reattach this organ to [owner]."
 
@@ -18,7 +18,7 @@
 	for(var/thing in healing_tools)
 		. += "Use a [thing] to heal this organ."
 
-	if(owner && !CHECK_BITFIELD(organ_flags, ORGAN_CUT_AWAY))
+	if(owner && !CHECK_BITFIELDS_ANY(organ_flags, ORGAN_CUT_AWAY))
 		. += "Use a sharp item or scalpel to sever this organ from [owner]."
 
 	if(germ_level)
@@ -30,7 +30,7 @@
 	else if(DOING_INTERACTION_WITH_TARGET(user, src))
 		return TRUE
 
-	if(owner && CHECK_BITFIELD(organ_flags, ORGAN_CUT_AWAY))
+	if(owner && CHECK_BITFIELDS_ANY(organ_flags, ORGAN_CUT_AWAY))
 		for(var/thing in attaching_items)
 			if(istype(tool, thing))
 				return handle_attaching_item(tool, user, modifiers)
@@ -43,7 +43,7 @@
 		if(tool.tool_behaviour == thing)
 			return handle_healing_item(tool, user, modifiers)
 
-	if(owner && (tool.sharpness == IS_SHARP || tool.tool_behaviour == TOOL_SCALPEL) && !CHECK_BITFIELD(organ_flags, ORGAN_CUT_AWAY))
+	if(owner && (tool.sharpness == IS_SHARP || tool.tool_behaviour == TOOL_SCALPEL) && !CHECK_BITFIELDS_ANY(organ_flags, ORGAN_CUT_AWAY))
 		return handle_cutting_away(tool, user, modifiers)
 
 	if(tool.tool_behaviour == TOOL_CAUTERY)

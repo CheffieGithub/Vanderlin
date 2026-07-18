@@ -1,7 +1,7 @@
 
 // bleedout checks
 /mob/living/carbon/proc/in_bleedout()
-	return (CHECK_BITFIELD(status_flags, BLEEDOUT)) || undergoing_cardiac_arrest()
+	return (CHECK_BITFIELDS_ANY(status_flags, BLEEDOUT)) || undergoing_cardiac_arrest()
 
 /// Blood volume, affected by the heart
 /mob/living/carbon/proc/get_blood_circulation()

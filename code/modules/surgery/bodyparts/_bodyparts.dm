@@ -261,17 +261,17 @@
 ///you might wonder why this isn't in life? this saves a metric ton of time since its situational as hell
 /obj/item/bodypart/proc/update_chronic()
 	if(owner)
-		if(CHECK_BITFIELD(limb_flags, BODYPART_CHRONIC_FRACTURE|BODYPART_CHRONIC_ARTHRITIS|BODYPART_CHRONIC_MIGRAINE))
+		if(CHECK_BITFIELDS_ANY(limb_flags, BODYPART_CHRONIC_FRACTURE|BODYPART_CHRONIC_ARTHRITIS|BODYPART_CHRONIC_MIGRAINE))
 			RegisterSignal(owner, COMSIG_LIVING_LIFE, PROC_REF(on_owner_life), override = TRUE)
 	update_wounds()
 	update_pain_coeff()
 
 /obj/item/bodypart/proc/on_owner_life()
-	if(CHECK_BITFIELD(limb_flags, BODYPART_CHRONIC_FRACTURE))
+	if(CHECK_BITFIELDS_ANY(limb_flags, BODYPART_CHRONIC_FRACTURE))
 		on_chronic_fracture_life()
-	if(CHECK_BITFIELD(limb_flags, BODYPART_CHRONIC_ARTHRITIS))
+	if(CHECK_BITFIELDS_ANY(limb_flags, BODYPART_CHRONIC_ARTHRITIS))
 		on_arthritis_life()
-	if(CHECK_BITFIELD(limb_flags, BODYPART_CHRONIC_MIGRAINE))
+	if(CHECK_BITFIELDS_ANY(limb_flags, BODYPART_CHRONIC_MIGRAINE))
 		on_migraine_life()
 
 /obj/item/bodypart/proc/on_chronic_fracture_life()
@@ -327,7 +327,7 @@
 	if(isreagentcontainer(loc))
 		return FALSE /// preserving ah.
 	check_cold(passed_temp)
-	if(CHECK_BITFIELD(limb_flags, BODYPART_FROZEN|BODYPART_DEAD|BODYPART_NO_INFECTION))
+	if(CHECK_BITFIELDS_ANY(limb_flags, BODYPART_FROZEN|BODYPART_DEAD|BODYPART_NO_INFECTION))
 		return FALSE
 	return TRUE
 
@@ -402,7 +402,7 @@
 /// Adding/removing germs
 /obj/item/bodypart/adjust_germ_level(add_germs, minimum_germs = 0, maximum_germs = INFECTION_LEVEL_THREE)
 	. = ..()
-	if(germ_level >= INFECTION_LEVEL_THREE && !CHECK_BITFIELD(limb_flags, BODYPART_DEAD))
+	if(germ_level >= INFECTION_LEVEL_THREE && !CHECK_BITFIELDS_ANY(limb_flags, BODYPART_DEAD))
 		kill_limb()
 		if(owner && owner.stat < DEAD)
 			to_chat(owner, span_userdanger("I can't feel my [name] anymore..."))
@@ -475,7 +475,7 @@
 			continue
 		if(organ.damage < organ.maxHealth && \
 			(organ.organ_volume * 10 >= 1) && \
-			!CHECK_BITFIELD(organ.organ_flags, ORGAN_NO_VIOLENT_DAMAGE))
+			!CHECK_BITFIELDS_ANY(organ.organ_flags, ORGAN_NO_VIOLENT_DAMAGE))
 			// Multiply by 10 because pickweight doesn't play nice with decimals
 			internal_organs[organ] = CEILING(organ.organ_volume * 10, 1)
 	if(!LAZYLEN(internal_organs))
@@ -755,7 +755,7 @@
 			adjust_germ_level(-SANITIZATION_LYING * delta_time)
 
 /obj/item/bodypart/proc/create_base_organs()
-	if(CHECK_BITFIELD(limb_flags, BODYPART_HAS_ARTERY))
+	if(CHECK_BITFIELDS_ANY(limb_flags, BODYPART_HAS_ARTERY))
 		create_artery()
 
 /obj/item/bodypart/attack(mob/living/carbon/C, mob/user, list/modifiers)
@@ -832,7 +832,7 @@
 /// Returns whether or not the bodypart can feel pain
 /obj/item/bodypart/proc/can_feel_pain()
 	/*
-	if(CHECK_BITFIELD(limb_flags, BODYPART_CUT_AWAY|BODYPART_DEAD))
+	if(CHECK_BITFIELDS_ANY(limb_flags, BODYPART_CUT_AWAY|BODYPART_DEAD))
 		return
 	*/
 	if(HAS_TRAIT(src, TRAIT_ROTTEN))
@@ -1543,7 +1543,7 @@
 		. += item.w_class
 
 /obj/item/bodypart/proc/artery_needed()
-	return CHECK_BITFIELD(limb_flags, BODYPART_HAS_ARTERY)
+	return CHECK_BITFIELDS_ANY(limb_flags, BODYPART_HAS_ARTERY)
 
 /obj/item/bodypart/proc/no_artery()
 	return (!getorganslot(ORGAN_SLOT_ARTERY))

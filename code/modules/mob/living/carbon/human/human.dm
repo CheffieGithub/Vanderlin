@@ -390,10 +390,10 @@
 				if(istype(humie))
 					var/obj/item/clothing/suit = humie.wear_armor
 					var/obj/item/clothing/under = humie.wear_shirt
-					if(istype(under) && CHECK_BITFIELD(under.clothing_flags, THICKMATERIAL))
+					if(istype(under) && CHECK_BITFIELDS_ANY(under.clothing_flags, THICKMATERIAL))
 						to_chat(src, span_warning("I need to take [humie.p_their()] [under] off!"))
 						return FALSE
-					else if(istype(suit) && CHECK_BITFIELD(suit.clothing_flags, THICKMATERIAL))
+					else if(istype(suit) && CHECK_BITFIELDS_ANY(suit.clothing_flags, THICKMATERIAL))
 						to_chat(src, span_warning("I need to take [humie.p_their()] [suit] off!"))
 						return FALSE
 
@@ -421,7 +421,7 @@
 				if(target.reagents?.get_reagent_amount(/datum/reagent/adrenaline) >= 1)
 					epinephrine_mod += 3
 				var/heart_exposed_mod = 0
-				if(istype(they_heart) && CHECK_MULTIPLE_BITFIELDS(chest.return_surgical_state(), SURGERY_SKIN_OPEN|SURGERY_BONE_SAWED))
+				if(istype(they_heart) && CHECK_BITFIELDS_ALL(chest.return_surgical_state(), SURGERY_SKIN_OPEN|SURGERY_BONE_SAWED))
 					heart_exposed_mod += 5
 
 				/// Master (55) have a 5% chance of reviving through CPR each attempt.

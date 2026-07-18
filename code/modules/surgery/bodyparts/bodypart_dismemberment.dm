@@ -223,7 +223,7 @@
 	was_owner.update_health_hud() //update the healthdoll
 	was_owner.update_body()
 
-	if(CHECK_BITFIELD(limb_flags, BODYPART_VITAL))
+	if(CHECK_BITFIELDS_ANY(limb_flags, BODYPART_VITAL))
 		was_owner.death()
 
 	// drop_location = null happens when a "dummy human" used for rendering icons on prefs screen gets its limbs replaced.

@@ -330,7 +330,7 @@
 	// Here's hoping it doesn't stay like this for years before we finish conversion to step_
 	var/atom/firstbump
 	var/canPassSelf = CanPass(mover, src)
-	if(canPassSelf || CHECK_BITFIELD(mover.movement_type, PHASING))
+	if(canPassSelf || CHECK_BITFIELDS_ANY(mover.movement_type, PHASING))
 		for(var/atom/movable/thing as anything in contents)
 			if(QDELETED(mover))
 				return FALSE		//We were deleted, do not attempt to proceed with movement.
@@ -339,7 +339,7 @@
 			if(!thing.Cross(mover))
 				if(QDELETED(mover))		//Mover deleted from Cross/CanPass, do not proceed.
 					return FALSE
-				if(CHECK_BITFIELD(mover.movement_type, PHASING))
+				if(CHECK_BITFIELDS_ANY(mover.movement_type, PHASING))
 					mover.Bump(thing)
 					continue
 				else
@@ -351,7 +351,7 @@
 		firstbump = src
 	if(firstbump)
 		mover.Bump(firstbump)
-		return CHECK_BITFIELD(mover.movement_type, PHASING)
+		return CHECK_BITFIELDS_ANY(mover.movement_type, PHASING)
 	return TRUE
 
 /turf/Entered(atom/movable/arrived, atom/old_loc, list/atom/old_locs)

@@ -327,7 +327,7 @@
 		return FALSE
 	var/obj/item/organ/O = AM
 	if(istype(O))
-		if(!CHECK_BITFIELD(O.organ_flags, ORGAN_CUT_AWAY))
+		if(!CHECK_BITFIELDS_ANY(O.organ_flags, ORGAN_CUT_AWAY))
 			return FALSE
 	. = ..()
 	if(.)
@@ -345,10 +345,10 @@
 		if(!carbon_parent.IsUnconscious() && (carbon_parent.get_chem_effect(CE_PAINKILLER) < 30))
 			carbon_parent.emote("scream")
 			/*
-			if(!CHECK_BITFIELD(O.organ_flags, ORGAN_CUT_AWAY))
+			if(!CHECK_BITFIELDS_ANY(O.organ_flags, ORGAN_CUT_AWAY))
 				carbon_parent.custom_pain("MY [capitalize(O.name)] HURTS!", rand(30, 40))
 			*/
-		if(!CHECK_BITFIELD(O.organ_flags, ORGAN_CUT_AWAY))
+		if(!CHECK_BITFIELDS_ANY(O.organ_flags, ORGAN_CUT_AWAY))
 			O.applyOrganDamage(rand(10, 20))
 		O.stored_in = null
 		O.Remove(O.owner, FALSE)

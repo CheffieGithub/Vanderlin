@@ -27,9 +27,9 @@
 	wetable = FALSE
 
 /obj/item/clothing/face/attack_self(mob/user, list/modifiers)
-	if(CHECK_BITFIELD(clothing_flags, VOICEBOX_TOGGLABLE))
+	if(CHECK_BITFIELDS_ANY(clothing_flags, VOICEBOX_TOGGLABLE))
 		TOGGLE_BITFIELD(clothing_flags, VOICEBOX_DISABLED)
-		var/status = !CHECK_BITFIELD(clothing_flags, VOICEBOX_DISABLED)
+		var/status = !CHECK_BITFIELDS_ANY(clothing_flags, VOICEBOX_DISABLED)
 		to_chat(user, "<span class='notice'>I turn the voice box in [src] [status ? "on" : "off"].</span>")
 
 /obj/item/clothing/face/equipped(mob/user, slot)

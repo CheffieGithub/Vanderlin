@@ -244,7 +244,7 @@
 					thrown_thing = pulling
 					dropItemToGround(I, silent = TRUE)
 
-		else if(!CHECK_BITFIELD(I.item_flags, ABSTRACT) && !HAS_TRAIT(I, TRAIT_NODROP))
+		else if(!CHECK_BITFIELDS_ANY(I.item_flags, ABSTRACT) && !HAS_TRAIT(I, TRAIT_NODROP))
 			thrown_thing = I
 			if(ismobholder(thrown_thing))
 				var/obj/item/mob_holder/old = thrown_thing

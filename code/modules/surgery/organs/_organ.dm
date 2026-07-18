@@ -177,19 +177,19 @@
 	return
 
 /obj/item/organ/proc/is_failing()
-	return (CHECK_BITFIELD(organ_flags, ORGAN_FAILING|ORGAN_DESTROYED|ORGAN_NECROTIC|ORGAN_CUT_AWAY) || (damage >= high_threshold) || (!current_blood && max_blood_storage))
+	return (CHECK_BITFIELDS_ANY(organ_flags, ORGAN_FAILING|ORGAN_DESTROYED|ORGAN_NECROTIC|ORGAN_CUT_AWAY) || (damage >= high_threshold) || (!current_blood && max_blood_storage))
 
 /obj/item/organ/proc/is_failing_without_bleedout()
-	return (CHECK_BITFIELD(organ_flags, ORGAN_FAILING|ORGAN_DESTROYED|ORGAN_NECROTIC|ORGAN_CUT_AWAY) || (damage >= high_threshold))
+	return (CHECK_BITFIELDS_ANY(organ_flags, ORGAN_FAILING|ORGAN_DESTROYED|ORGAN_NECROTIC|ORGAN_CUT_AWAY) || (damage >= high_threshold))
 
 /obj/item/organ/proc/is_dead()
-	return (CHECK_BITFIELD(organ_flags, ORGAN_DESTROYED|ORGAN_NECROTIC) || (damage >= maxHealth))
+	return (CHECK_BITFIELDS_ANY(organ_flags, ORGAN_DESTROYED|ORGAN_NECROTIC) || (damage >= maxHealth))
 
 /obj/item/organ/proc/is_bruised()
 	return (damage >= low_threshold)
 
 /obj/item/organ/proc/is_necrotic()
-	return (CHECK_BITFIELD(organ_flags, ORGAN_NECROTIC) || (germ_level >= INFECTION_LEVEL_THREE))
+	return (CHECK_BITFIELDS_ANY(organ_flags, ORGAN_NECROTIC) || (germ_level >= INFECTION_LEVEL_THREE))
 
 /obj/item/organ/proc/scar_organ(amount, cap)
 	for(var/slot in organ_efficiency)
@@ -205,14 +205,14 @@
 
 /obj/item/organ/proc/necrose_organ()
 	. = FALSE
-	if(!CHECK_BITFIELD(organ_flags, ORGAN_NECROTIC))
+	if(!CHECK_BITFIELDS_ANY(organ_flags, ORGAN_NECROTIC))
 		set_germ_level(INFECTION_LEVEL_THREE)
 		organ_flags |= ORGAN_NECROTIC
 		return TRUE
 
 /obj/item/organ/proc/unnecrose_organ()
 	. = FALSE
-	if(CHECK_BITFIELD(organ_flags, ORGAN_NECROTIC))
+	if(CHECK_BITFIELDS_ANY(organ_flags, ORGAN_NECROTIC))
 		set_germ_level(0)
 		organ_flags &= ~ORGAN_NECROTIC
 		return TRUE
@@ -373,13 +373,13 @@
 
 /obj/item/organ/adjust_germ_level(add_germs, minimum_germs = 0, maximum_germs = INFECTION_LEVEL_THREE)
 	. = ..()
-	if((germ_level >= INFECTION_LEVEL_THREE) && !CHECK_BITFIELD(organ_flags, ORGAN_NECROTIC))
+	if((germ_level >= INFECTION_LEVEL_THREE) && !CHECK_BITFIELDS_ANY(organ_flags, ORGAN_NECROTIC))
 		kill_organ()
 	consider_processing()
 
 /obj/item/organ/proc/kill_organ()
 	. = FALSE
-	if(damage < maxHealth && !CHECK_BITFIELD(organ_flags, ORGAN_DESTROYED))
+	if(damage < maxHealth && !CHECK_BITFIELDS_ANY(organ_flags, ORGAN_DESTROYED))
 		setOrganDamage(maxHealth)
 		return TRUE
 
@@ -399,7 +399,7 @@
 	if(isreagentcontainer(loc))
 		return FALSE /// preserving ah.
 	check_cold(passed_temp)
-	if(CHECK_BITFIELD(organ_flags, ORGAN_FROZEN|ORGAN_NECROTIC|ORGAN_SYNTHETIC|ORGAN_INDESTRUCTIBLE))//I'll let arteries not rot to make life easier
+	if(CHECK_BITFIELDS_ANY(organ_flags, ORGAN_FROZEN|ORGAN_NECROTIC|ORGAN_SYNTHETIC|ORGAN_INDESTRUCTIBLE))//I'll let arteries not rot to make life easier
 		return FALSE
 	return TRUE
 
@@ -842,7 +842,7 @@
 /obj/item/organ/proc/can_feel_pain()
 	if(pain_multiplier <= 0)
 		return FALSE
-	if(CHECK_BITFIELD(organ_flags, ORGAN_CUT_AWAY))
+	if(CHECK_BITFIELDS_ANY(organ_flags, ORGAN_CUT_AWAY))
 		return FALSE
 	if(HAS_TRAIT(src, TRAIT_NOPAIN))
 		return FALSE

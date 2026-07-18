@@ -401,7 +401,7 @@
 			success_result = DICE_CRIT_FAILURE
 		else
 			success_result = DICE_FAILURE
-	if(CHECK_MULTIPLE_BITFIELDS(return_flags, RETURN_DICE_SUCCESS|RETURN_DICE_DIFFERENCE))
+	if(CHECK_BITFIELDS_ALL(return_flags, RETURN_DICE_SUCCESS|RETURN_DICE_DIFFERENCE))
 		return alist(RETURN_DICE_INDEX_SUCCESS = success_result, \
 					RETURN_DICE_INDEX_DIFFERENCE = difference)
 	else if(return_flags & RETURN_DICE_DIFFERENCE)

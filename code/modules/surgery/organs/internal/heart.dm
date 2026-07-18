@@ -172,7 +172,7 @@
 		if(length(loose_humors))
 			handle_chimeric_stitching(tool, user)
 			return TRUE
-	if(owner && CHECK_BITFIELD(organ_flags, ORGAN_CUT_AWAY))
+	if(owner && CHECK_BITFIELDS_ANY(organ_flags, ORGAN_CUT_AWAY))
 		for(var/thing in attaching_items)
 			if(istype(tool, thing))
 				handle_attaching_item(tool, user, params)
@@ -195,7 +195,7 @@
 	if(istype(tool, /obj/item/chimeric_node))
 		handle_humor_placement(tool, user)
 		return TRUE
-	if(owner && (tool.sharpness == IS_SHARP || tool.tool_behaviour == TOOL_SCALPEL) && !CHECK_BITFIELD(organ_flags, ORGAN_CUT_AWAY))
+	if(owner && (tool.sharpness == IS_SHARP || tool.tool_behaviour == TOOL_SCALPEL) && !CHECK_BITFIELDS_ANY(organ_flags, ORGAN_CUT_AWAY))
 		handle_cutting_away(tool, user, params)
 		return TRUE
 	if(tool.tool_behaviour == TOOL_CAUTERY)

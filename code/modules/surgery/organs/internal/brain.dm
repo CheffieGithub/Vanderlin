@@ -174,7 +174,7 @@
 		return TRUE
 	else if(DOING_INTERACTION_WITH_TARGET(user, src))
 		return TRUE
-	if(owner && CHECK_BITFIELD(organ_flags, ORGAN_CUT_AWAY))
+	if(owner && CHECK_BITFIELDS_ANY(organ_flags, ORGAN_CUT_AWAY))
 		for(var/thing in attaching_items)
 			if(istype(tool, thing))
 				handle_attaching_item(tool, user, params)
@@ -191,7 +191,7 @@
 	if(owner && (tool.tool_behaviour == TOOL_HEMOSTAT))
 		handle_lobotomy(tool, user, params)
 		return TRUE
-	if(owner && (tool.sharpness == IS_SHARP || tool.tool_behaviour == TOOL_SCALPEL) && !CHECK_BITFIELD(organ_flags, ORGAN_CUT_AWAY))
+	if(owner && (tool.sharpness == IS_SHARP || tool.tool_behaviour == TOOL_SCALPEL) && !CHECK_BITFIELDS_ANY(organ_flags, ORGAN_CUT_AWAY))
 		handle_cutting_away(tool, user, params)
 		return TRUE
 	if(tool.tool_behaviour == TOOL_CAUTERY)

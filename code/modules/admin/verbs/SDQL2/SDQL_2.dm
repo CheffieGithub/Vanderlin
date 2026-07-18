@@ -275,7 +275,7 @@
 					selectors_used |= query.where_switched
 					combined_refs |= query.select_refs
 					running -= query
-					if(!CHECK_BITFIELD(query.options, SDQL2_OPTION_DO_NOT_AUTOGC))
+					if(!CHECK_BITFIELDS_ANY(query.options, SDQL2_OPTION_DO_NOT_AUTOGC))
 						QDEL_IN(query, 50)
 					if(sequential && waiting_queue.len)
 						finished = FALSE

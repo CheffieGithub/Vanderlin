@@ -5,14 +5,17 @@
 #define NONE 0
 
 //for convenience
-#define ENABLE_BITFIELD(variable, flag) (variable |= (flag))
-#define DISABLE_BITFIELD(variable, flag) (variable &= ~(flag))
-#define CHECK_BITFIELD(variable, flag) (variable & (flag))
-#define TOGGLE_BITFIELD(variable, flag) (variable ^= (flag))
+/// Enable given bitfields on a variable
+#define ENABLE_BITFIELD(variable, flags) (variable |= (flags))
+/// Disable given bitfields on a variable
+#define DISABLE_BITFIELD(variable, flags) (variable &= ~(flags))
+/// Toggle given bitfields on a variable
+#define TOGGLE_BITFIELD(variable, flags) (variable ^= (flags))
 
-
-//check if all bitflags specified are present
-#define CHECK_MULTIPLE_BITFIELDS(flagvar, flags) (((flagvar) & (flags)) == (flags))
+/// Check if the variable has any of the given flags
+#define CHECK_BITFIELDS_ANY(variable, flags) (variable & (flags))
+/// Check if the variable has all of the given flags
+#define CHECK_BITFIELDS_ALL(variable, flags) (((variable) & (flags)) == (flags))
 
 GLOBAL_LIST_INIT(bitflags, list(1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, 32768))
 

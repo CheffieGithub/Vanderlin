@@ -405,21 +405,21 @@
 	return max(0.1, (bleed_rate * bleed_modifier) + bad_embeddies)
 
 /datum/injury/proc/is_surgical()
-	return CHECK_BITFIELD(injury_flags, INJURY_SURGICAL)
+	return CHECK_BITFIELDS_ANY(injury_flags, INJURY_SURGICAL)
 
 /datum/injury/proc/is_disinfected()
-	if(CHECK_BITFIELD(injury_flags, INJURY_DISINFECTED) && germ_level <= 0)
+	if(CHECK_BITFIELDS_ANY(injury_flags, INJURY_DISINFECTED) && germ_level <= 0)
 		return TRUE
 	return FALSE
 
 /datum/injury/proc/is_salved()
-	return CHECK_BITFIELD(injury_flags, INJURY_SALVED)
+	return CHECK_BITFIELDS_ANY(injury_flags, INJURY_SALVED)
 
 /datum/injury/proc/is_clamped()
-	return CHECK_BITFIELD(injury_flags, INJURY_CLAMPED)
+	return CHECK_BITFIELDS_ANY(injury_flags, INJURY_CLAMPED)
 
 /datum/injury/proc/is_sutured()
-	return CHECK_BITFIELD(injury_flags, INJURY_SUTURED)
+	return CHECK_BITFIELDS_ANY(injury_flags, INJURY_SUTURED)
 
 /datum/injury/proc/is_bandaged()
-	return CHECK_BITFIELD(injury_flags, INJURY_BANDAGED)
+	return CHECK_BITFIELDS_ANY(injury_flags, INJURY_BANDAGED)
